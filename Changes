@@ -1,5 +1,6 @@
 3.56 XXX
     - fixed bug image dimensions test in DFV::Constraints::Upload (Barry Hoggard)
+    - added mention of HTML::Template::Associate::FormValidator to SEE ALSO
 
 3.55 Wed Mar 25 2004
     - better diagnostics when a filters fail.

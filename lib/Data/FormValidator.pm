@@ -955,7 +955,10 @@ The sample application above may be a more useful introduction.
 L<CGI::Application::ValidateRM|CGI::Application::ValidateRM>, a
 CGI::Application & Data::FormValidator glue module
 
-L<Params::Validate|Params::Validate> looks like a better choice for validating function parameters.  
+L<HTML::Template::Associate::FormValidator|HTML::Template::Associate::FormValidator> is designed
+to make some kinds of integration with HTML::Template easier. 
+
+L<Params::Validate|Params::Validate> is useful for validating function parameters.  
 
 L<Regexp::Common|Regexp::Common>,
 L<Data::Types|Data::Types>,
