@@ -1,3 +1,7 @@
+XXX
+    - clarified documentation for uploading constraints to mention that a
+      CGI.pm object is needed for input.
+
 3.53 Mon Mar 22 2004
     [BUG FIXES]
     - Removed bug introduced in 3.52 that would have mis-handled files that had
