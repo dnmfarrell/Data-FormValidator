@@ -3,6 +3,7 @@
     - Removed bug introduced in 3.52 that would have mis-handled files that had
       some filters applied, and were then used as parameters in constraints for
       multiple fields. (Kevin Baker) 
+    - Possibly fixed t/24_upload.t test on Windows platforms (podmaster)
 
 3.52 Sun Mar 21 2004
     [BUG FIXES]

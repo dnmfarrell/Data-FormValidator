@@ -38,6 +38,7 @@ BEGIN {
 diag "testing with CGI.pm version: $CGI::VERSION";
 
 open(IN,'<t/upload_post_text.txt') || die 'missing test file';
+binmode(IN);
 
 *STDIN = *IN;
 $q = new CGI;

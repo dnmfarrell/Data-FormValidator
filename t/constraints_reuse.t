@@ -4,6 +4,11 @@
 # for input data when used with multiple constraints
 # as 'params'
 
+# note: this relies on the constraint built_to_fail
+# being evaluated before expected_to_succeed. Which
+# relies on the order on which perl returns the keys
+# from each %{ $profile->{constraints} }
+
 use Test::More tests => 2;
 use Data::FormValidator;
 use strict;
