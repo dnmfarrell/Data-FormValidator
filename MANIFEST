@@ -53,3 +53,7 @@ t/constraints_reuse.t
 t/dependency_groups.t
 test/00_base.badformat
 test/00_base.profile
+t/check_profile_syntax.t
+t/unknown.t
+
+
