@@ -27,7 +27,7 @@ t/11_procedural_match.t
 t/12_untaint.pl
 t/12_untaint.t
 t/13_validator_packages.t
-t/14_multiple_constraints.t
+t/multiple_constraints.t
 t/15_literal_param_constraints.t
 t/16_cgi_object.t
 t/17_multi_valued_keys.t

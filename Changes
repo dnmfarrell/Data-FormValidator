@@ -1,4 +1,9 @@
 XXX
+    [BUG FIXES]
+    - Fixed a mis-handling of invalid constraints introduced in 3.53 (Kevin Baker).  
+
+    [ENHANCEMENTS]
+    - Refactored and improved some contraint related tests (Kevin Baker)
     - clarified documentation for uploading constraints to mention that a
       CGI.pm object is needed for input.
 

@@ -9,7 +9,7 @@
 # relies on the order on which perl returns the keys
 # from each %{ $profile->{constraints} }
 
-use Test::More tests => 2;
+use Test::More tests => 6;
 use Data::FormValidator;
 use strict;
 
@@ -32,7 +32,8 @@ my %profile = (
         params     => [qw/depart_date return_date/],
         constraint => sub {
             my ($depart,$return) = @_;
-            warn "depart: $depart";
+            Test::More::is($depart, '2004');
+            Test::More::is($return, '2005');
             return ($depart < $return);
         },
       },
@@ -41,7 +42,8 @@ my %profile = (
         params     => [qw/depart_date return_date/],
         constraint => sub {
             my ($depart,$return) = @_;
-            warn "depart: $depart";
+            Test::More::is($depart, '2004');
+            Test::More::is($return, '2005');
             return ($depart > $return);
         },
       },
