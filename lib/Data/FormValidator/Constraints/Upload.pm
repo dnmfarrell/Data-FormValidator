@@ -58,8 +58,7 @@ sub file_max_bytes {
 sub valid_file_format {
 	my $self = shift;
 	$self->isa('Data::FormValidator::Results') ||
-		die "file_format: first argument is not a Data::FormValidator::Results object.
-			Check that you used 'constraint_method' and not 'constraint'";
+		die "file_format: first argument is not a Data::FormValidator::Results object. ";
 	my $params = shift || {};
 	# if (ref $params ne 'HASH' ) {
 	# 	die "format: hash reference expected. Make sure you have
@@ -71,7 +70,7 @@ sub valid_file_format {
 
     require UNIVERSAL;
 	$q->UNIVERSAL::can('param')||
-		die 'valid_file_format: data object missing param() method';
+		die 'file_format: data object missing param() method';
 
 	my $field = $self->get_current_constraint_field;
 
@@ -135,8 +134,7 @@ sub valid_file_format {
 sub valid_image_max_dimensions {
 	my $self = shift;
 	$self->isa('Data::FormValidator::Results') ||
-		die "image_max_dimensions: first argument is not a Data::FormValidator::Results object.
-			Check that you used 'constraint_method' and not 'constraint'";
+		die "image_max_dimensions: first argument is not a Data::FormValidator::Results object. ";
 	my $max_width_ref  = shift || die 'image_max_dimensions: missing maximum width value';
 	my $max_height_ref = shift || die '_image_max_dimensions: missing maximum height value';
 	my $max_width  = $$max_width_ref;
@@ -147,7 +145,7 @@ sub valid_image_max_dimensions {
 	my $q = $self->get_input_data;
     require UNIVERSAL;
 	$q->UNIVERSAL::can('param')||
-		die 'valid_image_max_dimensions: data object missing param() method';
+		die 'image_max_dimensions: data object missing param() method';
 
 	my $field = $self->get_current_constraint_field;
 
@@ -181,8 +179,7 @@ sub valid_file_max_bytes {
 	my $self = shift;
 
 	$self->isa('Data::FormValidator::Results') ||
-		die "valid_file_format: first argument is not a Data::FormValidator::Results object.
-			Check that you used 'constraint_method' and not 'constraint'";
+		die "first argument is not a Data::FormValidator::Results object.";
 	my $max_bytes_ref = shift;
 	
 	my $max_bytes;
@@ -196,7 +193,7 @@ sub valid_file_max_bytes {
 	my $q = $self->get_input_data;
     require UNIVERSAL;
 	$q->UNIVERSAL::can('param') ||
-		die 'valid_file_max_bytes: object missing param() method';
+		die 'file_max_bytes: object missing param() method';
 
 	my $field = $self->get_current_constraint_field;
 
