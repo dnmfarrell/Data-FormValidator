@@ -9,7 +9,7 @@
 # relies on the order on which perl returns the keys
 # from each %{ $profile->{constraints} }
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Data::FormValidator;
 use strict;
 
@@ -66,4 +66,26 @@ ok($results->valid('depart_date'),
     'second constraint still has access to value of field used in first failed constraint.');
 
 
+# The next test are to confirm when a constraint method returns 'undef'
+# that it causes no warnings to be issued
+{
+    my %profile = (
+        required                => ['foo'],
+        constraints             => {
+            foo => {
+                constraint  => sub {
+                    return;
+                },
+            },
+        },
+        untaint_all_constraints => 1,
+    );
+
+    my $err = '';
+    local *STDERR;
+    open STDERR, '>', \$err;
+    my $results = Data::FormValidator->check({ foo => 1}, \%profile);
+    is($err, '', 'no warnings emitted');
+
+}
 
