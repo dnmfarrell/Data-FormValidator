@@ -138,14 +138,11 @@ sub AUTOLOAD {
 
 =item email
 
-Checks if the email LOOKS LIKE an email address. This checks if the
-input contains one @, and a two level domain name. The address portion
-is checked quite liberally. For example, all those probably invalid
-address would pass the test :
+Checks if the email LOOKS LIKE an email address. This should be sufficient
+99% of the time. 
 
-    nobody@top.domain
-    %?&/$()@nowhere.net
-    guessme@guess.m
+Look elsewhere if you want something super fancy that matches every possible variation
+that is valid in the RFC, or runs out and checks some MX records.
 
 =cut
 
