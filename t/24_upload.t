@@ -1,8 +1,9 @@
 #########################
 
-use Test::More tests => 17;
+use Test::More tests => 18;
+use strict;
 BEGIN { 
-    use_ok(CGI);
+    use_ok('CGI');
     use_ok('Data::FormValidator::Constraints::Upload') 
 };
 
@@ -15,7 +16,7 @@ BEGIN {
           'HTTP_CONNECTION' => 'TE, close',
           'REQUEST_METHOD' => 'POST',
           'SCRIPT_URI' => 'http://www.perl.org/test.cgi',
-          'CONTENT_LENGTH' => '2986',
+          'CONTENT_LENGTH' => 3129,
           'SCRIPT_FILENAME' => '/home/usr/test.cgi',
           'SERVER_SOFTWARE' => 'Apache/1.3.27 (Unix) ',
           'HTTP_TE' => 'deflate,gzip;q=0.3',
@@ -41,14 +42,18 @@ open(IN,'<t/upload_post_text.txt') || die 'missing test file';
 binmode(IN);
 
 *STDIN = *IN;
-$q = new CGI;
+my $q = new CGI;
 
 use Data::FormValidator;
 my $default = {
-		required=>[qw/hello_world 100x100_gif 300x300_gif/],
+		required=>[qw/hello_world does_not_exist_gif 100x100_gif 300x300_gif/],
 		validator_packages=> 'Data::FormValidator::Constraints::Upload',
 		constraints => {
 			'hello_world' => {
+				constraint_method => 'file_format',
+				params=>[],
+			},
+			'does_not_exist_gif' => {
 				constraint_method => 'file_format',
 				params=>[],
 			},
@@ -82,8 +87,11 @@ my @invalids = $results->invalid;
 my $missing = $results->missing;
 
 
-# Test to make sure hello world failes because it is the wrong type
-ok((grep /hello_world/, @invalids), 'expect format failure');
+# Test to make sure hello world fails because it is the wrong type
+ok((grep {m/hello_world/} @invalids), 'expect format failure');
+
+# should fail on empty/missing source file data
+ok((grep {m/does_not_exist_gif/} @invalids), 'expect non-existent failure');
 
 
 # Make sure 100x100 passes because it is the right type and size

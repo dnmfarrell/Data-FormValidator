@@ -20,7 +20,7 @@ use vars qw($VERSION @ISA @EXPORT);
 	valid_file_max_bytes	
 );
 
-$VERSION = '0.70';
+$VERSION = '0.71';
 
 sub valid_file_format {
 	my $self = shift;
@@ -69,7 +69,7 @@ sub valid_file_format {
    use MIME::Types;
    my $mimetypes = MIME::Types->new;
    my MIME::Type $t = $mimetypes->type($mt);
-   my @mt_exts = $t->extensions;
+   my @mt_exts = $t ? $t->extensions : ();
 
    my ($uploaded_ext) = ($img =~ m/\.([\w\d]*)?$/);
 

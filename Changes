@@ -1,3 +1,8 @@
+3.61 Mon Sep 20 18:10:23 EST 2004
+	[BUG FIXES]
+	- file_format from ::Constraints::Upload now handles non-existent files more
+	  gracefully. (Evan A. Zacks)
+
 3.60 Mon Sep 20 18:10:23 EST 2004
 	[BUG FIXES]
 	- file_max_bytes seemed to never be reporting failure.
