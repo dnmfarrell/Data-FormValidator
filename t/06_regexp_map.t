@@ -39,9 +39,8 @@ ok ($valids->{'extra'});
 ok ($valids->{'first_name'} eq 'Mark' and $valids->{'last_name'} eq 'Stosberg');
 
 # Tests below added 04/24/03 to test adding constraints to fields with existing constraints 
-my ($valids, $missings, $invalids, $unknowns);
 eval {
-	($valids,$missings,$invalids) = Data::FormValidator->validate(
+	my ($valids,$missings,$invalids) = Data::FormValidator->validate(
 		# input
 		{
 			with_no_constraint	=> 'f1 text',	
@@ -65,7 +64,7 @@ eval {
 
 TODO: {
 	local $TODO = 'rewrite when message system is rebuilt';
-	#warn $@ unless ok (not $@);
+	#ok (not $@) ir diag $@;
 	#like($invalids->{with_no_constraint}, qr/Invalid/ ,   '...with no existing constraints');
 	#ok(scalar @{ $invalids->{with_one_constraint} } eq 2, '...with one existing constraint');
 	#ok(scalar @{ $invalids->{with_mult_constraint} } eq 3,'...with two existing constraints');

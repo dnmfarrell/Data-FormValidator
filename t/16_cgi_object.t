@@ -6,15 +6,14 @@ use lib ('.','../t');
 
 $^W = 1;
 
-print "1..2\n";
+use Test::More tests => 2;
 
 my $q;
 eval {
 	use CGI;
 	$q = new CGI  ({ my_zipcode_field => 'big brown' });
 };
-print "not " if $@;
-print "ok 1\n";
+ok(not $@);
 
 use Data::FormValidator;
 
@@ -29,7 +28,5 @@ eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($q, 'default');
 };
 
-print "not " unless $valids->{my_zipcode_field} eq 'big brown';
-print "ok 2\n";
-
+is($valids->{my_zipcode_field}, 'big brown');
 

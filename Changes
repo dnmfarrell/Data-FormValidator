@@ -1,4 +1,10 @@
 
+3.58 Wed May 05 2004
+    [ENHANCEMENTS]
+    - Test suite has been migrated further to 'Test::More' style, and
+      all tests should complete without any warnings. A big thanks
+      goes to Gabor Szabo for this work.  
+
 3.57 Wed Apr 21 2004 
     [ENHANCEMENTS]
     - 'validator_packages' now handles the importing of filters as well as constraints.

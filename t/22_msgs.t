@@ -131,7 +131,8 @@ my $msgs;
 eval {
 	$msgs = $results->msgs;
 };
-warn $@ unless ok ((not $@), 'existence of msgs method' );
+ok((not $@), 'existence of msgs method' ) or
+  diag $@;
 
 
 ok (ref $msgs eq 'HASH', 'invalid fields returned as hash in simple case'); 
@@ -154,16 +155,17 @@ like($msgs->{error_sleep} ,qr/lesser.*Test|Test.*lesser/, 'multiple constraints 
 eval{
 	$results = $validator->check($simple_data, 'prefix');
 };
-warn $@ unless ok (not $@);
+ok (not $@) or
+  diag $@;
 
 $msgs = $results->msgs({format => 'Control-Test: %s'});
 	
 ok(defined $msgs->{req_1}, 'using default prefix');
-ok(scalar keys %$msgs == 3, 'size of msgs hash'); # 2 errors plus 1 prefix 
+is(keys %$msgs, 3, 'size of msgs hash'); # 2 errors plus 1 prefix 
 ok(defined $msgs->{err__}, 'any_errors');
 like($msgs->{req_1},qr/Control/,'passing controls to method');
 
-# See what happens when msgs is called with it doesn't appeare in the profile
+# See what happens when msgs is called with it does not appeare in the profile
 my @basic_input = (
 	{
 		field_1 => 'email',
@@ -172,7 +174,7 @@ my @basic_input = (
 		required => 'field_1',
 
 	});
-my $results = Data::FormValidator->check(@basic_input);
+$results = Data::FormValidator->check(@basic_input);
 eval { $results->msgs };
 ok ((not $@), 'calling msgs method without hash definition');
 

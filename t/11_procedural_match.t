@@ -3,13 +3,11 @@ use strict;
 
 $^W = 1;
 
-print "1..25\n";
-
+use Test::More tests => 25;
 
 
 use Data::FormValidator qw(:validators :matchers);
 
-my $rv;
 my $invalid = "fake value";
 
 #For CC Exp test
@@ -39,34 +37,20 @@ foreach my $function (keys(%tests)) {
     my $not_valid = "\$rv = $function('$invalid');";
     
     eval $is_valid;
-    if ($@ or ($rv ne $val)) {
-	print "NOT ";
-    }
-    print "ok $i\n";
-    print sprintf("# %-25s", $function)
-	. " using"
-	. sprintf("%-16s\n", " valid value. ");
+    ok(not $@ and ($rv eq $val)) or
+      diag sprintf("%-25s using %-16s", $function, "valid value. ");
     $i++;
 
     eval $not_valid;
-    if ($@ or $rv) {
-	print "not ";
-    }
-    print "ok $i\n";
-    print sprintf("# %-25s", $function)
-	. " using"
-	. sprintf("%-16s\n", " invalid value. ");
+    ok(not $@ and not $rv) or
+      diag sprintf("%-25s using %-16s", $function, "invalid value. ");
     $i++;
 }
     
-#Test cc_number seperately since i don't know a valid cc number
+#Test cc_number seperately since i do not know a valid cc number
 my $rv;
 eval "\$rv = match_cc_number('$invalid', 'm')";
 
-if ($@ or $rv) {
-    print "not ";
-}
-print "ok $i\n";
-print sprintf("%-25s", "match_cc_number")
-    . " using"
-    . sprintf("%-16s", " invalid value. ");
+ok(not $@ and not $rv) or
+  diag sprintf("%-25s using %-16s", "match_cc_number", "invalid value. ");
+

@@ -3,7 +3,7 @@ use strict;
 
 $^W = 1;
 
-print "1..1\n";
+use Test::More tests => 1;
 
 use Data::FormValidator;
 
@@ -38,11 +38,11 @@ eval{
 };
 #use Data::Dumper; warn Dumper   ($valids, $missings, $invalids, $unknowns);
 
-if($@){
-  print "not " unless 
-    ($@ eq "Invalid input profile: keys not recognised [bad_key_which_should_trigger_error, another_bad_key_which_should_trigger_error]\n") ||
-    ($@ eq "Invalid input profile: keys not recognised [another_bad_key_which_should_trigger_error, bad_key_which_should_trigger_error]\n");
-}
-print "ok 1\n";
+ok(not $@ 
+   or 
+   $@ eq "Invalid input profile: keys not recognised [bad_key_which_should_trigger_error, another_bad_key_which_should_trigger_error]\n" 
+   or
+   $@ eq "Invalid input profile: keys not recognised [another_bad_key_which_should_trigger_error, bad_key_which_should_trigger_error]\n"
+  ); 
 
 

@@ -6,7 +6,7 @@ use strict;
 
 $^W = 1;
 
-print "1..2\n";
+use Test::More tests => 2;
 
 use Data::FormValidator;
 
@@ -31,13 +31,7 @@ eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
 
-unless (exists $valids->{'good_ip'}){
-  print "not ";
-}
-print "ok 1\n";
+ok(exists $valids->{'good_ip'});
 
-unless ($invalids->[0] eq 'bad_ip'){
-  print "not ";
-}
-print "ok 2\n";
+is($invalids->[0], 'bad_ip');
 

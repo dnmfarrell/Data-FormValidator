@@ -7,7 +7,7 @@ use lib ('.','../t');
 
 $^W = 1;
 
-print "1..2\n";
+use Test::More tests => 3;
 
 use strict;
 use Data::FormValidator;
@@ -30,12 +30,11 @@ my ($valids, $missings, $invalids, $unknowns) = ({},[],[],[]);
 ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 
 # empty strings in arrays should be set to "undef"
-print "not " if  (defined $valids->{arrayref}->[0]);
-print "ok 1\n";
+ok(not defined $valids->{arrayref}->[0]);
 
 # hash refs and code refs should be ok.
-print "not " unless ((ref $valids->{hashref} eq 'HASH') and (ref $valids->{coderef} eq 'CODE'));
-print "ok 2\n";
+is(ref $valids->{hashref}, 'HASH');
+is(ref $valids->{coderef}, 'CODE');
 
 
 

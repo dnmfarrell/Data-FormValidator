@@ -25,7 +25,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 	match_date_and_time
 );
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 # XXX TODO: find a way to make standard formats available.
 # For example, having a format that you know Postgres will accept as a valid
@@ -41,6 +41,7 @@ sub match_date_and_time {
 
 	my $format = _prepare_date_format($fmt);
 	my ($date,$Y,$M,$D,$h,$m,$s) = _parse_date_format($format,$self->get_current_constraint_value);
+	return if not defined $date;
 
 	
 	# We need to check the date if we find any in the format string, otherwise, it succeeds
@@ -70,7 +71,7 @@ sub _prepare_date_format {
         if ($1 eq 'pp') {
             "(AM|PM|am|pm)"
         } else {
-            '('.('\d' x length($1))."$2)"
+            '(' . ('\d' x length($1)) . ($2 ? $2 : "") . ")"
         }
     }ge;
 
@@ -94,7 +95,9 @@ sub _parse_date_format {
     $result{h} = 0   if ($result{p} eq 'AM' and $result{h} == 12);
 
 
-    return $untainted_date, map $result{$_}, qw(Y M D h m s);
+    return $untainted_date, map {defined $result{$_} ? $result{$_} : 0} qw(Y M D h m s);
+    #return $untainted_date, map $result{$_}, qw(Y M D h m s);
+    #return $untainted_date, map {defined $result{$_} ? $result{$_} : ''} qw(Y M D h m s);
 }
 
 1;

@@ -3,7 +3,7 @@ use strict;
 
 $^W = 1;
 
-print "1..3\n";
+use Test::More tests => 3;
 
 use Data::FormValidator;
 
@@ -28,18 +28,9 @@ my ($valids, $missings, $invalids, $unknowns) = ({},[],[],[]);
 eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
-if($@){
-  warn "$@";
-  print "not ";
-}
-print "ok 1\n";
+ok(not $@) or
+  diag $@;
 
-unless (exists $valids->{'phone'}){
-  print "not ";
-}
-print "ok 2\n";
+ok(exists $valids->{'phone'});
 
-unless ($invalids->[0] eq 'email'){
-  print "not ";
-}
-print "ok 3\n";
+is($invalids->[0], 'email');

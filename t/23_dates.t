@@ -45,6 +45,9 @@ my ($valids, $missings, $invalids, $unknowns) = ({},[],{},[]);
 eval{
 	($valids, $missings, $invalids, $unknowns) = $validator->validate($simple_data, 'simple');
 };
-warn $@ unless ok ((not $@), 'eval');
+ok ((not $@), 'eval') or
+   diag $@;
 ok ($valids->{date_and_time_field_good}, 'expecting date_and_time success');
-ok ((grep {/date_and_time_field_bad/} @$invalids), 'expecting date_and_time failure');
+ok ((grep /date_and_time_field_bad/, @$invalids), 'expecting date_and_time failure');
+
+

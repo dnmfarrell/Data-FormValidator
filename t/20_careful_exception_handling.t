@@ -6,7 +6,7 @@ use lib ('.','../t');
 
 $^W = 1;
 
-print "1..1\n";
+use Test::More tests => 1;
 
 use strict;
 use Data::FormValidator;
@@ -33,7 +33,6 @@ eval {
 	($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
 
-print "not " if ($@ =~ /Error compiling regular expression/);
-print "ok 1\n";
+unlike($@, qr/Error compiling regular expression/);
 
 # vim: set ai et sw=8 syntax=perl :

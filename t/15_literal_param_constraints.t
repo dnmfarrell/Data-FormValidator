@@ -4,7 +4,7 @@ use lib ('.','../t');
 
 $^W = 1;
 
-print "1..1\n";
+use Test::More tests => 1;
 
 use Data::FormValidator;
 
@@ -37,8 +37,6 @@ eval{
 };
 
 # Test to make sure that the constraint receives a literal value of an element passed by reference
-print "not " unless $valids->{my_zipcode_field} eq 'big brown cow';
-print "ok 1\n";
-#warn "actual vlaue: $valids->{my_zipcode_field}";
+is($valids->{my_zipcode_field}, 'big brown cow');
 
 

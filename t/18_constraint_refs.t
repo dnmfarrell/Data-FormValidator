@@ -6,7 +6,7 @@ use lib ('.','../t');
 
 $^W = 1;
 
-print "1..3\n";
+use Test::More tests => 4;
 
 use strict;
 use Data::FormValidator;
@@ -28,9 +28,8 @@ my ($valids, $missings, $invalids, $unknowns) = ({},[],[],[]);
 
 ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 
-# We need to make sure we don't get a reference back here
-print "not " if (ref $invalids->[0]);
-print "ok 1\n";
+# We need to make sure we do not get a reference back here
+ok(not ref $invalids->[0]);
 
 $input_profile =
 {
@@ -52,11 +51,10 @@ $validator = new Data::FormValidator({default => $input_profile});
 eval {
 ($valids, $missings, $invalids, $unknowns) = $validator->validate({ email => 'invalid'}, 'default');
 };
-print "not " if ($@);
-print "ok 2\n";
+ok(not $@);
 
-print "not " unless (($invalids->[0]->[0] eq 'email') and ($invalids->[0]->[1] eq 'Your email address is invalid.'));
-print "ok 3\n";
+is($invalids->[0]->[0], 'email');
+is($invalids->[0]->[1], 'Your email address is invalid.');
 
 
 

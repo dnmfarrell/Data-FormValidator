@@ -3,7 +3,7 @@ use strict;
 
 $^W = 1;
 
-print "1..6\n";
+use Test::More tests => 6;
 
 use Data::FormValidator;
 
@@ -28,21 +28,11 @@ my ($valids, $missings, $invalids, $unknowns);
 eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
-if($@){
-  print "not ";
-}
-print "ok 1\n";
+ok(not $@);
 
 my %missings = map {$_ => 1} @$missings;
-unless($missings{'cc_num'}){
-  print "not ";
-}
-print "ok 2\n";
-
-unless($missings{'cc_exp'}){
-  print "not ";
-}
-print "ok 3\n";
+ok($missings{'cc_num'});
+ok($missings{'cc_exp'});
 
 $input_hashref = {
 			cc_type=>'Check'
@@ -51,20 +41,10 @@ $input_hashref = {
 eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
-if($@){
-  print "not ";
-}
-print "ok 4\n";
+ok(not $@);
 
 %missings = map {$_ => 1} @$missings;
-unless($missings{'cc_num'}){
-  print "not ";
-}
-print "ok 5\n";
-
-if($missings{'cc_exp'}){
-  print "not ";
-}
-print "ok 6\n";
+ok($missings{'cc_num'});
+ok(not $missings{'cc_exp'});
 
 

@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: Data-FormValidator
-version: 3.57
+version: 3.58
 license: perl
 distribution_type: module
 requires:
@@ -16,13 +16,13 @@ conflicts: {}
 provides:
   Data::FormValidator:
     file: lib/Data/FormValidator.pm
-    version: 3.57
+    version: 3.58
   Data::FormValidator::Constraints:
     file: lib/Data/FormValidator/Constraints.pm
     version: 3.5
   Data::FormValidator::Constraints::Dates:
     file: lib/Data/FormValidator/Constraints/Dates.pm
-    version: 0.02
+    version: 0.03
   Data::FormValidator::Constraints::Upload:
     file: lib/Data/FormValidator/Constraints/Upload.pm
     version: 0.62
@@ -34,5 +34,5 @@ provides:
     version: 3.50
   Data::FormValidator::Results:
     file: lib/Data/FormValidator/Results.pm
-    version: 3.57
+    version: 3.58
 generated_by: Module::Build version 0.21

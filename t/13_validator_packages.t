@@ -4,7 +4,7 @@ use lib ('.','../t','t/');
 
 $^W = 1;
 
-print "1..8\n";
+use Test::More tests => 8;
 
 use Data::FormValidator;
 
@@ -33,26 +33,17 @@ my ($valids, $missings, $invalids, $unknowns);
 eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
+ok(not $@) or 
+  diag "eval error: $@";
 
-if ($@) {
-	warn "eval error: $@";
-	print "not ";
-}
-print "ok 1\n";
-
-
-print "not " unless (defined $valids->{required_1});
-print "ok 2\n";
+ok(defined $valids->{required_1});
 
 # Test to make sure that the field failed imported validator
-print "not " unless (grep {/required_2/} @$invalids);
-print "ok 3\n";
+ok(grep /required_2/, @$invalids);
 
-print "not " unless (defined $valids->{required_3});
-print "ok 4\n";
+ok(defined $valids->{required_3});
 
-print "not " unless $valids->{required_3} eq 'has whitespace';
-print "ok 5\n";
+is($valids->{required_3}, 'has whitespace');
 
 #### Now test importing from multiple packages
 
@@ -77,22 +68,19 @@ eval{
 };
 
 
-print "not " unless (defined $valids->{required_1});
-print "ok 6\n";
+ok(defined $valids->{required_1});
 
-print "not " unless (defined $valids->{required_2});
-print "ok 7\n";
+ok(defined $valids->{required_2});
 
 # Now test calling 'validate' as a class method
 use Data::FormValidator;
 
 eval {
-my ($valid,$missing,$invalid) = Data::FormValidator->validate($input_hashref,{
+  my ($valid,$missing,$invalid) = Data::FormValidator->validate($input_hashref,{
         required=>[qw/required_1/],
         validator_packages=> 'Data::FormValidator',
     });
 };
-print "not " if $@;
-print "ok 8\n";
+ok(not $@);
 
 

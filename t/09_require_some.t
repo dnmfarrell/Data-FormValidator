@@ -3,7 +3,7 @@ use strict;
 
 $^W = 1;
 
-print "1..3\n";
+use Test::More tests => 4;
 
 use Data::FormValidator;
 
@@ -29,16 +29,13 @@ eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
 
-print "not " unless ($valids->{blue} and $valids->{green});
-print "ok 1\n";
-
-print "not " unless ($valids->{one});
-print "ok 2\n";
+ok($valids->{blue});
+ok($valids->{green});
+ok($valids->{one});
 
 #use Data::Dumper;
 #warn Dumper ($missings,[grep {/2_of_3_fail/} @$missings]);
 
-print "not " unless (grep {/2_of_3_fail/} @$missings); 
-print "ok 3\n";
+ok(grep {/2_of_3_fail/} @$missings); 
 
 

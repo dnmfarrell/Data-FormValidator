@@ -3,7 +3,7 @@ use strict;
 
 $^W = 1;
 
-print "1..4\n";
+use Test::More tests => 8;
 
 use Data::FormValidator;
 
@@ -43,25 +43,15 @@ my ($valids, $missings, $invalids, $unknowns);
 eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
-if($@){
-  print "not ";
-}
-print "ok 1\n";
+ok(not $@);
 
-unless (exists $valids->{'phone'}){
-  print "not ";
-}
-print "ok 2\n";
+ok(exists $valids->{'phone'});
 
-unless ($invalids->[0] eq 'email'){
-  print "not ";
-}
-print "ok 3\n";
+is($invalids->[0], 'email');
 
 my %missings;
 @missings{@$missings} = ();
 #print "@$missings\n";
-unless (exists $missings{'species'} && exists $missings{'no_legs'} && exists $missings{'petals'} && exists $missings{'stem'} && @$missings == 4) {
-  print "not ";
-}
-print "ok 4\n";
+ok(exists $missings{$_}) for (qw(species no_legs petals stem));
+is(@$missings, 4);
+

@@ -20,7 +20,7 @@ use Data::FormValidator::Filters qw/:filters/;
 use Data::FormValidator::Constraints (qw/:validators :matchers/);
 use vars qw/$AUTOLOAD $VERSION/;
 
-$VERSION = 3.57;
+$VERSION = 3.58;
 
 =pod
 
@@ -890,8 +890,11 @@ sub _constraint_check_match {
     # We need to make this distinction when untainting,
     # to allow untainting values that are defined but not true,
     # such as zero.
-    my $success =  ($untaint_this) ? length $match : $match;
-
+    my $success =  defined $match;
+    if (defined $match) {
+       $success =  ($untaint_this) ? length $match : $match;
+    }
+    
 	if ($success) { 
 		return $match;
 	}

@@ -21,7 +21,7 @@ $results = Data::FormValidator->check(\%FORM, {
 		}
 	});
 };
-warn $@ unless ok((not $@), 'runtime errors');
+ok((not $@), 'runtime errors') or diag $@;
 ok($results->valid->{good_ip}, 'good ip'); 
 ok($results->invalid->{bad_ip}, 'bad ip'); 
 
@@ -36,7 +36,7 @@ $results = Data::FormValidator->check(\%FORM, {
 	});
 
 
-warn $@ unless ok((not $@), 'runtime errors');
+ok((not $@), 'runtime errors') or diag $@;
 ok($results->valid->{good_ip}, 'good ip with tainting'); 
 ok($results->invalid->{bad_ip}, 'bad ip with tainting'); 
 
@@ -52,7 +52,7 @@ $results = Data::FormValidator->check(\%FORM, {
 	});
 
 
-warn $@ unless ok((not $@), 'runtime errors');
+ok((not $@), 'runtime errors') or diag $@;
 # Here we are trying passing a parameter which should reverse
 # the notion of which one expect to succeed.
 ok($results->valid->{bad_ip}, 'expecting success with params'); 

@@ -74,7 +74,7 @@ my ($results);
 eval {
 	$results = $dfv->check($q, 'default');
 };
-warn $@ unless ok(not $@);
+ok(not $@) or diag $@;
 
 my $valid   = $results->valid;
 my $invalid = $results->invalid; # as hash ref
@@ -82,11 +82,11 @@ my @invalids = $results->invalid;
 my $missing = $results->missing;
 
 
-# Test to make sure hello world failes because it's the wrong type
-ok((grep {/hello_world/} @invalids), 'expect format failure');
+# Test to make sure hello world failes because it is the wrong type
+ok((grep /hello_world/, @invalids), 'expect format failure');
 
 
-# Make sure 100x100 passes because it's the right type and size
+# Make sure 100x100 passes because it is the right type and size
 ok(exists $valid->{'100x100_gif'});
 
 my $meta = $results->meta('100x100_gif');
@@ -95,7 +95,7 @@ is(ref $meta, 'HASH', 'meta() returns hash ref');
 ok($meta->{extension}, 'setting extension meta data');
 ok($meta->{mime_type}, 'setting mime_type meta data');
 
-# 300x300 should fail because it's too big
+# 300x300 should fail because it is too big
 ok((grep {'300x300'} @invalids), 'max_bytes');
 
 ok($results->meta('100x100_gif')->{bytes}>0, 'setting bytes meta data');
@@ -121,7 +121,7 @@ $dfv = Data::FormValidator->new({ profile_2 => $profile_2});
 eval {
 	$results = $dfv->check($q, 'profile_2');
 };
-warn $@ unless ok(not $@);
+ok(not $@) or diag $@;
 
 $valid   = $results->valid;
 $invalid = $results->invalid; # as hash ref
@@ -129,7 +129,7 @@ $invalid = $results->invalid; # as hash ref
 $missing = $results->missing;
 
 ok(exists $valid->{'100x100_gif'}, 'expecting success with max_dimensions');
-ok((grep {'300x300'} @invalids), 'expecting failure with max_dimensions');
+ok((grep /300x300/, @invalids), 'expecting failure with max_dimensions');
 
 ok( $results->meta('100x100_gif')->{width} > 0, 'setting width as meta data');
 ok( $results->meta('100x100_gif')->{width} > 0, 'setting height as meta data');
@@ -150,5 +150,6 @@ $dfv = Data::FormValidator->new({ profile_3 => $profile_3});
 ($valid,$missing,$invalid) = $dfv->validate($q, 'profile_3');
 
 ok(exists $valid->{'100x100_gif'}, 'expecting success with max_dimensions using constraint_regexp_map');
-ok((grep {'300x300'} @$invalid), 'expecting failure with max_dimensions using constraint_regexp_map');
+ok((grep /300x300/, @$invalid), 'expecting failure with max_dimensions using constraint_regexp_map');
+
 

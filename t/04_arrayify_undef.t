@@ -5,7 +5,7 @@ use strict;
 
 $^W = 1;
 
-print "1..2\n";
+use Test::More tests => 2;
 
 use Data::FormValidator;
 
@@ -23,12 +23,5 @@ my ($valids, $missings, $invalids, $unknowns);
 eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
-if($@){
-  print "not ";
-}
-print "ok 1\n";
-
-unless (not @$missings) {
-  print "not ";
-}
-print "ok 2\n";
+ok(not $@);
+is(@$missings, 0);

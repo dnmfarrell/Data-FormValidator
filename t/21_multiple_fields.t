@@ -1,12 +1,11 @@
 use strict;
-use Test;
+use Test::More tests => 3;
 use lib ('.','../t');
 
 # Verify that multiple params passed to a constraint are being handled correctly
 
 $^W = 1;
 
-BEGIN { plan tests => 4 }
 
 use Data::FormValidator;
 
@@ -47,33 +46,14 @@ eval{
     $validator->validate($input_hashref, 'default');
 };
 
-if ($@) {
-  print "not ok 1\n";
-  warn "eval error: $@";
-}
-else {
-  print "ok 1\n";
-}
+ok(not $@) or
+  diag "eval error: $@";
 
-unless (grep { (ref $_) eq 'ARRAY' } @$invalids) {
-  print "ok 2\n";
-}
-else {
-  print "not ok 2\n";
-  warn $#{$invalids};
-}
+ok(not grep { (ref $_) eq 'ARRAY' } @$invalids) or
+  diag $#{$invalids};
 
-if ($#args_for_check == 1 and
-    $args_for_check[0] == 402015 and
-    $args_for_check[1] eq 'mapserver_rulez') {
-  print "ok 3\n";
-} else {
-  warn "\nwaited for 402015 mapserver_rulez
-got        @args_for_check\n";
-  print "not ok 3\n";
-}
 
-print "ok 4\n";
+is_deeply(\@args_for_check, [402015,'mapserver_rulez']); 
 
 # Local variables:
 # compile-command: "cd .. && make test"
