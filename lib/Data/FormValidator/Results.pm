@@ -338,6 +338,10 @@ sub _process {
 			# set current constraint field for use by get_current_constraint_field
 			$self->{__CURRENT_CONSTRAINT_FIELD} = $field;
 
+			# Initialize the current constraint name to undef, to prevent it
+			# from being accidently shared
+			$self->{__CURRENT_CONSTAINT_NAME} = undef;
+
 			my $c = $self->_constraint_hash_build($constraint_spec,$untaint_this);
 
 			my $is_value_list = 1 if (ref $valid{$field} eq 'ARRAY');
@@ -348,7 +352,7 @@ sub _process {
 					# set current constraint field for use by get_current_constraint_value
 					$self->{__CURRENT_CONSTRAINT_VALUE} = $valid{$field}->[$i];
 
-					my ($match,$failed) = _constraint_check_match($c,\@params,$untaint_this);
+					my ($match,$failed) = $self->_constraint_check_match($c,\@params,$untaint_this);
 					if ($failed) {
 						push @invalid_list, $failed;
 					}
@@ -363,7 +367,7 @@ sub _process {
 				# set current constraint field for use by get_current_constraint_value
 				$self->{__CURRENT_CONSTRAINT_VALUE} = $valid{$field};
 
-				my ($match,$failed) = _constraint_check_match($c,\@params,$untaint_this);
+				my ($match,$failed) = $self->_constraint_check_match($c,\@params,$untaint_this);
 				if ($failed) {
 					push @invalid_list, $failed
 				}
@@ -928,7 +932,7 @@ sub _constraint_input_build {
 
 # =head2 _constraint_check_match()
 #
-# ($value,$failed_href) = _constraint_check_match($c,\@params,$untaint_this);
+# ($value,$failed_href) = $self->_constraint_check_match($c,\@params,$untaint_this);
 #
 # This is the routine that actually, finally, checks if a constraint passes or fails.
 #
@@ -944,8 +948,8 @@ sub _constraint_input_build {
 #	    - name	     name of the failed constraint, if known. 
 
 sub _constraint_check_match {
-	my 	($c,$params,$untaint_this) = @_;
-	die "_constraint_check_match received wrong number of arguments" unless (scalar @_ == 3);
+	my 	($self,$c,$params,$untaint_this) = @_;
+	die "_constraint_check_match received wrong number of arguments" unless (scalar @_ == 4);
 
     my $match = $c->{constraint}->( @$params );
 
@@ -956,18 +960,14 @@ sub _constraint_check_match {
     if (defined $match) {
        $success =  ($untaint_this) ? length $match : $match;
     }
-    
-	if ($success) { 
-		return $match;
-	}
-	else {
-		return 
-		undef,	
+
+	return (
+		($success && $match),
 		{
-			failed  => 1,
-			name	=> $c->{name},
-		};
-	}
+			failed  => (!$success),
+			name	=> $self->{__CURRENT_CONSTRAINT_NAME},
+		},
+	);
 }
 
 # Figure out whether the data is a hash reference of a param-capable object and return it has a hash
