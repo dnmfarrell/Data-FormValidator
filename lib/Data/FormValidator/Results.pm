@@ -338,7 +338,7 @@ sub _process {
 			# set current constraint field for use by get_current_constraint_field
 			$self->{__CURRENT_CONSTRAINT_FIELD} = $field;
 
-			my $c = $self->_constraint_hash_build($field,$constraint_spec,$untaint_this);
+			my $c = $self->_constraint_hash_build($constraint_spec,$untaint_this);
 
 			my $is_value_list = 1 if (ref $valid{$field} eq 'ARRAY');
 			if ($is_value_list) {
@@ -809,7 +809,7 @@ sub _filter_apply {
 }
 
 sub _constraint_hash_build {
-	my ($self,$field,$constraint_spec,$untaint_this) = @_;
+	my ($self,$constraint_spec,$untaint_this) = @_;
 	die "_constraint_apply received wrong number of arguments" unless (scalar @_ == 4);
 
 	my	$c = {
