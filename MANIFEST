@@ -22,7 +22,7 @@ t/06_regexp_map.t
 t/07_missing_optional.t
 t/08_profile_checking.t
 t/09_require_some.t
-t/10_procedural_valid.t
+t/procedural_valid.t
 t/11_procedural_match.t
 t/12_untaint.pl
 t/12_untaint.t
