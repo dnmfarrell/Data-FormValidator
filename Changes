@@ -3,6 +3,9 @@
       constraint returns undef (Michael Peters)
 
     [ENHANCEMENTS]
+    - success() method added to Results object. This is an easy way to check
+      that there were no missing or invalid fields. (Michael Peters). 
+
     - 'separator' was misspelled consistently in the the docs, code and tests.
       The proper spelling as well as the legacy typo spelling are now
       supported, although the typo'ed version is no longer documented, except

@@ -408,6 +408,18 @@ sub _process {
 
 =pod
 
+=head1  success();
+
+This method returns true if there were no invalid or missing fields,
+else it returns false.
+
+=cut
+
+sub success {
+    my $self = shift;
+    return !($self->has_invalid || $self->has_missing);
+}
+
 =head1  valid( [[field] [, value]] );
 
 In an array context with no arguments, it returns the list of fields which 
