@@ -72,6 +72,9 @@ $i++;
 ok(! valid_email('pretty_b;ue_eyes16@cpan.org'), 'semi-colons in e-mail aren\'t valid');
 ok(! valid_email('Ollie 102@cpan.org'), 'spaces in e-mail aren\'t valid');
 
+ok(! valid_email('mark@summersualt.com\0mark@summersault.com'), "including a null in an e-mail is not valid.");
+
+
 my $address_1 = 'mark';
 isnt($address_1, valid_email($address_1), "'$address_1' is not a valid e-mail");
 
