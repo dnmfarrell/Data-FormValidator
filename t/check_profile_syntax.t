@@ -1,6 +1,3 @@
-# Please don't remove the next line. Thanks.
-#arch-tag: Mark_Stosberg_<mark@summersault.com>--2004-04-21_21:15:26
-
 use Test::More qw/no_plan/;
 use Data::FormValidator;
 use strict;

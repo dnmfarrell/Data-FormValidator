@@ -1,6 +1,3 @@
-# Please don't remove tehe next line. Thanks.
-#arch-tag: Mark_Stosberg_<mark@summersault.com>--2004-04-16_21:19:24
-
 use Test::More tests => 4;
 
 use Data::FormValidator; 

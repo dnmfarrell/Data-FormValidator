@@ -15,7 +15,7 @@ provides:
     version: 3.61
   Data::FormValidator::Constraints:
     file: lib/Data/FormValidator/Constraints.pm
-    version: 3.5
+    version: 3.63
   Data::FormValidator::Constraints::Dates:
     file: lib/Data/FormValidator/Constraints/Dates.pm
     version: 0.03
