@@ -1,6 +1,28 @@
-3.62 XXX
     [INTERNALS]
-    - Dependency and dependency_group test suite updates (Drew Taylor )
+    - A new test was added to check that no warnings are emitted when an untainted
+      constraint returns undef (Michael Peters)
+
+    [ENHANCEMENTS]
+    - 'separator' was misspelled consistently in the the docs, code and tests.
+      The proper spelling as well as the legacy typo spelling are now
+      supported, although the typo'ed version is no longer documented, except
+      for here. :) Thanks to Terrence Brannon for spotting this.
+
+3.63
+	[BUG FIXES]
+    - email validation was beefed up to not permit spaces with e-mails 
+      or semi-colons to get through. Thanks to Jason Crome for some tests  
+      to this, and the Mail::VRFY module, which was the source of the
+      improved RE. 
+
+    [INTERNALS]
+    - Added a couple more test to the distribution which were missing in
+      the MANIFEST
+
+3.62 Fri Oct  8 22:55:49 EST 2004
+    [INTERNALS]
+    - Removed experimental label from 'msgs' functionality. 
+    - Beefed up test suite for dependencies and dependency_groups (Drew Taylor)
 
 3.61 Mon Sep 20 18:10:23 EST 2004
 	[BUG FIXES]
