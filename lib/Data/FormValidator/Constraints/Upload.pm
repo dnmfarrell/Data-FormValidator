@@ -20,7 +20,7 @@ use vars qw($VERSION @ISA @EXPORT);
 	valid_file_max_bytes	
 );
 
-$VERSION = '0.601';
+$VERSION = '0.62';
 
 sub valid_file_format {
 	my $self = shift;
@@ -141,7 +141,7 @@ sub valid_image_max_dimensions {
    $info = { %$info, width => $width, height => $height };
    $self->meta($field,$info);
 
-    return (($width <= $$max_width_ref) or ($height <= $$max_height_ref));
+    return (($width <= $$max_width_ref) and ($height <= $$max_height_ref));
 }
 
 sub valid_file_max_bytes {
