@@ -450,15 +450,16 @@ INPUT PROFILE SPECIFICATION
     that have been set back to "blank" may fail to get updated.
 
   validator_packages
-     # load all the constraints from these modules
+     # load all the constraints and filters from these modules
      validator_packages => [qw(Data::FormValdidator::Constraints::Upload)],
 
     This key is used to define other packages which contain constraint
-    routines. Set this key to a single package name, or an arrayref of
-    several. All of its constraint routines beginning with 'match_' and
-    'valid_' will be imported into Data::FormValidator. This lets you
-    reference them in a constraint with just their name, just like built-in
-    routines. You can even override the provided validators.
+    routines or filters. Set this key to a single package name, or an
+    arrayref of several. All of its constraint and filter routines beginning
+    with 'match_', 'valid_' and 'filter_' will be imported into
+    Data::FormValidator. This lets you reference them in a constraint with
+    just their name, just like built-in routines. You can even override the
+    provided validators.
 
     See "WRITING YOUR OWN CONSTRAINT ROUTINES" in the
     Data::FormValidator::Constraints documentation for more information

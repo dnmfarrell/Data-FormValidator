@@ -1,9 +1,16 @@
 
-3.XXX
+3.57 Wed Apr 21 2004 
+    [ENHANCEMENTS]
+    - 'validator_packages' now handles the importing of filters as well as constraints.
+       (Ronald Kimball)
+
+    - Added profile validation check for hashref style constraints. This will
+      make typos in key names easier to find. (Barry Hoggard, for demonstrating
+      the need.) 
+
     [BUG FIXES]
     - no longer try to use a Carp module method without having it loaded. Instead,
       we just call "die" now. (Gunnar Wolf)
-
 
 3.56 Fri Apr 16 2004 
     [BUG FIXES]

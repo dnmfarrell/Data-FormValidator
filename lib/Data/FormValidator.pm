@@ -31,7 +31,7 @@ use Data::FormValidator::Constraints (qw/:validators :matchers/);
 
 use vars qw( $VERSION $AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS );
 
-$VERSION = '3.56';
+$VERSION = '3.57';
 
 require Exporter;
 @ISA = qw(Exporter);
@@ -686,15 +686,15 @@ set back to "blank" may fail to get updated.
 
 =head2 validator_packages 
 
- # load all the constraints from these modules
+ # load all the constraints and filters from these modules
  validator_packages => [qw(Data::FormValdidator::Constraints::Upload)],
 
-This key is used to define other packages which contain constraint routines.
-Set this key to a single package name, or an arrayref of several. All of its
-constraint routines  beginning with 'match_' and 'valid_' will be imported into
-Data::FormValidator.  This lets you reference them in a constraint with just
-their name, just like built-in routines.  You can even override the provided
-validators.
+This key is used to define other packages which contain constraint routines or
+filters.  Set this key to a single package name, or an arrayref of several. All
+of its constraint and filter routines  beginning with 'match_', 'valid_' and
+'filter_' will be imported into Data::FormValidator.  This lets you reference
+them in a constraint with just their name, just like built-in routines.  You
+can even override the provided validators.
 
 See L<WRITING YOUR OWN CONSTRAINT ROUTINES> in the Data::FormValidator::Constraints
 documentation for more information
@@ -902,9 +902,34 @@ sub _check_profile_syntax {
     for my $key (keys %$profile) {
         push @invalid, $key unless exists $valid_profile_keys{$key};
     }
-    return unless @invalid;
+
     local $" = ', ';
-    die "Invalid input profile: keys not recognised [@invalid]\n";
+    if (@invalid) {
+        die "Invalid input profile: keys not recognised [@invalid]\n";
+    }
+
+    my %valid_constraint_hash_keys = (
+        constraint => undef,
+        constraint_method => undef,
+        name => undef,
+        params => undef,
+    );
+
+    my @constraint_hashrefs = grep { ref $_ eq 'HASH' } values %{ $profile->{constraints} } 
+        if $profile->{constraints};
+    push @constraint_hashrefs, grep { ref $_ eq 'HASH' } values %{ $profile->{constraint_regexp_map} } 
+        if $profile->{constraint_regexp_map};
+
+    for my $href (@constraint_hashrefs) {
+        for my $key (keys %$href) {
+            push @invalid, $key unless exists $valid_constraint_hash_keys{$key};
+        }
+    }
+
+    if (@invalid) {
+        die "Invalid input profile: constraint hashref keys not recognised [@invalid]\n";
+    }
+
 }
 
 
