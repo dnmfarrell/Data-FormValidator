@@ -967,10 +967,9 @@ Validating Web Forms with Perl, L<http://mark.stosberg.com/Tech/perl/form-valida
 
 B<Related modules:>
 
-L<Data::FormValidator::Util::HTML|Data::FormValidator::Util::HTML>
+L<Data::FormValidator::Tutorial|Data::FormValidator::Tutorial> 
 
-L<Data::FormValidator::Tutorial|Data::FormValidator::Tutorial> is now out of date.
-The sample application above may be a more useful introduction. 
+L<Data::FormValidator::Util::HTML|Data::FormValidator::Util::HTML>
 
 L<CGI::Application::ValidateRM|CGI::Application::ValidateRM>, a
 CGI::Application & Data::FormValidator glue module
