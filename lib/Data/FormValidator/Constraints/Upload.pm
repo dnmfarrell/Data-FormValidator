@@ -20,7 +20,7 @@ use vars qw($VERSION @ISA @EXPORT);
 	valid_file_max_bytes	
 );
 
-$VERSION = '0.50_01';
+$VERSION = '0.601';
 
 sub valid_file_format {
 	my $self = shift;
@@ -187,6 +187,11 @@ Data::FormValidator::Constraints::Upload - Validate File Uploads
 
 =head1 SYNOPSIS
 
+    # Be sure to use a CGI.pm object as the form input
+    # when using this constraint
+    my $q = new CGI;
+    my $dfv = Data::FormValidator->check($q,$my_profile);
+
 	# In a Data::FormValidator Profile:
 	validator_packages => [qw(Data::FormValidator::Constraints::Upload)],
 	constraints => {
@@ -215,7 +220,10 @@ should be considered "Beta".
 
 These module is meant to be used in conjunction with the Data::FormValidator
 module to automate the task of validating uploaded files. The following
-validation routines are supplied
+validation routines are supplied.
+
+To use any of them, the input data passed to Data::FormValidator must
+be a CGI.pm object.
 
 =over 4
 
