@@ -315,7 +315,6 @@ sub _process {
 	   $untaint_all = 1;
     }
     
-    my @invalid = ();
 	while ( my ($field,$constraint_list) = each %{$profile->{constraints}} ) {
 
 		next unless exists $valid{$field};
@@ -365,8 +364,9 @@ sub _process {
 
 		if (@invalid_list) {
 			my @failed = map { $_->{name} } @invalid_list;
-			push @{ $self->{invalid}{$field} }, @failed;
-			push @invalid, $is_constraint_list ? [$field, @failed] : $field;
+			push @{ $self->{invalid}{$field}  }, @failed;
+            # the older interface to validate returned things differently
+			push @{ $self->{validate_invalid} }, $is_constraint_list ? [$field, @failed] : $field;
 		}
 	}
 
@@ -386,10 +386,6 @@ sub _process {
 
 	$self->{valid} ||= {};
     $self->{valid}	=  { %valid , %{$self->{valid}} };
-
-	# the older interface to validate returned things differently
-    $self->{validate_invalid}	= \@invalid;
-
     $self->{missing}	= { map { $_ => 1 } @missings };
     $self->{unknown}	= { map { $_ => 1 } @unknown };
 
