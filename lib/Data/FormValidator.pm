@@ -268,7 +268,7 @@ Applying defaults to more than one input profile. There are some parts
 of the validation profile that you might like to re-use for many form
 validations. 
 
-To facilite this, C<new()> takes a second argument, a hash reference. Here
+To facilitate this, C<new()> takes a second argument, a hash reference. Here
 the usual input profile definitions can be made. These will act as defaults for
 any subsequent calls to C<check()> on this object.
 
