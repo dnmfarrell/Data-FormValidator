@@ -1,10 +1,10 @@
-# This script tests validating keyts with multiple data
+# This script tests validating keys with multiple data
 use strict;
 use lib ('.','../t');
 
 $^W = 1;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 my $input_hash = { 
 	single_value => ' Just One ',
@@ -69,3 +69,25 @@ diag "error: $@" if $@;
 ok(!$v, 'multiple valued fields containing only undefined values should not be valid');
 
 
+###
+
+use Data::Dumper;
+
+eval { $r = Data::FormValidator->check({ 
+            cc_type => ['Check'],
+        },
+        {
+            required => 'cc_type',
+            dependencies => {
+                cc_type => {
+                    Check   => [qw( cc_num )],
+                    Visa => [qw( cc_num cc_exp cc_name )],
+                },
+            },
+        }) };
+diag "error: $@" if $@;
+
+ok($r->missing('cc_num'), 'a single valued array should still trigger the dependency check')
+    || diag Dumper($r);
+
+; 

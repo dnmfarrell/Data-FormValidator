@@ -20,7 +20,7 @@ use Data::FormValidator::Filters qw/:filters/;
 use Data::FormValidator::Constraints (qw/:validators :matchers/);
 use vars qw/$AUTOLOAD $VERSION/;
 
-$VERSION = 3.58;
+$VERSION = 3.59;
 
 =pod
 
@@ -212,7 +212,17 @@ sub _process {
         if ($valid{$field}) {
 			if (ref($deps) eq 'HASH') {
 				foreach my $key (keys %$deps) {
-					if($valid{$field} eq $key){
+                    # Handle case of a key with a single value given as an arrayref
+                    # There is probably a better, more general soution to this problem.
+                    my $val_to_compare;
+                    if ((ref $valid{$field} eq 'ARRAY') and (scalar @{ $valid{$field} } == 1)) {
+                        $val_to_compare = $valid{$field}->[0];
+                    }
+                    else {
+                        $val_to_compare = $valid{$field}
+                    }
+
+					if($val_to_compare eq $key){
 						foreach my $dep (_arrayify($deps->{$key})){
 							$required{$dep} = 1;
 						}

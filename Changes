@@ -1,7 +1,9 @@
-
-3.59 XXX
+3.59 Thu Jul 02 2004
     [ENHANCEMENTS]
     - Added more tests for Date constraints, and removed some more warnings (Michael Dorman)
+
+    [BUG FIXES]
+    - Fixed failing dependency check happening sometimes with a CGI object as input. (Drew Taylor)
 
 3.58 Wed May 05 2004
     [ENHANCEMENTS]
