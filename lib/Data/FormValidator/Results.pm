@@ -926,6 +926,23 @@ sub _constraint_input_build {
 	return @params;
 }
 
+# =head2 _constraint_check_match()
+#
+# ($value,$failed_href) = _constraint_check_match($c,\@params,$untaint_this);
+#
+# This is the routine that actually, finally, checks if a constraint passes or fails.
+#
+# Input:
+#   - $c,            a constraint hash, as returned by C<_constraint_hash_build()>.
+#   - \@params,      params to pass to the constraint, as prepared by C<_constraint_input_build()>. 
+#   - $untaint_this  bool if we untaint successful constraints. 
+#
+# Output:
+#  - $value          the value if successful
+#  - $failed_href    a hashref with the following keys:
+#		- failed     bool for failure or not
+#	    - name	     name of the failed constraint, if known. 
+
 sub _constraint_check_match {
 	my 	($c,$params,$untaint_this) = @_;
 	die "_constraint_check_match received wrong number of arguments" unless (scalar @_ == 3);
