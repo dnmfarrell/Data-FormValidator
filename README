@@ -8,11 +8,11 @@ SYNOPSIS
      my $results = Data::FormValidator->check(\%input_hash, \%dfv_profile);
  
      if ($results->has_invalid or $results->has_missing) {
-            # do something with $results->invalid, $results->missing
-            # or  $results->msgs
+         # do something with $results->invalid, $results->missing
+         # or  $results->msgs
      }
      else {
-            # do something with $results->valid
+         # do something with $results->valid
      }
 
 DESCRIPTION
@@ -52,7 +52,7 @@ VALIDATING INPUT
 
   validate()
         my( $valids, $missings, $invalids, $unknowns ) = 
-                    Data::FormValidator->validate( \%input_hash, \%dfv_profile);
+            Data::FormValidator->validate( \%input_hash, \%dfv_profile);
 
     "validate()" provides a deprecated alternative to "check()". It has the
     same input syntax, but returns a four element array, described as
@@ -259,7 +259,7 @@ INPUT PROFILE SPECIFICATION
 
   defaults
      defaults => {
-            country => "USA",
+         country => "USA",
      },
 
     This is a hash reference where keys are field names and values are
@@ -285,7 +285,7 @@ INPUT PROFILE SPECIFICATION
 
   field_filters
      field_filters => { 
-            cc_no => ['digit'],
+         cc_no => ['digit'],
      },
 
     A hash ref with field names and keys. Values are array references of
@@ -295,8 +295,8 @@ INPUT PROFILE SPECIFICATION
 
   field_filter_regexp_map
      field_filter_regexp_map => {
-            # Upper-case the first letter of all fields that end in "_name"
-            qr/_name$/      => ['ucfirst'],
+         # Upper-case the first letter of all fields that end in "_name"
+         qr/_name$/    => ['ucfirst'],
      },
 
     This is a hash reference where the keys are the regular expressions to
@@ -306,12 +306,12 @@ INPUT PROFILE SPECIFICATION
 
   constraints
      constraints => {
-            cc_no      => {  
-                    constraint  => "cc_number",
-                    params      => [ qw( cc_no cc_type ) ],
-            },
-            cc_type => "cc_type",
-            cc_exp  => "cc_exp",
+        cc_no      => {  
+            constraint  => "cc_number",
+            params        => [ qw( cc_no cc_type ) ],
+        },
+        cc_type    => "cc_type",
+        cc_exp    => "cc_exp",
       },
 
     A hash ref which contains the constraints that will be used to check
@@ -324,7 +324,7 @@ INPUT PROFILE SPECIFICATION
 
         Example:
 
-         my_zipcode_field       => 'zip',
+         my_zipcode_field     => 'zip',
 
         See Data::FormValidator::Constraints for the details of which
         built-in constraints that are available.
@@ -362,26 +362,39 @@ INPUT PROFILE SPECIFICATION
 
          # supply multiple parameters
          cc_no  => {  
-                constraint  => "cc_number",
-                params       => [ qw( cc_no cc_type ) ],
+             constraint  => "cc_number",
+             params         => [ qw( cc_no cc_type ) ],
          },
 
          # name a constraint, useful for returning error messages
          last_name => {
-                name => "ends_in_name",
-                constraint => qr/_name$/,
+             name => "ends_in_name",
+             constraint => qr/_name$/,
          },
 
-        Using the hash reference for a constraint allows the possibility to
-        pass in multiple arguments to the constraint, and to provide a name
-        for a constraint that doesn't have one. The name can be used in the
-        error message system to return a custom error message for this
-        constraint. In some cases you will want to use "constraint_method"
-        instead of "constraint". Consult the documentation for the
-        constraint you are using to see which is correct for that case. If
-        in doubt, use "constraint".
+        Using a hash reference for a constraint permits the passing of
+        multiple arguments. Required arguments are "constraint" or
+        "constraint_method". Optional arguments are "name" and "params".
 
-        For details see "VALIDATING INPUT BASED ON MULTIPLE FIELDS".
+        A "name" on a constraints 'glues' the constraint to its error
+        message in the validator profile (refer "msgs" section below). If no
+        "name" is given then it will default to the value of "constraint" or
+        "constraint_method" IF they are NOT a CODE ref or a RegExp ref.
+
+        The "params" value is a reference to an array of the parameters to
+        pass to the constraint method. If an element of the "params" list is
+        a scalar, it is assumed to be naming a key of the %input_hash and
+        that value is passed to the routine. If the parameter is a '\'
+        reference, then it is treated literally and passed unchanged to the
+        routine.
+
+        If you are using the older "constraint" over the new
+        "constraint_method" then don't forget to include the name of the
+        field to check in the "params" list. "constraint_method" provides
+        access to this value via the "get_current_*" methods (refer
+        Data::FormValidator::Constraints)
+
+        For more details see "VALIDATING INPUT BASED ON MULTIPLE FIELDS".
 
     o   an array reference
 
@@ -391,9 +404,9 @@ INPUT PROFILE SPECIFICATION
 
   constraint_regexp_map
      constraint_regexp_map => {
-            # All fields that end in _postcode have the 'postcode' constraint applied.
-            qr/_postcode$/  => 'postcode',
-     },                           
+         # All fields that end in _postcode have the 'postcode' constraint applied.
+         qr/_postcode$/    => 'postcode',
+     },                  
 
     A hash ref where the keys are the regular expressions to use and the
     values are the constraints to apply.
@@ -468,7 +481,7 @@ INPUT PROFILE SPECIFICATION
     The default formatting applied is designed for display in an XHTML web
     page. That formatting is as followings:
 
-            <span style="color:red;font-weight:bold"><span class="dfv_errors">* %s</span></span>
+        <span style="color:red;font-weight:bold"><span class="dfv_errors">* %s</span></span>
 
     The %s will be replaced with the message. The effect is that the message
     will appear in bold red with an asterisk before it. This style can be
@@ -480,36 +493,36 @@ INPUT PROFILE SPECIFICATION
     handling multiple constraints:
 
      msgs => {
-        
-            # set a custom error prefix, defaults to none
+     
+         # set a custom error prefix, defaults to none
          prefix=> 'error_',
  
-            # Set your own "Missing" message, defaults to "Missing"
+         # Set your own "Missing" message, defaults to "Missing"
          missing => 'Not Here!',
  
-            # Default invalid message, default's to "Invalid"
+         # Default invalid message, default's to "Invalid"
          invalid => 'Problematic!',
  
-            # message seperator for multiple messages
-            # Defaults to ' '
+         # message seperator for multiple messages
+         # Defaults to ' '
          invalid_seperator => ' <br /> ',
  
-            # formatting string, default given above.
+         # formatting string, default given above.
          format => 'ERROR: %s',
  
-            # Error messages, keyed by constraint name
-            # Your constraints must be named to use this.
+         # Error messages, keyed by constraint name
+         # Your constraints must be named to use this.
          constraints => {
                          'date_and_time' => 'Not a vaild time format',
                          # ...
          },
  
-            # This token will be included in the hash if there are 
-            # any errors returned. This can be useful with templating
-            # systems like HTML::Template
-            # The 'prefix' setting does not apply here.
-            # defaults to undefined
-            any_errors => 'some_errors',
+         # This token will be included in the hash if there are 
+         # any errors returned. This can be useful with templating
+         # systems like HTML::Template
+         # The 'prefix' setting does not apply here.
+         # defaults to undefined
+         any_errors => 'some_errors',
      }
 
     The hash that's prepared can be retrieved through the "msgs" method
@@ -564,8 +577,8 @@ VALIDATING INPUT BASED ON MULTIPLE FIELDS
     Example:
 
      cc_no  => {  
-            constraint  => "cc_number",
-            params       => [ qw( cc_no cc_type ) ],
+         constraint  => "cc_number",
+         params         => [ qw( cc_no cc_type ) ],
      },
 
 MULTIPLE CONSTRAINTS
@@ -580,11 +593,11 @@ MULTIPLE CONSTRAINTS
     name of your constraint. Here's an example:
 
      my_zipcode_field => [
-            'zip',
-            { 
-                    constraint =>  '/^406/', 
-                    name       =>  'starts_with_406',
-            }
+         'zip',
+         { 
+           constraint =>  '/^406/', 
+           name        =>  'starts_with_406',
+         }
      ],
 
     You can use an array reference with a single constraint in it if you

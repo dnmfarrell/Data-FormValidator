@@ -20,7 +20,7 @@ use Data::FormValidator::Filters qw/:filters/;
 use Data::FormValidator::Constraints (qw/:validators :matchers/);
 use vars qw/$AUTOLOAD $VERSION/;
 
-$VERSION = 3.52;
+$VERSION = 3.53;
 
 =pod
 
@@ -85,7 +85,6 @@ sub _process {
 	my %data        = $self->_get_data($data);
     my %valid	    = %data;
     my @missings    = ();
-    my @invalid	    = ();
     my @unknown	    = ();
 
 	# msgs() method will need access to the profile
@@ -316,6 +315,7 @@ sub _process {
 	   $untaint_all = 1;
     }
     
+    my @invalid	    = ();
     while ( my ($field,$constraint_list) = each %{$profile->{constraints}} ) {
 
        next unless exists $valid{$field};
@@ -333,7 +333,7 @@ sub _process {
 			 my $is_value_list = 1 if (ref $valid{$field} eq 'ARRAY');
 			 if ($is_value_list) {
 				 foreach (my $i = 0; $i < scalar @{ $valid{$field}} ; $i++) {
-					 my @params = $self->_constraint_input_build($c,$valid{$field}->[$i],\%data);
+					 my @params = $self->_constraint_input_build($c,$valid{$field}->[$i],\%valid);
 
 					 # set current constraint field for use by get_current_constraint_value
 					 $self->{__CURRENT_CONSTRAINT_VALUE} = $valid{$field}->[$i];
@@ -375,10 +375,14 @@ sub _process {
 			   push @invalid, $field;
 				push @{ $self->{invalid}->{$field} }, $invalid_list[0]->{name} ;
 		   }
-		   delete $valid{$field};
 	   }
 
    }
+
+    # all invalid fields are removed from valid hash
+    foreach my $field (@invalid) {
+        delete $valid{$field};
+    }
 
     # add back in missing optional fields from the data hash if we need to
 	foreach my $field ( keys %data ) {

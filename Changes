@@ -1,3 +1,9 @@
+3.53 Mon Mar 22 2004
+    [BUG FIXES]
+    - Removed bug introduced in 3.52 that would have mis-handled files that had
+      some filters applied, and were then used as parameters in constraints for
+      multiple fields. (Kevin Baker) 
+
 3.52 Sun Mar 21 2004
     [BUG FIXES]
     - After a constraint failed, future constraints relying on the same input
