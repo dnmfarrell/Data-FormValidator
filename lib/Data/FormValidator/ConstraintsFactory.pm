@@ -46,7 +46,7 @@ use vars qw( $VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS );
 BEGIN {
     require Exporter;
 
-    ($VERSION) = '$Revision: 1.3 $' =~ /Revision: ([\d.]+)/;
+    $VERSION = 1.4;
 
     @ISA = qw( Exporter );
 

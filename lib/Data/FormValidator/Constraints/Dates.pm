@@ -30,7 +30,6 @@ $VERSION = '0.03';
 # XXX TODO: find a way to make standard formats available.
 # For example, having a format that you know Postgres will accept as a valid
 
-
 sub match_date_and_time {
 	my $self = shift;
 	my $fmt_ref =  shift || die q!date_and_time: need format parameter. Be sure to pass it by reference, like this: \'MM/DD/YYYY'!;
@@ -124,7 +123,6 @@ Data::FormValidator::Constraints::Dates - Validate Dates and Times
 		},
 	}
 
-
 =head1 DESCRIPTION
 
 =head2 date_and_time
@@ -158,9 +156,11 @@ L<Data::FormValidator>, L<DateTime::Format::Pg>, L<DateTime::Format::MySQL>, L<D
 
 Mark Stosberg, E<lt>mark@summersault.comE<gt>
 
+With magic code by Jan Krynicky. 
+
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2003 by Mark Stosberg
+Copyright 2003-2005 by Mark Stosberg
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 

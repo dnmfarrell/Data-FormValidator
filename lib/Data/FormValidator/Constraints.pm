@@ -3,17 +3,16 @@
 #
 #    This file is part of Data::FormValidator.
 #
-#    Author: Francis J. Lacoste <francis.lacoste@Contre.COM>
+#    Author: Francis J. Lacoste 
 #    Maintainer: Mark Stosberg <mark@summersault.com>
 #
 #    Copyright (C) 1999,2000 iNsu Innovations Inc.
 #    Copyright (C) 2001 Francis J. Lacoste
-#    Parts Copyright 1996-1999 by Michael J. Heins <mike@heins.net>
-#    Parts Copyright 1996-1999 by Bruce Albrecht  <bruce.albrecht@seag.fingerhut.com>
+#    Parts Copyright 1996-1999 by Michael J. Heins 
+#    Parts Copyright 1996-1999 by Bruce Albrecht  
 #
 #    Parts of this module are based on work by
-#    Bruce Albrecht, <bruce.albrecht@seag.fingerhut.com> contributed to
-#    MiniVend.
+#    Bruce Albrecht, contributed to MiniVend.
 #
 #    Parts also based on work by Michael J. Heins <mikeh@minivend.com>
 #
@@ -623,7 +622,7 @@ L<Regexp::Common>
 =head1 CREDITS
 
 Some of those input validation functions have been taken from MiniVend
-by Michael J. Heins <mike@heins.net>
+by Michael J. Heins
 
 The credit card checksum validation was taken from contribution by
 Bruce Albrecht to the MiniVend
@@ -642,6 +641,7 @@ All rights reserved.
 
 Parts Copyright 1996-1999 by Michael J. Heins 
 Parts Copyright 1996-1999 by Bruce Albrecht  
+Parts Copyright 2005	  by Mark Stosberg
 
 This program is free software; you can redistribute it and/or modify
 it under the terms as perl itself.

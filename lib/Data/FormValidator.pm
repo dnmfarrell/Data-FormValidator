@@ -3,19 +3,19 @@
 #
 #    This file is part of Data::FormValidator.
 #
-#    Author: Francis J. Lacoste <francis.lacoste@iNsu.COM>
+#    Author: Francis J. Lacoste 
 #    Maintainer: Mark Stosberg <mark@stosberg.com>
 #
 #    Copyright (C) 1999 Francis J. Lacoste, iNsu Innovations
-#    Parts Copyright 1996-1999 by Michael J. Heins <mike@heins.net>
-#    Parts Copyright 1996-1999 by Bruce Albrecht  <bruce.albrecht@seag.fingerhut.com>
-#    Parts Copyright 2001-2003 by Mark Stosberg <mark@stosberg.com>
+#    Parts Copyright 1996-1999 by Michael J. Heins 
+#    Parts Copyright 1996-1999 by Bruce Albrecht  
+#    Parts Copyright 2001-2003 by Mark Stosberg 
 #
 #    Parts of this module are based on work by
-#    Bruce Albrecht, <bruce.albrecht@seag.fingerhut.com> contributed to
+#    Bruce Albrecht,  contributed to
 #    MiniVend.
 #
-#    Parts also based on work by Michael J. Heins <mikeh@minivend.com>
+#    Parts also based on work by Michael J. Heins 
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms same terms as perl itself.
@@ -23,7 +23,7 @@
 
 package Data::FormValidator;
 
-use 5.005; # for "qr" support, which isn't strictly required. -mls
+use 5.005; # for "qr" support, which isn't strictly required. 
 
 use Data::FormValidator::Results;
 use Data::FormValidator::Filters (qw/:filters/);
@@ -161,8 +161,6 @@ sub new {
     }, $class;
 }
 
-=pod
-
 =head1 VALIDATING INPUT
 
 =head2 check()
@@ -229,8 +227,7 @@ dependant.
 
 =head2 new()
 
-Using C<new()> is only needed for advanced usage, so feel free to skip this
-section if you are just getting started.
+Using C<new()> is only needed for advanced usage, including these cases:
 
 That said, using C<new()> is useful in some cases. These include:
 
@@ -357,9 +354,6 @@ sub check {
     return $results;
 }
 
-
-=pod
-
 =head1 INPUT PROFILE SPECIFICATION
 
 An input profile is a hash reference containing one or more of the following
@@ -437,7 +431,6 @@ to be optional, you could use the regular expression, /^user_/
 
 =head2 dependencies
 
-
  dependencies   => {
 
     # If cc_no is entered, make cc_type and cc_exp required
@@ -469,7 +462,6 @@ will be reported as missing.
 This is a hash reference which contains information about groups of 
 interdependent fields. The keys are arbitrary names that you create and
 the values are references to arrays of the field names in each group. 
-
 
 =head2 defaults
 
@@ -534,8 +526,8 @@ match a regular expression.
     cc_exp    => "cc_exp",
   },
 
-A hash ref which contains the constraints that
-will be used to check whether or not the field contains valid data.
+A hash ref which contains the constraints that will be used to check whether or
+not the field contains valid data.
 
 The keys in this hash are field names. The values can be any of the following:
 
@@ -555,7 +547,7 @@ built-in constraints that are available.
 
 =item o 
 
-a perl regular expression
+A perl regular expression
 
 B<Example>: 
 
@@ -575,7 +567,6 @@ This will check the input and return true or false depending on the input's vali
 By default, the constraint function takes one parameter, the field to be
 validated.  To validate a field based more inputs than just the field itself,
 see C<VALIDATING INPUT BASED ON MULTIPLE FIELDS>.
-
 
 B<Examples>:
 
