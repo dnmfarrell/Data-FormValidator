@@ -37,7 +37,7 @@ t/20_careful_exception_handling.t
 t/21_multiple_fields.t
 t/22_msgs.t
 t/23_dates.t
-t/24_upload.t
+t/upload.t
 t/25_results.t
 t/26_qr.t
 t/27_qualify_ref_happy_death.t
