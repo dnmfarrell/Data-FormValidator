@@ -4,7 +4,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile
   (
    NAME        => 'Data::FormValidator',
-   VERSION     => '3.53',
+   VERSION     => '3.54',
    PL_FILES    => {},
    INSTALLDIRS => 'site',
    PREREQ_PM   => {

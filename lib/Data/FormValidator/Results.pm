@@ -20,7 +20,7 @@ use Data::FormValidator::Filters qw/:filters/;
 use Data::FormValidator::Constraints (qw/:validators :matchers/);
 use vars qw/$AUTOLOAD $VERSION/;
 
-$VERSION = 3.53;
+$VERSION = 3.54;
 
 =pod
 
