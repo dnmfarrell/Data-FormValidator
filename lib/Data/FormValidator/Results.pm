@@ -315,39 +315,39 @@ sub _process {
 	   $untaint_all = 1;
     }
     
-    my @invalid	    = ();
-    while ( my ($field,$constraint_list) = each %{$profile->{constraints}} ) {
+    my @invalid = ();
+	while ( my ($field,$constraint_list) = each %{$profile->{constraints}} ) {
 
-       next unless exists $valid{$field};
+		next unless exists $valid{$field};
 
-	   my $is_constraint_list = 1 if (ref $constraint_list eq 'ARRAY');
-	   my $untaint_this =  ($untaint_all || $untaint_hash{$field} || 0);
+		my $is_constraint_list = 1 if (ref $constraint_list eq 'ARRAY');
+		my $untaint_this =  ($untaint_all || $untaint_hash{$field} || 0);
 
-	   my @invalid_list;
-	   foreach my $constraint_spec (_arrayify($constraint_list)) {
-		   	 # set current constraint field for use by get_current_constraint_field
-			 $self->{__CURRENT_CONSTRAINT_FIELD} = $field;
-		   	
-			 my $c = $self->_constraint_hash_build($field,$constraint_spec,$untaint_this);
+		my @invalid_list;
+		foreach my $constraint_spec (_arrayify($constraint_list)) {
+			# set current constraint field for use by get_current_constraint_field
+			$self->{__CURRENT_CONSTRAINT_FIELD} = $field;
 
-			 my $is_value_list = 1 if (ref $valid{$field} eq 'ARRAY');
-			 if ($is_value_list) {
-				 foreach (my $i = 0; $i < scalar @{ $valid{$field}} ; $i++) {
-					 my @params = $self->_constraint_input_build($c,$valid{$field}->[$i],\%valid);
+			my $c = $self->_constraint_hash_build($field,$constraint_spec,$untaint_this);
 
-					 # set current constraint field for use by get_current_constraint_value
-					 $self->{__CURRENT_CONSTRAINT_VALUE} = $valid{$field}->[$i];
+			my $is_value_list = 1 if (ref $valid{$field} eq 'ARRAY');
+			if ($is_value_list) {
+				foreach (my $i = 0; $i < scalar @{ $valid{$field}} ; $i++) {
+					my @params = $self->_constraint_input_build($c,$valid{$field}->[$i],\%valid);
 
-					 my ($match,$failed) = _constraint_check_match($c,\@params,$untaint_this);
-					 if ($failed) {
+					# set current constraint field for use by get_current_constraint_value
+					$self->{__CURRENT_CONSTRAINT_VALUE} = $valid{$field}->[$i];
+
+					my ($match,$failed) = _constraint_check_match($c,\@params,$untaint_this);
+					if ($failed) {
 						push @invalid_list, $failed;
-					 }
-					 else {
+					}
+					else {
 						 $valid{$field}->[$i] = $match if $untaint_this;
-					 }
-				 }
-			 }
-			 else {
+					}
+				}
+			}
+			else {
 				my @params = $self->_constraint_input_build($c,$valid{$field},\%data);
 
 				# set current constraint field for use by get_current_constraint_value
@@ -359,30 +359,21 @@ sub _process {
 				}
 				else {
 					$valid{$field} = $match if $untaint_this;
-
 				}
-			 }
-
+			}
 	   }
 
-	   if (@invalid_list) {
-		   if ($is_constraint_list) {
-			   my @failed = map { $_->{name} } @invalid_list;
-				push @invalid, [$field, @failed];
-				push @{ $self->{invalid}->{$field} }, @failed;
-		   }
-		   else {
-			   push @invalid, $field;
-				push @{ $self->{invalid}->{$field} }, $invalid_list[0]->{name} ;
-		   }
-	   }
-
-   }
+		if (@invalid_list) {
+			my @failed = map { $_->{name} } @invalid_list;
+			push @{ $self->{invalid}{$field} }, @failed;
+			push @invalid, $is_constraint_list ? [$field, @failed] : $field;
+		}
+	}
 
     # all invalid fields are removed from valid hash
-    foreach my $field (@invalid) {
-        delete $valid{$field};
-    }
+	foreach my $field (keys %{ $self->{invalid} }) {
+		delete $valid{$field};
+	}
 
     # add back in missing optional fields from the data hash if we need to
 	foreach my $field ( keys %data ) {
@@ -397,7 +388,7 @@ sub _process {
     $self->{valid}	=  { %valid , %{$self->{valid}} };
 
 	# the older interface to validate returned things differently
-    $self->{validate_invalid}	= \@invalid || [];
+    $self->{validate_invalid}	= \@invalid;
 
     $self->{missing}	= { map { $_ => 1 } @missings };
     $self->{unknown}	= { map { $_ => 1 } @unknown };
