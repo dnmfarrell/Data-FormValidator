@@ -454,7 +454,7 @@ sub valid {
 
 =head1 has_missing()
 
-This method returns true if the results contains missing fields.
+This method returns true if the results contain missing fields.
 
 =cut
 
@@ -485,7 +485,7 @@ sub missing {
 
 =head1 has_invalid()
 
-This method returns true if the results contains fields with invalid
+This method returns true if the results contain fields with invalid
 data.
 
 =cut
@@ -520,7 +520,7 @@ sub invalid {
 
 =head1 has_unknown()
 
-This method returns true if the results contains unknown fields.
+This method returns true if the results contain unknown fields.
 
 =cut
 
