@@ -733,9 +733,9 @@ as providing custom messages per field, and handling multiple constraints:
      # Default invalid message, default's to "Invalid"
      invalid => 'Problematic!',
  
-     # message seperator for multiple messages
+     # message separator for multiple messages
      # Defaults to ' '
-     invalid_seperator => ' <br /> ',
+     invalid_separator => ' <br /> ',
  
      # formatting string, default given above.
      format => 'ERROR: %s',

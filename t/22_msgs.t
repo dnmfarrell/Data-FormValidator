@@ -1,4 +1,4 @@
-use Test::More tests => 14;
+use Test::More tests => 15;
 use strict;
 
 use Data::FormValidator;
@@ -177,4 +177,30 @@ my @basic_input = (
 $results = Data::FormValidator->check(@basic_input);
 eval { $results->msgs };
 ok ((not $@), 'calling msgs method without hash definition');
+
+###
+{ 
+    my $test_name = 'Spelling "separator" correctly should work OK.';
+    my $results = Data::FormValidator->check(
+        {
+            field => 'value',
+        },
+        {
+            required => [qw/field/],
+            constraints => {
+                field => ['email','province'],
+            },
+            msgs => {
+                invalid_separator=> ' ## ',
+            },
+        }
+    );
+
+    my $msgs = $results->msgs;
+    like($msgs->{field},qr/##/,$test_name);
+}
+
+
+
+
 

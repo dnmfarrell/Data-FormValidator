@@ -20,7 +20,7 @@ use Data::FormValidator::Filters qw/:filters/;
 use Data::FormValidator::Constraints (qw/:validators :matchers/);
 use vars qw/$AUTOLOAD $VERSION/;
 
-$VERSION = 3.59;
+$VERSION = 3.64;
 
 =pod
 
@@ -559,7 +559,7 @@ is determined by parameters in the C<msgs> area of the validation profile,
 described in the L<Data::FormValidator> documentation.
 
 This method takes one possible parameter, a hash reference containing the same 
-options that you can define in the validation profile. This allows you to seperate
+options that you can define in the validation profile. This allows you to separate
 the controls for message display from the rest of the profile. While validation profiles
 may be different for every form, you may wish to format messages the same way
 across many projects.
@@ -580,18 +580,31 @@ sub msgs {
 
 	# Allow msgs to be called more than one to accumulate error messages
 	$self->{msgs} ||= {};
-	$self->{profile}->{msgs} ||= {};
+	$self->{profile}{msgs} ||= {};
 	$self->{msgs} = { %{ $self->{msgs} }, %$controls };
+
+    # Legacy typo support. 
+    for my $href ($self->{msgs}, $self->{profile}{msgs}) {
+        if (
+             (not defined $href->{invalid_separator}) 
+             &&  (defined $href->{invalid_seperator})
+         ) {
+            $href->{invalid_separator} = $href->{invalid_seperator};
+        }
+    }
 
 	my %profile = (
 		prefix	=> '',
 		missing => 'Missing',
 		invalid	=> 'Invalid',
-		invalid_seperator => ' ',
+		invalid_separator => ' ',
+
 		format  => '<span style="color:red;font-weight:bold"><span class="dfv_errors">* %s</span></span>',
 		%{ $self->{msgs} },
-		%{ $self->{profile}->{msgs} },
+		%{ $self->{profile}{msgs} },
 	);
+
+
 	my %msgs = ();
 
 	# Add invalid messages to hash
@@ -600,7 +613,7 @@ sub msgs {
 	if ($self->has_invalid) {
 		my $invalid = $self->invalid;
 		for my $i ( keys %$invalid ) {
-			$msgs{$i} = join $profile{invalid_seperator}, map {
+			$msgs{$i} = join $profile{invalid_separator}, map {
 				_error_msg_fmt($profile{format},($profile{constraints}{$_} || $profile{invalid}))
 				} @{ $invalid->{$i} };
 		}
