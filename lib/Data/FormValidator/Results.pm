@@ -119,7 +119,7 @@ sub _process {
     foreach my $filter (_arrayify($profile->{filters})) {
 		if (defined $filter) {
 			# Qualify symbolic references
-			$filter = (ref $filter ? $filter : *{qualify_to_ref("filter_$filter")}{CODE}) ||
+			$filter = (ref $filter eq 'CODE' ? $filter : *{qualify_to_ref("filter_$filter")}{CODE}) ||
 				die "No filter found named: '$filter'";
 			foreach my $field ( keys %valid ) {
 				# apply filter, modifying %valid by reference, skipping undefined values
@@ -133,7 +133,7 @@ sub _process {
 		foreach my $filter ( _arrayify($filters)) {
 			if (defined $filter) {
 				# Qualify symbolic references
-				$filter = (ref $filter ? $filter : *{qualify_to_ref("filter_$filter")}{CODE}) ||
+				$filter = (ref $filter eq 'CODE' ? $filter : *{qualify_to_ref("filter_$filter")}{CODE}) ||
 					die "No filter found named '$filter'";
 				
 				# apply filter, modifying %valid by reference
@@ -149,7 +149,7 @@ sub _process {
 		foreach my $filter ( _arrayify($filters)) {
 			if (defined $filter) {
 				# Qualify symbolic references
-				$filter = (ref $filter ? $filter : *{qualify_to_ref("filter_$filter")}{CODE}) ||
+				$filter = (ref $filter eq 'CODE' ? $filter : *{qualify_to_ref("filter_$filter")}{CODE}) ||
 					die "No filter found named '$filter'";
 
 				no strict 'refs';
