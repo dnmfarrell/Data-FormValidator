@@ -1,4 +1,9 @@
 3.52 XXX
+    [BUG FIXES]
+    - After a constraint failed, future constraints relying on the same input
+      parameters may have falsely failed. (Kevin Baker)  
+    - Untainting of false values (such as '0') was broken, and has been fixed.    
+      (Kato Atsushi)
 
     [ENHANCEMENTS]
     - the profile syntax checker now reports all invalid keys, instead of just

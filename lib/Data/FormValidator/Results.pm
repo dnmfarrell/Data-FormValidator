@@ -338,7 +338,7 @@ sub _process {
 					 # set current constraint field for use by get_current_constraint_value
 					 $self->{__CURRENT_CONSTRAINT_VALUE} = $valid{$field}->[$i];
 
-					 my ($match,$failed) = _constraint_check_match($c,\@params);
+					 my ($match,$failed) = _constraint_check_match($c,\@params,$untaint_this);
 					 if ($failed) {
 						push @invalid_list, $failed;
 					 }
@@ -353,7 +353,7 @@ sub _process {
 				# set current constraint field for use by get_current_constraint_value
 				$self->{__CURRENT_CONSTRAINT_VALUE} = $valid{$field};
 
-				my ($match,$failed) = _constraint_check_match($c,\@params);
+				my ($match,$failed) = _constraint_check_match($c,\@params,$untaint_this);
 				if ($failed) {
 					push @invalid_list, $failed
 				}
@@ -723,16 +723,16 @@ sub _create_sub_from_RE {
 	my $re = shift || return undef;
 	my $untaint_this = shift;
 
-	# This looks like VooDoo to me, but it works. Simplications welcome. -mls 05/26/03 
-	my $return_code = ($untaint_this) ? '; return ($& =~ m/(.*)/s)[0] if defined($`);' : '';
-
 	my $sub;
 	# If it's "qr" style
 	if (substr($re,0,1) eq '(') {
 		$sub = sub { 
-			my $match = $_[0] =~ $re; 
-			if ($untaint_this && defined $-[0]) {
-				return (substr($_[0], $-[0], $+[0] - $-[0]) =~ m/(.*)/s)[0];
+            my $val = shift;
+			my ($match) = ($val =~ $re); 
+			if ($untaint_this && defined $match) {
+                # pass the value through a RE that matches anything to untaint it.
+                my ($untainted) = ($&  =~ m/(.*)/s);
+				return $untainted;
 			}
 			else {
 				return $match;
@@ -741,6 +741,7 @@ sub _create_sub_from_RE {
 
 	}
 	else {
+        my $return_code = ($untaint_this) ? '; return ($& =~ m/(.*)/s)[0] if defined($`);' : '';
 		$sub = eval 'sub { $_[0] =~ '.$re.$return_code. '}';
 	    die "Error compiling regular expression $re: $@" if $@;
 	}
@@ -888,10 +889,17 @@ sub _constraint_input_build {
 }
 
 sub _constraint_check_match {
-	my 	($c,$params) = @_;
-	die "_constraint_check_match received wrong number of arguments" unless (scalar @_ == 2);
+	my 	($c,$params,$untaint_this) = @_;
+	die "_constraint_check_match received wrong number of arguments" unless (scalar @_ == 3);
 
-	if (my $match = $c->{constraint}->( @$params )) { 
+    my $match = $c->{constraint}->( @$params );
+
+    # We need to make this distinction when untainting,
+    # to allow untainting values that are defined but not true,
+    # such as zero.
+    my $success =  ($untaint_this) ? length $match : $match;
+
+	if ($success) { 
 		return $match;
 	}
 	else {

@@ -2,11 +2,10 @@
 
 use strict;
 
+use Test::More tests => 28;
 use Data::FormValidator;
 
 $ENV{PATH} = "/bin/";
-
-print "1..12\n";
 
 sub is_tainted {
     my $val = shift;
@@ -33,6 +32,7 @@ my $data4 = {
 	zip_field1 => [$ARGV[7],$ARGV[7]],  #12345 , 12345
 	zip_field2 => [$ARGV[7],$ARGV[8]],  #12345 , oops
 };
+
 
 my $profile = 
 {
@@ -76,98 +76,71 @@ my $validator = new Data::FormValidator($profile);
 
 #Rules #1
 my ( $valid, $missing, $invalid, $unknown );
+eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data1, "rules1"); };
 
-eval {  ( $valid, $missing, $invalid, $unknown )
-	    = $validator->validate(  $data1, "rules1");
-    };
-
-if ($@ 
-    or !$valid->{firstname} 
-    or is_tainted($valid->{firstname})
-    or ($valid->{firstname} ne $data1->{firstname})) {
-    print "not " 
-}
-print "ok 1\n";
+ok(!$@,'avoided eval error');
+ok($valid->{firstname}, 'found firstname'); 
+ok(! is_tainted($valid->{firstname}), 'firstname is untainted');
+is($valid->{firstname},$data1->{firstname}, 'firstname has expected value');
 
 #Rules #2
-eval {  ( $valid, $missing, $invalid, $unknown )
-	    = $validator->validate(  $data2, "rules2");
-    };   
+eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data2, "rules2"); };   
 
-if ($@) {
-    print "not ";
-}
-print "ok 2\n";
+ok(!$@,'avoided eval error');
+ok($valid->{lastname});
+ok(!is_tainted($valid->{lastname}));
+is($valid->{lastname},$data2->{lastname});
 
-if (!$valid->{lastname} 
-    or is_tainted($valid->{lastname})
-    or ($valid->{lastname} ne $data2->{lastname})) {
-    print "not ";
-}
+ok($valid->{email1});
+ok(!is_tainted($valid->{email1}));
+is($valid->{email1},$data2->{email1});
 
-print "ok 3\n";
-
-if (!$valid->{email1} 
-    or is_tainted($valid->{email1})
-    or ($valid->{email1} ne $data2->{email1})) {
-    print "not ";
-}
-print "ok 4\n";
-
-#In this case we're testing to make sure email2 wasn't untainted
-if (!$valid->{email2} 
-    or !is_tainted($valid->{email2})
-    or ($valid->{email2} ne $data2->{email2})) {
-    print "not ";
-}
-print "ok 5\n";
+ok($valid->{email2});
+ok(is_tainted($valid->{email2}), 'email2 is tainted');
+is($valid->{email2},$data2->{email2});
 
 #Rules #3
-eval {  ( $valid, $missing, $invalid, $unknown )
-	    = $validator->validate(  $data3, "rules3");
-    };   
+eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data3, "rules3"); };   
 
-if ($@) {
-    print "not ";
-}
-print "ok 6\n";
+ok(!$@);
 
-if (!$valid->{ip_address} 
-    or is_tainted($valid->{ip_address})
-    or ($valid->{ip_address} ne $data3->{ip_address})) {
-    print "not ";
-}
-print "ok 7\n";
+ok($valid->{ip_address});
+ok(!is_tainted($valid->{ip_address}));
+is($valid->{ip_address},$data3->{ip_address});
 
 #in this case we're expecting no match
-if ($valid->{cats_name} 
-    or $invalid->[0] ne "cats_name") {
-    print "not ";
-}
-print "ok 8\n";
+ok(!(exists $valid->{cats_name}), 'cats_name is not valid');
+is($invalid->[0], 'cats_name', 'cats_name fails constraint');
 
-if (!$valid->{dogs_name} 
-    or is_tainted($valid->{dogs_name})
-    or ($valid->{dogs_name} ne $data3->{dogs_name})) {
-    print "not ";
-}
-print "ok 9\n";
+ok($valid->{dogs_name});
+ok(!is_tainted($valid->{dogs_name}));
+is($valid->{dogs_name},$data3->{dogs_name});
 
 # Rules # 4
-eval {  ( $valid, $missing, $invalid, $unknown )
-	    = $validator->validate(  $data4, "rules4");
-    };   
+eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data4, "rules4"); };   
+ok(!$@, 'avoided eval error');
 
-if ($@) {
-    print "not ";
-}
-print "ok 10\n";
-# zip_field1 should be untainted
-print "not " if is_tainted($valid->{zip_field1}->[0]);
-print "ok 11\n";
+ok(!is_tainted($valid->{zip_field1}->[0]),
+        'zip_field1 should be untainted');
 
-# zip_field2 should be tainted
-print "not " unless is_tainted($valid->{zip_field2}->[0]);
-print "ok 12\n";
+ok(is_tainted($valid->{zip_field2}->[0]),
+    'zip_field2 should be tainted');
 
 
+my $results = Data::FormValidator->check(
+    {
+    qr_re_no_parens => $ARGV[9], # 0
+    qr_re_parens    => $ARGV[9], # 0
+
+    },
+    {
+            required => [qw/qr_re_no_parens qr_re_parens/],
+             constraints=>{
+                 qr_re_no_parens => qr/^.*$/,
+                 qr_re_parens    => qr/^(.*)$/,
+             },
+             untaint_all_constraints =>1
+         });
+
+is($results->valid('qr_re_no_parens'),0,'qr RE without parens in untainted');
+is($results->valid('qr_re_parens')   ,0,'qr RE with    parens in untainted');
