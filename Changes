@@ -1,3 +1,7 @@
+3.60 Mon Sep 20 18:10:23 EST 2004
+	[BUG FIXES]
+	- file_max_bytes seemed to never be reporting failure.
+
 3.59 Thu Jul 02 2004
     [ENHANCEMENTS]
     - Added more tests for Date constraints, and removed some more warnings (Michael Dorman)
