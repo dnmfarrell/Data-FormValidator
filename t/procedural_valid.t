@@ -3,7 +3,7 @@ use strict;
 
 $^W = 1;
 
-use Test::More tests => 26;
+use Test::More qw/no_plan/;
 
 use Data::FormValidator qw(:validators :matchers);
 
@@ -68,5 +68,15 @@ $i++;
     ok($@) or
       diag sprintf("%-25s", "Fake Valid Routine");
 }
+
+TODO: {
+    local $TODO = 'improve email validation'; 
+    ok(! valid_email('pretty_b;ue_eyes16@cpan.org'), 'semi-colons in e-mail aren\'t valid');
+    ok(! valid_email('Ollie 102@cpan.org'), 'spaces in e-mail aren\'t valid');
+}
+
+
+
+
 
 
