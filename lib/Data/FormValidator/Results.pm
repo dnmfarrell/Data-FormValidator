@@ -738,7 +738,7 @@ sub prefix_hash {
 
 
 # We tolerate two kinds of regular expression formats
-# First, the preferred format made with "qr", matched using a learning paren
+# First, the preferred format made with "qr", matched using a leading paren
 # Also, we accept the deprecated format given as strings: 'm/old/'
 # (which must start with a slash or "m", not a paren)
 sub _create_sub_from_RE {
@@ -813,6 +813,22 @@ sub _filter_apply {
 		$valid->{$field} = $filter->( $valid->{$field} ) if defined $valid->{$field};
 	}
 }
+
+# =head2 _constraint_hash_build()
+# 
+# $constraint_href = $self->_constraint_hash_build($spec,$untaint_p)
+#
+# Input:
+#   - $spec     # Any constraint valid in the profile
+#   - $untaint  # bool for whether we could try to untaint the field. 
+#
+# Output:
+#  - $constraint_hashref
+#    Keys are as follows:  
+# 		constraint - the constraint as coderef
+# 		name	   - the constraint name, if we know it. 
+# 		params	   - 'params', as given in the hashref style of specifying a constraint
+# 		is_method  - bool for whether this was a 'constraint' or 'constraint_method'
 
 sub _constraint_hash_build {
 	my ($self,$constraint_spec,$untaint_this) = @_;
