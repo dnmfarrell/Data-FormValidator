@@ -1,8 +1,11 @@
 --- #YAML:1.0
 name: Data-FormValidator
-version: 3.61
+version: 3.62
+author: Mark Stosberg <mark@summersault.com>
+abstract: |-
+  Validates user input (usually from an HTML form) based
+  on input profile.
 license: perl
-distribution_type: module
 requires:
   Date::Calc: 0
   File::MMagic: 1.17
@@ -10,13 +13,10 @@ requires:
   MIME::Types: 1.005
   Regexp::Common: 0
   Test::More: 0
-recommends: {}
-build_requires: {}
-conflicts: {}
 provides:
   Data::FormValidator:
     file: lib/Data/FormValidator.pm
-    version: 3.61
+    version: 3.62
   Data::FormValidator::Constraints:
     file: lib/Data/FormValidator/Constraints.pm
     version: 3.5
@@ -35,4 +35,4 @@ provides:
   Data::FormValidator::Results:
     file: lib/Data/FormValidator/Results.pm
     version: 3.59
-generated_by: Module::Build version 0.21
+generated_by: Module::Build version 0.25

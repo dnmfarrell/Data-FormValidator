@@ -701,10 +701,6 @@ documentation for more information
 
 =head2 msgs
 
-B<NOTE:> This part of the interface is newer and may change.  Use in production
-code at your own caution. Contact the maintainer with any questions or
-suggestions.
-
 This key is used to define parameters related to formatting error messages
 returned to the user.
 
