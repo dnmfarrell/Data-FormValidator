@@ -626,22 +626,22 @@ Some of those input validation functions have been taken from MiniVend
 by Michael J. Heins <mike@heins.net>
 
 The credit card checksum validation was taken from contribution by
-Bruce Albrecht <bruce.albrecht@seag.fingerhut.com> to the MiniVend
+Bruce Albrecht to the MiniVend
 program.
 
 =head1 AUTHORS
 
-    Francis J. Lacoste <francis.lacoste@iNsu.COM>
-    Michael J. Heins <mike@heins.net>
-    Bruce Albrecht  <bruce.albrecht@seag.fingerhut.com>
+    Francis J. Lacoste 
+    Michael J. Heins 
+    Bruce Albrecht  
 
 =head1 COPYRIGHT
 
 Copyright (c) 1999 iNsu Innovations Inc.
 All rights reserved.
 
-Parts Copyright 1996-1999 by Michael J. Heins <mike@heins.net>
-Parts Copyright 1996-1999 by Bruce Albrecht  <bruce.albrecht@seag.fingerhut.com>
+Parts Copyright 1996-1999 by Michael J. Heins 
+Parts Copyright 1996-1999 by Bruce Albrecht  
 
 This program is free software; you can redistribute it and/or modify
 it under the terms as perl itself.
