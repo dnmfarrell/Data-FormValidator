@@ -1,4 +1,4 @@
-3.52 XXX
+3.52 Sun Mar 21 2004
     [BUG FIXES]
     - After a constraint failed, future constraints relying on the same input
       parameters may have falsely failed. (Kevin Baker)  
