@@ -47,4 +47,15 @@ ok(not $@);
 ok($missings{'cc_num'});
 ok(not $missings{'cc_exp'});
 
+## Now, some tests using a CGI.pm object as input
+use CGI;
+my $q = CGI->new('cc_type=Visa');
+my $results;
+eval {
+    $results = $validator->check($input_hashref,'default'); 
+};
+ok($results->missing('cc_num'), 'using CGI.pm object for input');
+
+
+
 

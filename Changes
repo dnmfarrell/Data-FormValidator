@@ -1,4 +1,8 @@
 
+3.59 XXX
+    [ENHANCEMENTS]
+    - Added more tests for Date constraints, and removed some more warnings (Michael Dorman)
+
 3.58 Wed May 05 2004
     [ENHANCEMENTS]
     - Test suite has been migrated further to 'Test::More' style, and

@@ -67,11 +67,15 @@ sub _prepare_date_format {
 
     my ($i, @order) = 0;
     $format =~ s{([YMDhms]+|pp)(\?)?}{
-        $order[$i++] = substr($1,0,1);
-        if ($1 eq 'pp') {
+        my ($chr,$q) = ($1,$2);
+        $chr = '' if not defined $chr;
+        $q   = '' if not defined $chr;
+
+        $order[$i++] = substr($chr,0,1);
+        if ($chr eq 'pp') {
             "(AM|PM|am|pm)"
         } else {
-            '(' . ('\d' x length($1)) . ($2 ? $2 : "") . ")"
+            '(' . ('\d' x length($chr)) . ($q ? $q : "") . ")"
         }
     }ge;
 
@@ -91,8 +95,10 @@ sub _parse_date_format {
         $result{$format->[1]->[$i]} ||= $data[$i];
     }
 
-    $result{h} += 12 if ($result{p} eq 'PM' and $result{h} != 12);
-    $result{h} = 0   if ($result{p} eq 'AM' and $result{h} == 12);
+    if (exists $result{p}) {
+        $result{h} += 12 if ($result{p} eq 'PM' and $result{h} != 12);
+        $result{h} = 0   if ($result{p} eq 'AM' and $result{h} == 12);
+    }
 
 
     return $untainted_date, map {defined $result{$_} ? $result{$_} : 0} qw(Y M D h m s);
@@ -102,7 +108,6 @@ sub _parse_date_format {
 
 1;
 __END__
-# Below is stub documentation for your module. You'd better edit it!
 
 =head1 NAME
 

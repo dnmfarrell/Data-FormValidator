@@ -1,4 +1,5 @@
-use Test::More tests => 11;
+#!/usr/bin/perl -w
+use Test::More qw/no_plan/;
 BEGIN { use_ok('Data::FormValidator::Constraints::Dates') };
 use strict;
 
@@ -12,6 +13,17 @@ ok ($day == 2);
 ok ($hour == 13);
 ok ($min == 1);
 ok ($sec == 3); 
+
+# Now try again, leaving out PM, which may trigger a warning when it shouldn't
+$format = Data::FormValidator::Constraints::Dates::_prepare_date_format('MM/DD/YYYY hh?:mm:ss');
+($date,$year, $month, $day, $hour, $min, $sec) = Data::FormValidator::Constraints::Dates::_parse_date_format($format, '12/02/2003 1:01:03');
+is($date,'12/02/2003 1:01:03','returning untainted date');
+ok ($year == 2003, 'basic date prepare and parse test');
+ok ($month == 12, 'month');
+ok ($day == 2,'day');
+ok ($hour == 1,'hour');
+ok ($min == 1,'min');
+ok ($sec == 3,'sec'); 
 
 use Data::FormValidator;
 
