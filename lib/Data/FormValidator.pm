@@ -31,7 +31,7 @@ use Data::FormValidator::Constraints (qw/:validators :matchers/);
 
 use vars qw( $VERSION $AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS );
 
-$VERSION = '3.55';
+$VERSION = '3.56';
 
 require Exporter;
 @ISA = qw(Exporter);
@@ -91,7 +91,6 @@ require Exporter;
 
 
 use strict;
-use Carp; # generate better errors with more context
 use Symbol;
 
 

@@ -1,5 +1,17 @@
-3.56 XXX
+
+3.XXX
+    [BUG FIXES]
+    - no longer try to use a Carp module method without having it loaded. Instead,
+      we just call "die" now. (Gunnar Wolf)
+
+
+3.56 Fri Apr 16 2004 
+    [BUG FIXES]
+    - Fixed a mis-handling of unknown variables. Functionality brought inline
+      with documented behaviour (Richard Clarke)
     - fixed bug image dimensions test in DFV::Constraints::Upload (Barry Hoggard)
+
+    [ENHANCEMENTS]
     - added mention of HTML::Template::Associate::FormValidator to SEE ALSO
 
 3.55 Wed Mar 25 2004

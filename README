@@ -645,8 +645,10 @@ SEE ALSO
     CGI::Application::ValidateRM, a CGI::Application & Data::FormValidator
     glue module
 
-    Params::Validate looks like a better choice for validating function
-    parameters.
+    HTML::Template::Associate::FormValidator is designed to make some kinds
+    of integration with HTML::Template easier.
+
+    Params::Validate is useful for validating function parameters.
 
     Regexp::Common, Data::Types, Data::Verify, Email::Valid,
     String::Checker, CGI::ArgChecker, CGI::FormMagick::Validator,

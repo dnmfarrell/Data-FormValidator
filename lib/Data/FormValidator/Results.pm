@@ -20,7 +20,7 @@ use Data::FormValidator::Filters qw/:filters/;
 use Data::FormValidator::Constraints (qw/:validators :matchers/);
 use vars qw/$AUTOLOAD $VERSION/;
 
-$VERSION = 3.55;
+$VERSION = 3.56;
 
 =pod
 
@@ -387,7 +387,7 @@ sub _process {
 	$self->{valid} ||= {};
     $self->{valid}	=  { %valid , %{$self->{valid}} };
     $self->{missing}	= { map { $_ => 1 } @missings };
-    $self->{unknown}	= { map { $_ => 1 } @unknown };
+    $self->{unknown}	= { map { $_ => $data{$_} } @unknown };
 
 }
 
@@ -532,7 +532,8 @@ is unknown, undef otherwise.
 =cut
 
 sub unknown {
-    return $_[0]{unknown}{$_[1]} if (defined $_[1]);
+    return (wantarray ? _arrayify($_[0]{unknown}{$_[1]}) : $_[0]{unknown}{$_[1]})
+      if (defined $_[1]);
 
     wantarray ? keys %{$_[0]{unknown}} : $_[0]{unknown};
 }
@@ -914,7 +915,7 @@ sub _get_data {
 		my %return;
 		# make sure object supports param()
 		defined($data->UNIVERSAL::can('param')) or
-		croak("Data::FormValidator->validate() or check() called with an object which lacks a param() method!");
+		die "Data::FormValidator->validate() or check() called with an object which lacks a param() method!";
 		foreach my $k ($data->param()){
 			# we expect param to return an array if there are multiple values
 			my @v = $data->param($k);
