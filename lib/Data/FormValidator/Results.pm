@@ -988,12 +988,9 @@ sub _get_data {
 	$self->{__INPUT_DATA} = $data;
 	require UNIVERSAL;
 
-    # This checks whether we have an object or not.
-    if (UNIVERSAL::isa($data,'UNIVERSAL') ) {
+    # This checks whether we have an object that supports param
+    if (UNIVERSAL::can($data,'param') ) {
 		my %return;
-		# make sure object supports param()
-		defined($data->UNIVERSAL::can('param')) or
-		die "Data::FormValidator->validate() or check() called with an object which lacks a param() method!";
 		foreach my $k ($data->param()){
 			# we expect param to return an array if there are multiple values
 			my @v = $data->param($k);
@@ -1002,8 +999,11 @@ sub _get_data {
 		return %return;
 	}
 	# otherwise, it's already a hash reference
-	else {
+    elsif (ref $data eq 'HASH') {
 		return %$data;	
+    }
+	else {
+		die "Data::FormValidator->validate() or check() called with invalid input data structure.";
 	}
 }
 
