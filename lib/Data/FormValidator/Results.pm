@@ -279,36 +279,6 @@ sub _process {
 		push @missings, $field unless ($enough_required_fields >= $num_fields_to_require);
 	}
 
-    # add in the constraints from the regexp map 
-	foreach my $re (keys %{ $profile->{constraint_regexp_map} }) {
-		my $sub = _create_sub_from_RE($re);
-
-		# find all the keys that match this RE and add a constraint for them
-		for my $key (keys %valid) {
-			if ($sub->($key)) {
-					my $cur = $profile->{constraints}{$key};
-					my $new = $profile->{constraint_regexp_map}{$re};
-					# If they already have an arrayref of constraints, add to the list
-					if (ref $cur eq 'ARRAY') {
-						push @{ $profile->{constraints}{$key} }, $new;
-					} 
-					# If they have a single constraint defined, create an array ref with with this plus the new one
-					elsif ($cur) {
-						$profile->{constraints}{$key} = [$cur,$new];
-					}
-					# otherwise, a new constraint is created with this as the single constraint
-					else {
-						$profile->{constraints}{$key} = $new;
-					}
-
-					warn "constraint_regexp_map: $key matches\n" if $profile->{debug};
-						
-				}
-			}
-	}
- 
-    # Check constraints
-
     #Decide which fields to untaint
     my ($untaint_all, %untaint_hash);
 	if (defined($profile->{untaint_constraint_fields})) {
@@ -325,65 +295,23 @@ sub _process {
 	   && ($profile->{untaint_all_constraints} == 1)) {
 	   $untaint_all = 1;
     }
-    
-	while ( my ($field,$constraint_list) = each %{$profile->{constraints}} ) {
 
-		next unless exists $valid{$field};
+    # add in the constraints from the regexp maps
+	$profile->{constraints} ||= {};
+	$profile->{constraints} = {
+	    %{ $profile->{constraints} }, 	
+		_add_constraints_from_map($profile,'constraint',\%valid),
+	};
+	$profile->{constraint_methods} ||= {};
+	$profile->{constraint_methods} = {
+	    %{ $profile->{constraint_methods} }, 	
+		_add_constraints_from_map($profile,'constraint_method',\%valid),
+	};
 
-		my $is_constraint_list = 1 if (ref $constraint_list eq 'ARRAY');
-		my $untaint_this =  ($untaint_all || $untaint_hash{$field} || 0);
+	$self->_check_constraints($profile->{constraints},\%valid,$untaint_all,\%untaint_hash);
 
-		my @invalid_list;
-		foreach my $constraint_spec (_arrayify($constraint_list)) {
-			# set current constraint field for use by get_current_constraint_field
-			$self->{__CURRENT_CONSTRAINT_FIELD} = $field;
-
-			# Initialize the current constraint name to undef, to prevent it
-			# from being accidently shared
-			$self->{__CURRENT_CONSTAINT_NAME} = undef;
-
-			my $c = $self->_constraint_hash_build($constraint_spec,$untaint_this);
-
-			my $is_value_list = 1 if (ref $valid{$field} eq 'ARRAY');
-			if ($is_value_list) {
-				foreach (my $i = 0; $i < scalar @{ $valid{$field}} ; $i++) {
-					my @params = $self->_constraint_input_build($c,$valid{$field}->[$i],\%valid);
-
-					# set current constraint field for use by get_current_constraint_value
-					$self->{__CURRENT_CONSTRAINT_VALUE} = $valid{$field}->[$i];
-
-					my ($match,$failed) = $self->_constraint_check_match($c,\@params,$untaint_this);
-					if ($failed) {
-						push @invalid_list, $failed;
-					}
-					else {
-						 $valid{$field}->[$i] = $match if $untaint_this;
-					}
-				}
-			}
-			else {
-				my @params = $self->_constraint_input_build($c,$valid{$field},\%data);
-
-				# set current constraint field for use by get_current_constraint_value
-				$self->{__CURRENT_CONSTRAINT_VALUE} = $valid{$field};
-
-				my ($match,$failed) = $self->_constraint_check_match($c,\@params,$untaint_this);
-				if ($failed) {
-					push @invalid_list, $failed
-				}
-				else {
-					$valid{$field} = $match if $untaint_this;
-				}
-			}
-	   }
-
-		if (@invalid_list) {
-			my @failed = map { $_->{name} } @invalid_list;
-			push @{ $self->{invalid}{$field}  }, @failed;
-            # the older interface to validate returned things differently
-			push @{ $self->{validate_invalid} }, $is_constraint_list ? [$field, @failed] : $field;
-		}
-	}
+	my $force_method_p = 1;
+	$self->_check_constraints($profile->{constraint_methods},\%valid,$untaint_all,\%untaint_hash, $force_method_p);
 
     # all invalid fields are removed from valid hash
 	foreach my $field (keys %{ $self->{invalid} }) {
@@ -444,7 +372,7 @@ as an array:
  @values = $r->valid('field');
 
 If called with two arguments, it sets C<field> to C<value> and returns C<value>.
-This form is useful to alter the results from within a C<constraint_method>.
+This form is useful to alter the results from within some constraints.
 See the L<Data::FormValidator::Constraints> documentation.
 
  $new_value = $r->valid('field',$new_value);
@@ -735,7 +663,9 @@ sub set_current_constraint_name {
 	my $self = shift;
 	my $value = shift;
 	$self->{__CURRENT_CONSTRAINT_NAME} = $value;
-}
+
+} 
+sub name_this { goto &set_current_constraint_name  }
 
 
 # INPUT: prefix_string, hash reference
@@ -848,13 +778,12 @@ sub _filter_apply {
 
 sub _constraint_hash_build {
 	my ($self,$constraint_spec,$untaint_this) = @_;
-	die "_constraint_apply received wrong number of arguments" unless (scalar @_ == 4);
+	die "_constraint_hash_build received wrong number of arguments" unless (scalar @_ == 3);
 
 	my	$c = {
 			name 		=> $constraint_spec,
 			constraint  => $constraint_spec, 
 		};
-
 
    # constraints can be passed in directly via hash
 	if (ref $c->{constraint} eq 'HASH') {
@@ -877,9 +806,6 @@ sub _constraint_hash_build {
 		# provide a default name for the constraint if we don't have one already
 		$c->{name} ||= $c->{constraint};
 
-		# Save the current constraint name for later
-		$self->{__CURRENT_CONSTRAINT_NAME} = $c->{name};
-		
 		#If untaint is turned on call match_* sub directly. 
 		if ($untaint_this) {
 			my $routine = 'match_'.$c->{constraint};			
@@ -918,6 +844,9 @@ sub _constraint_hash_build {
 			}
 		}
 	}
+
+	# Save the current constraint name for later
+	$self->{__CURRENT_CONSTRAINT_NAME} = $c->{name};
 
 	return $c;
 
@@ -968,15 +897,16 @@ sub _constraint_check_match {
     # We need to make this distinction when untainting,
     # to allow untainting values that are defined but not true,
     # such as zero.
-    my $success =  defined $match;
+    my $success;
     if (defined $match) {
        $success =  ($untaint_this) ? length $match : $match;
     }
 
+	my $failed = 1 unless $success;
 	return (
-		($success && $match),
+		$match,
 		{
-			failed  => (!$success),
+			failed  => $failed,
 			name	=> $self->{__CURRENT_CONSTRAINT_NAME},
 		},
 	);
@@ -1007,10 +937,26 @@ sub _get_data {
 	}
 }
 
+# A newer version of this logic now exists in Constraints.pm in the AUTOLOADing section
+# This is is used to support the older param passing style. Eg:
+#
+# {
+#	constraint => 'RE_foo_bar',
+#	params => [ \'zoo' ]
+#  }
+#
+# Still, it's possble, the two bits of logic could be refactored into one location if you cared
+# to do that. 
 
 sub _create_regexp_common_constraint  {
+	# this should work most of the time and is useful for preventing warnings
+
+	# prevent name space clashes
+    package Data::FormValidator::Constraints::RegexpCommon;		
+	
 	require Regexp::Common;
 	import  Regexp::Common 'RE_ALL';
+
 	my $self = shift;
 	my $re_name = $self->get_current_constraint_name;
 	# deference all input
@@ -1021,6 +967,131 @@ sub _create_regexp_common_constraint  {
 	return ($self->get_current_constraint_value =~ qr/^$re$/) ? $1 : undef; 
 }
 
+# _add_constraints_from_map($profile,'constraint',\%valid);
+# Returns:
+#  - a hash to add to either 'constraints' or 'constraint_methods'
+
+sub _add_constraints_from_map {
+	die "_add_constraints_from_map: need 3 arguments" unless (scalar @_ == 3);
+	my ($profile, $name, $valid) = @_;
+	($name =~ m/^constraint(_method)?$/) || die "unexpected input.";
+
+	my $key_name = $name.'s';
+	my $map_name = $name.'_regexp_map';
+
+	my %result = ();
+	foreach my $re (keys %{ $profile->{$map_name} }) {
+		my $sub = _create_sub_from_RE($re);
+
+		# find all the keys that match this RE and add a constraint for them
+		for my $key (keys %$valid) {
+			if ($sub->($key)) {
+					my $cur = $profile->{$key_name}{$key};
+					my $new = $profile->{$map_name}{$re};
+					# If they already have an arrayref of constraints, add to the list
+					if (ref $cur eq 'ARRAY') {
+						push @{ $result{$key} }, $new;
+					} 
+					# If they have a single constraint defined, create an array ref with with this plus the new one
+					elsif ($cur) {
+						$result{$key} = [$cur,$new];
+					}
+					# otherwise, a new constraint is created with this as the single constraint
+					else {
+						$result{$key} = $new;
+					}
+					warn "constraint_regexp_map: $key matches\n" if $profile->{debug};
+				}
+			}
+	}
+	return %result;
+}
+
+# =head2 _check_constraints()
+#
+# $self->_check_constraints(
+#	$profile->{constraint_methods},
+#	\%valid, 
+#	$untaint_all
+#	\%untaint_hash
+#	$force_method_p
+#);
+#
+# Input:
+#  - 'constraints' or 'constraint_methods' hashref
+#  - hashref of valid data
+#  - bool to try to untaint everything
+#  - hashref of things to untaint
+#  - bool if all constraints should be treated as methods. 
+	
+sub _check_constraints {
+	my ($self, 
+	    $constraint_href, 
+		$valid, 
+		$untaint_all,
+		$untaint_href,
+		$force_method_p) = @_; 
+
+	while ( my ($field,$constraint_list) = each %$constraint_href ) {
+		next unless exists $valid->{$field};
+
+		my $is_constraint_list = 1 if (ref $constraint_list eq 'ARRAY');
+		my $untaint_this =  ($untaint_all || $untaint_href->{$field} || 0);
+
+		my @invalid_list;
+		foreach my $constraint_spec (_arrayify($constraint_list)) {
+
+			# set current constraint field for use by get_current_constraint_field
+			$self->{__CURRENT_CONSTRAINT_FIELD} = $field;
+
+			# Initialize the current constraint name to undef, to prevent it
+			# from being accidently shared
+			$self->{__CURRENT_CONSTRAINT_NAME} = undef;
+
+			my $c = $self->_constraint_hash_build($constraint_spec,$untaint_this);
+			$c->{is_method} = 1 if $force_method_p;
+
+			my $is_value_list = 1 if (ref $valid->{$field} eq 'ARRAY');
+			if ($is_value_list) {
+				foreach (my $i = 0; $i < scalar @{ $valid->{$field}} ; $i++) {
+					my @params = $self->_constraint_input_build($c,$valid->{$field}->[$i],$valid);
+
+					# set current constraint field for use by get_current_constraint_value
+					$self->{__CURRENT_CONSTRAINT_VALUE} = $valid->{$field}->[$i];
+
+					my ($match,$failed) = $self->_constraint_check_match($c,\@params,$untaint_this);
+					if ($failed->{failed}) {
+						push @invalid_list, $failed;
+					}
+					else {
+						 $valid->{$field}->[$i] = $match if $untaint_this;
+					}
+				}
+			}
+			else {
+				my @params = $self->_constraint_input_build($c,$valid->{$field},$valid);
+
+				# set current constraint field for use by get_current_constraint_value
+				$self->{__CURRENT_CONSTRAINT_VALUE} = $valid->{$field};
+
+				my ($match,$failed) = $self->_constraint_check_match($c,\@params,$untaint_this);
+				if ($failed->{failed}) {
+					push @invalid_list, $failed
+				}
+				else {
+					$valid->{$field} = $match if $untaint_this;
+				}
+			}
+	   }
+
+		if (@invalid_list) {
+			my @failed = map { $_->{name} } @invalid_list;
+			push @{ $self->{invalid}{$field}  }, @failed;
+            # the older interface to validate returned things differently
+			push @{ $self->{validate_invalid} }, $is_constraint_list ? [$field, @failed] : $field;
+		}
+	}
+}
 
 1;
 

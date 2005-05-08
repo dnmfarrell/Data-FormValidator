@@ -38,11 +38,12 @@ sub file_format {
 }
 
 sub image_max_dimensions {
-	my ($w,$h) = @_;
+	my $w  = shift || die 'image_max_dimensions: missing maximum width value';
+	my $h  = shift || die 'image_max_dimensions: missing maximum height value';
 	return sub {
 		my $self = shift;
 		$self->set_current_constraint_name('image_max_dimensions');
-		valid_image_max_dimensions(\$w,\$h);
+		valid_image_max_dimensions($self,\$w,\$h);
 	}
 }
 
@@ -51,7 +52,7 @@ sub file_max_bytes {
 	return sub {
 		my $self = shift;
 		$self->set_current_constraint_name('file_max_bytes');
-		valid_image_max_dimensions(\$max_bytes);
+		valid_file_max_bytes($self,\$max_bytes);
 	}
 }
 
@@ -136,7 +137,7 @@ sub valid_image_max_dimensions {
 	$self->isa('Data::FormValidator::Results') ||
 		die "image_max_dimensions: first argument is not a Data::FormValidator::Results object. ";
 	my $max_width_ref  = shift || die 'image_max_dimensions: missing maximum width value';
-	my $max_height_ref = shift || die '_image_max_dimensions: missing maximum height value';
+	my $max_height_ref = shift || die 'image_max_dimensions: missing maximum height value';
 	my $max_width  = $$max_width_ref;
 	my $max_height = $$max_height_ref;
 	($max_width > 0) || die 'image_max_dimensions: maximum width must be > 0';

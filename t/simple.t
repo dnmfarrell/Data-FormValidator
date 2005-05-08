@@ -28,9 +28,10 @@ my ($valids, $missings, $invalids, $unknowns) = ({},[],[],[]);
 eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
-ok(not $@) or
-  diag $@;
+is($@,'', 'survived eval');
 
-ok(exists $valids->{'phone'});
+ok(exists $valids->{'phone'}, "phone is valid" );
 
-is($invalids->[0], 'email');
+is($invalids->[0], 'email')
+
+

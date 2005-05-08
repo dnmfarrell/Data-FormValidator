@@ -2,6 +2,20 @@ use Test::More qw/no_plan/;
 use Data::FormValidator;
 use strict;
 
+{
+	local $@ = undef;
+	eval {
+	  my $results = Data::FormValidator->check({}, 
+		{
+			msgs => {
+				my_field => 'foo',
+			},
+		}
+	);
+	};
+	like($@, qr/Invalid/, 'checking syntax of unknown msgs fields works');
+}
+
 my $results;
 eval {
 $results = Data::FormValidator->check({}, 
@@ -32,3 +46,4 @@ $results = Data::FormValidator->check({},
 );
 };
 like($@, qr/Invalid/, 'checking syntax of constraint_regexp_map hashrefs works');
+

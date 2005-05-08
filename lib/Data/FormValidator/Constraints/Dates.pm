@@ -19,16 +19,25 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 	
 ) ] );
 
-@EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
+@EXPORT_OK = ( 
+    'date_and_time',	
+	@{ $EXPORT_TAGS{'all'} } 
+);
 
 @EXPORT = qw(
 	match_date_and_time
 );
 
-$VERSION = '0.03';
+$VERSION = '1.00_01';
 
-# XXX TODO: find a way to make standard formats available.
-# For example, having a format that you know Postgres will accept as a valid
+sub date_and_time {
+	my $fmt = shift;
+	return sub {
+		my $self = shift;
+		$self->set_current_constraint_name('date_and_time');
+		return match_date_and_time($self,\$fmt);
+	}
+}
 
 sub match_date_and_time {
 	my $self = shift;
@@ -114,13 +123,12 @@ Data::FormValidator::Constraints::Dates - Validate Dates and Times
 
 =head1 SYNOPSIS
 
-	# In a Data::FormValidator Profile:
-	validator_packages => [qw(Data::FormValidator::Constraints::Dates)],
+	use Data::FormValidator::Constraints::Dates qw(date_and_time);
+
+	# In a DFV profile...
 	constraints => {
-		date_and_time_field 	  => {
-			constraint_method => 'date_and_time',
-			params=>[\'MM/DD/YYYY hh:mm:ss pp'], # 'pp' denotes AM|PM for 12 hour representation
-		},
+		# 'pp' denotes AM|PM for 12 hour representation
+		my_time_field => date_and_time('MM/DD/YYYY hh:mm:ss pp'), 
 	}
 
 =head1 DESCRIPTION
@@ -147,6 +155,24 @@ do perlish things like this to create mor complex expressions:
 	'MM?/DD?/YYYY|YYYY-MM?-DD?'
 
 Internally L<Date::Calc> is used to test the functions.
+
+=head1 BACKWARDS COMPATIBILITY
+
+This older, more awkward interface is supported:
+
+	# In a Data::FormValidator Profile:
+	validator_packages => [qw(Data::FormValidator::Constraints::Dates)],
+	constraints => {
+		date_and_time_field 	  => {
+			constraint_method => 'date_and_time',
+			params=>[\'MM/DD/YYYY hh:mm:ss pp'], # 'pp' denotes AM|PM for 12 hour representation
+		},
+	}
+
+=head1 TODO 
+
+Find a way to make standard formats available.  For example, having a format
+that you know PostgreSQL will accept as a valid. 
 
 =head1 SEE ALSO
 

@@ -1,8 +1,17 @@
-    [INTERNALS]
-    - A new test was added to check that no warnings are emitted when an untainted
-      constraint returns undef (Michael Peters)
-
+4.00_01
     [ENHANCEMENTS]
+	- The constraints interface has been overhauled to be more intuitive to use
+	  with parameterized constraints. This included added new two new profile
+	  keys: 'constraint_methods' and 'constraint_method_regexp_map'. All of
+	  the old syntax is still supported, but de-emphasized in the documentation.
+	  See RELEASE_NOTES for details. 
+
+	- A new method has been added to help building custom constraints:
+	  "set_current_constraint_name('foo')" will set the name of a constraint
+	  from within itself. An alias named 'name_this()' is provided for brevity. 
+	  See the section on "Writing your own constraints" in DFV::Constraints
+	  for details. 
+
     - success() method added to Results object. This is an easy way to check
       that there were no missing or invalid fields. (Michael Peters). 
 
@@ -10,6 +19,16 @@
       The proper spelling as well as the legacy typo spelling are now
       supported, although the typo'ed version is no longer documented, except
       for here. :) Thanks to Terrence Brannon for spotting this.
+
+	- The 'msgs' hash in the profile is now validated to make sure it includes only
+	  valid keys. This should help to spot some errors faster.  
+
+    [INTERNALS]
+    - A new test was added to check that no warnings are emitted when an untainted
+      constraint returns undef (Michael Peters)
+
+	[BUG FIXES]
+	- RT#12220: Canadian Province RE were updated. (Steve Simms).   
 
 3.63
 	[BUG FIXES]
