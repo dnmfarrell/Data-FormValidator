@@ -36,7 +36,6 @@ my ($valids, $missings, $invalids, $unknowns);
 eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
-#use Data::Dumper; warn Dumper   ($valids, $missings, $invalids, $unknowns);
 
 ok(not $@ 
    or 

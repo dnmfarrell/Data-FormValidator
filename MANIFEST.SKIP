@@ -12,12 +12,14 @@
 .tar.gz$
 ^notes
 ^releases
+\.tgz$
 \.swp$
 \.swm$
 \.swn$
 \.swo$
 \.patch$
 \.orig$
+\.diff$
 _darcs
 _build
 ^Build$

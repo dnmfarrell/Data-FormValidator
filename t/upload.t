@@ -158,10 +158,6 @@ $dfv = Data::FormValidator->new({ profile_3 => $profile_3});
 ($valid,$missing,$invalid) = $dfv->validate($q, 'profile_3');
 
 ok(exists $valid->{'100x100_gif'}, 'expecting success with max_dimensions using constraint_regexp_map');
-
-#use Data::Dumper;
-#warn Dumper ($invalid);
-
 ok((grep {m/300x300/} @$invalid), 'expecting failure with max_dimensions using constraint_regexp_map');
 
 
