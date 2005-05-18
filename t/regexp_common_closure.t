@@ -18,7 +18,7 @@ eval {
 $results = Data::FormValidator->check(\%FORM, { 
 		required => [qw/good_ip bad_ip/],
 		constraint_method_regexp_map => {
-			qr/_ip$/ => RE_net_IPv4(),
+			qr/_ip$/ => FV_net_IPv4(),
 		}
 	});
 };
@@ -31,7 +31,7 @@ $results = Data::FormValidator->check(\%FORM, {
 		untaint_all_constraints => 1,
 		required => [qw/good_ip bad_ip/],
 		constraint_method_regexp_map => {
-			qr/_ip$/ => RE_net_IPv4(),
+			qr/_ip$/ => FV_net_IPv4(),
 		}
 	});
 
@@ -44,7 +44,7 @@ ok($results->invalid->{bad_ip}, 'bad ip with tainting');
 $results = Data::FormValidator->check(\%FORM, { 
 		required => [qw/good_ip bad_ip/],
 		constraint_method_regexp_map => {
-			qr/_ip$/ => RE_net_IPv4_dec(-sep => ' '),
+			qr/_ip$/ => FV_net_IPv4_dec(-sep => ' '),
 		}
 	});
 
@@ -60,7 +60,7 @@ ok($results->invalid->{good_ip}, 'expecting failure with params');
 $results = Data::FormValidator->check(\%FORM, { 
 		required => [qw/embedded_ip/],
 		constraint_method_regexp_map => {
-			qr/_ip$/ => RE_net_IPv4(),
+			qr/_ip$/ => FV_net_IPv4(),
 		}
 	});
 my $invalid = scalar $results->invalid || {};

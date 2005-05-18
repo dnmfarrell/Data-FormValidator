@@ -134,15 +134,17 @@ sub import {
 	# This is Regexp::Common support.
 	# Here we are handling cases that look like this:
 	#
-	# my_field => RE_foo_bar(-zoo=>'queue'), 
+	# my_field => FV_foo_bar(-zoo=>'queue'), 
 	if (grep { m/^:regexp_common$/ } @_) {
 		for my $sub (grep { m/^RE_/}  keys %Data::FormValidator::Constraints:: ) {
 			no strict 'refs';
-			*{caller() . "::$sub"} = sub {
+            my $new_name = $sub;
+            $new_name =~ s/^RE_/FV_/;
+			*{caller() . "::$new_name"} = sub {
 				my @params =  @_;
 				return sub {
 					my $dfv = shift;
-					$dfv->set_current_constraint_name($sub);
+					$dfv->set_current_constraint_name($new_name);
 
 					no strict "refs";
 					my $re = &$sub(-keep=>1,@params);
@@ -556,11 +558,16 @@ This works whether you want to untaint the data or not. For example:
  use Data::FormValidator::Constraints qw(:regexp_common);
 
  constraint_methods => {
-	my_ip_address => RE_net_IPv4(),
+	my_ip_address => FV_net_IPv4(),
 
 	# An example with parameters
-	other_ip      => RE_net_IPv4(-sep=>' '),
+	other_ip      => FV_net_IPv4(-sep=>' '),
  }
+
+Notice that the routines are named with the prefix "FV_" instead of "RE_" now. 
+This is simply a visual cue that these are slightly modified versions. We've made
+a wrapper for each Regexp::Common routine so that it can be used as a named constraint 
+like this. 
 
 Be sure to check out the L<Regexp::Common> syntax for how its syntax works. It
 will make more sense to add future regular expressions to Regexp::Common rather
