@@ -606,8 +606,8 @@ writing your own complex constraint.
 		height => '60',
 	});
 
-This function does not currently multi-valued fields. If it 
-does in the future, the above syntax will still work..
+This function does not currently support multi-valued fields. If it 
+does in the future, the above syntax will still work.
 
 =cut
 
@@ -854,6 +854,14 @@ sub _constraint_hash_build {
 	return $c;
 
 }
+
+# =head2 _constraint_input_build()
+# 
+#  @params = $self->constraint_input_build($c,$value,$data);
+# 
+# Build in the input that passed into the constraint. 
+# 
+# =cut
 
 sub _constraint_input_build {
 	my ($self,$c,$value,$data) = @_;
