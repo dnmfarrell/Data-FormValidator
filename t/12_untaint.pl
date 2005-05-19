@@ -9,6 +9,7 @@ $ENV{PATH} = "/bin/";
 
 sub is_tainted {
     my $val = shift;
+    # What does kill do here? -mls
     return !eval { $val++, kill 0; 1; };
 }
 
