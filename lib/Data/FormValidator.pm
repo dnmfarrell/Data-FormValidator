@@ -979,7 +979,7 @@ Using a hash reference to specify a constraint is an older technique
 used to name a constraint or supply multiple parameters.
 
 Both of these interface issues are now better addressed with C<constraint_methods>
-and C<$self-\>set_current_constraint_name('foo')>.
+and C<$self-\>name_this('foo')>.
 
  # supply multiple parameters
  cc_no  => {  

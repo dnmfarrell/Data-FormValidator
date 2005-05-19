@@ -17,12 +17,12 @@ my $input_profile = {
 		},
         nan => sub {
 			my ($self,$v) = @_;
-			$self->set_current_constraint_name('number');
+			$self->name_this('number');
 			return ($v =~ m/^\d+$/);
 		},
         nan_typo => sub {
 			my ($self,$v) = @_;
-			$self->set_current_constraint_name('numer');
+			$self->name_this('numer');
 			return ($v =~ m/^\d+$/);
 		},
         nan_name_this => sub { my ($d,$v) = @_; $d->name_this('number'); return ($v =~ m/^\d+$/); },

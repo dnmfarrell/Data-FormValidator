@@ -663,10 +663,13 @@ sub set_current_constraint_name {
 	my $self = shift;
 	my $value = shift;
 	$self->{__CURRENT_CONSTRAINT_NAME} = $value;
-
 } 
-sub name_this { goto &set_current_constraint_name  }
-
+# same as above
+sub name_this {
+	my $self = shift;
+	my $value = shift;
+	$self->{__CURRENT_CONSTRAINT_NAME} = $value;
+} 
 
 # INPUT: prefix_string, hash reference
 # Copies the hash and prefixes all keys with prefix_string

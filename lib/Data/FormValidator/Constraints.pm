@@ -29,6 +29,11 @@ require Exporter;
 @ISA = qw(Exporter);
 
 BEGIN: {
+    # A gift from Andy Lester, this trick shows me where eval's die. 
+    use Carp;
+    $SIG{__WARN__} = \&carp;
+    $SIG{__DIE__} = \&confess;
+
 	my @closures = (qw/
 			american_phone
 			cc_exp
@@ -49,14 +54,24 @@ BEGIN: {
 	for my $func (@closures) {
 		# cc_number is defined statically
 		unless ($func eq 'cc_number') {
+            # Notice we have to escape some characters
+            # in the subroutine, which is really a string here. 
 			my $code = qq!
 			sub $func  {
-				my \$dfv = shift;
-				\$dfv->set_current_constraint_name('$func');
-				return defined &{'match_$func'}(\@_);
+                return sub {
+                    my \$dfv = shift;
+                    use UNIVERSAL qw( can ) ;
+                    can(\$dfv, "name_this") 
+                        || die "first arg to $func was not an object. Must be called as a constraint_method.";
+
+                    \$dfv->name_this('$func');
+                    no strict 'refs';
+                    return &{"match_\$func"}(\@_);
+                }
 			}
 			!;
 
+            # warn $code;
 			eval "package Data::FormValidator::Constraints; $code";
 			die "couldn't create $func: $@" if $@;
 		}
@@ -144,7 +159,7 @@ sub import {
 				my @params =  @_;
 				return sub {
 					my $dfv = shift;
-					$dfv->set_current_constraint_name($new_name);
+					$dfv->name_this($new_name);
 
 					no strict "refs";
 					my $re = &$sub(-keep=>1,@params);

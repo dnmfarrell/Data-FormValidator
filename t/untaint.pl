@@ -2,8 +2,14 @@
 
 use strict;
 
-use Test::More tests => 28;
+use Test::More qw/no_plan/;
 use Data::FormValidator;
+use Data::FormValidator::Constraints qw/:closures/;
+
+# A gift from Andy Lester, this trick shows me where eval's die. 
+use Carp;
+$SIG{__WARN__} = \&carp;
+$SIG{__DIE__} = \&confess;
 
 $ENV{PATH} = "/bin/";
 
@@ -54,6 +60,14 @@ my $profile =
 			email2 => "email",
 		}   
 	},   
+    rules2_closure => {
+		untaint_constraint_fields => [ qw( email1  )],
+		required     => [ qw( email1 email2) ],
+		constraint_methods  => {
+            email1 => email(),
+			email2 => email(),
+		}   
+	},   
     rules3 => {
 		untaint_all_constraints => 1,
 		required => 
@@ -84,6 +98,9 @@ ok($valid->{firstname}, 'found firstname');
 ok(! is_tainted($valid->{firstname}), 'firstname is untainted');
 is($valid->{firstname},$data1->{firstname}, 'firstname has expected value');
 
+
+
+
 #Rules #2
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data2, "rules2"); };   
 
@@ -99,6 +116,19 @@ is($valid->{email1},$data2->{email1});
 ok($valid->{email2});
 ok(is_tainted($valid->{email2}), 'email2 is tainted');
 is($valid->{email2},$data2->{email2});
+
+# Rules2 with closures 
+{
+    my ($result,$valid);
+    eval { $result = $validator->check(  $data2, "rules2_closure"); };   
+    is($@,'', 'survived eval');
+    $valid = $result->valid();
+
+    ok($valid->{email1});
+    ok(!is_tainted($valid->{email1}));
+    is($valid->{email1},$data2->{email1});
+}
+
 
 #Rules #3
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data3, "rules3"); };   
