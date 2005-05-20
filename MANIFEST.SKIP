@@ -13,6 +13,7 @@
 ^notes
 ^releases
 \.tgz$
+\.tmp$
 \.swp$
 \.swm$
 \.swn$
