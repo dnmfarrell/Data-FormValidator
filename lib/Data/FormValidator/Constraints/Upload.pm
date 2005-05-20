@@ -236,7 +236,7 @@ Data::FormValidator::Constraints::Upload - Validate File Uploads
     my $dfv = Data::FormValidator->check($q,$my_profile);
 
 	# In a Data::FormValidator Profile:
-	constraints => {
+	constraint_methods => {
 		image_name => [
 			file_format(),
 			file_max_bytes(10),
