@@ -199,8 +199,11 @@ In an Data::FormValidator profile:
 
 =head1 DESCRIPTION
 
-Those are the builtin constraints that can be specified by name in the input
+These are the builtin constraints that can be specified by name in the input
 profiles. 
+
+Be sure to check out the SEE ALSO section for even more pre-packaged
+constraints you can use.
 
 =cut
 
@@ -832,9 +835,16 @@ and the names were given as strings, like this:
 
 =head1 SEE ALSO
 
-Data::FormValidator(3), Data::FormValidator::Filters(3),
-Data::FormValidator::ConstraintsFactory(3),
-L<Regexp::Common>
+L<Data::FormValidator::Constraints::Upload> - validate the bytes, format and dimensions of file uploads,
+L<Data::FormValidator::Constraints::DateTime> - 
+  A newer DateTime constraint module. May save you a step of tranforming the date into
+  a more useful format after it's validated. 
+L<Data::FormValidator::Constraints::Dates> - the original DFV date constraint module
+L<Regexp::Common> -- lost of useful regular expressions to choose from!
+
+L<Data::FormValidator>
+L<Data::FormValidator::Filters>
+L<Data::FormValidator::ConstraintsFactory>
 
 =head1 CREDITS
 
@@ -842,14 +852,14 @@ Some of those input validation functions have been taken from MiniVend
 by Michael J. Heins
 
 The credit card checksum validation was taken from contribution by
-Bruce Albrecht to the MiniVend
-program.
+Bruce Albrecht to the MiniVend program.
 
 =head1 AUTHORS
 
     Francis J. Lacoste 
     Michael J. Heins 
     Bruce Albrecht  
+    Mark Stosberg
 
 =head1 COPYRIGHT
 
