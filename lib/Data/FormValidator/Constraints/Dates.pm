@@ -110,8 +110,6 @@ sub _parse_date_format {
 
 
     return $untainted_date, map {defined $result{$_} ? $result{$_} : 0} qw(Y M D h m s);
-    #return $untainted_date, map $result{$_}, qw(Y M D h m s);
-    #return $untainted_date, map {defined $result{$_} ? $result{$_} : ''} qw(Y M D h m s);
 }
 
 1;
@@ -126,7 +124,7 @@ Data::FormValidator::Constraints::Dates - Validate Dates and Times
 	use Data::FormValidator::Constraints::Dates qw(date_and_time);
 
 	# In a DFV profile...
-	constraints => {
+	constraint_methods => {
 		# 'pp' denotes AM|PM for 12 hour representation
 		my_time_field => date_and_time('MM/DD/YYYY hh:mm:ss pp'), 
 	}
