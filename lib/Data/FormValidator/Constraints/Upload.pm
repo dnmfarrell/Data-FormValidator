@@ -126,7 +126,7 @@ sub valid_file_format {
 
    # Add the mime_type and extension to the valid data set
    my $info = $self->meta($field) || {};
-   $info = { %$info, mime_type => $uploaded_mt, extension => ".$ext" };
+   $info = { %$info, mime_type => $mt, extension => ".$ext" };
    $self->meta($field,$info);
 
    return $allowed_types{$mt};

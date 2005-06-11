@@ -1,3 +1,9 @@
+    [BUG FIXES]
+    - The preferred MIME type was not being returned by the 'file_format'
+      constraint for file uploads. This would have only affected cases where
+      the mime type sent by the browser differed from the one detected by DFV.
+      Thanks to Randal Schwartz for spotting this. (RT#12744). 
+
 4.00_01
     [ENHANCEMENTS]
 	- The constraints interface has been overhauled to be more intuitive to use
