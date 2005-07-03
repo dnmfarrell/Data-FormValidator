@@ -1,6 +1,6 @@
 # Integration with Regexp::Common;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use Data::FormValidator; 
 
@@ -12,7 +12,7 @@ my %FORM = (
 
 my $results;
 
-use Data::FormValidator::Constraints qw(:regexp_common);
+BEGIN { use_ok('Data::FormValidator::Constraints', qw/:regexp_common/) }
 
 eval {
 $results = Data::FormValidator->check(\%FORM, { 

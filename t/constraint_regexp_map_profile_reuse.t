@@ -1,6 +1,5 @@
 use Test::More (qw/no_plan/);
 use Data::FormValidator;
-use Data::Dumper;
 
 my $profile = {
     required => [qw( test1 )],

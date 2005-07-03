@@ -108,10 +108,9 @@ BEGIN {
         match_zip_or_postcode)
     );
 
-    use  Regexp::Common 'RE_ALL';
-
     %EXPORT_TAGS = (
-        regexp_common => [ grep { m/^RE_/}  keys %Data::FormValidator::Constraints:: ],
+        # regexp common is correctly empty here, because we handle the case on the fly with the import function below. 
+        regexp_common => [],
         closures => \@closures, 
         validators => [qw/
             valid_american_phone
@@ -151,6 +150,9 @@ BEGIN {
         #
         # my_field => FV_foo_bar(-zoo=>'queue'), 
         if (grep { m/^:regexp_common$/ } @_) {
+            require Regexp::Common;
+            import  Regexp::Common 'RE_ALL';
+
             for my $sub (grep { m/^RE_/}  keys %Data::FormValidator::Constraints:: ) {
                 no strict 'refs';
                 my $new_name = $sub;
