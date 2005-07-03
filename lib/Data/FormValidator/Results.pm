@@ -297,21 +297,22 @@ sub _process {
     }
 
     # add in the constraints from the regexp maps
+    # We don't want to modify the profile, so we use a new variable.
 	$profile->{constraints} ||= {};
-	$profile->{constraints} = {
+	my $private_constraints = {
 	    %{ $profile->{constraints} }, 	
 		_add_constraints_from_map($profile,'constraint',\%valid),
 	};
 	$profile->{constraint_methods} ||= {};
-	$profile->{constraint_methods} = {
+	my $private_constraint_methods = {
 	    %{ $profile->{constraint_methods} }, 	
 		_add_constraints_from_map($profile,'constraint_method',\%valid),
 	};
 
-	$self->_check_constraints($profile->{constraints},\%valid,$untaint_all,\%untaint_hash);
+	$self->_check_constraints($private_constraints,\%valid,$untaint_all,\%untaint_hash);
 
 	my $force_method_p = 1;
-	$self->_check_constraints($profile->{constraint_methods},\%valid,$untaint_all,\%untaint_hash, $force_method_p);
+	$self->_check_constraints($private_constraint_methods,\%valid,$untaint_all,\%untaint_hash, $force_method_p);
 
     # all invalid fields are removed from valid hash
 	foreach my $field (keys %{ $self->{invalid} }) {
