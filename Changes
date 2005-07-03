@@ -4,6 +4,15 @@
       the mime type sent by the browser differed from the one detected by DFV.
       Thanks to Randal Schwartz for spotting this. (RT#12744). 
 
+    - Profile re-use when constraint_regexp_map is used is now fixed 
+      (Thanks to Cees Hek).
+
+    [INTERNALS]
+    - Regexp::Common is now only loaded if it's needed, making a significant
+      speed increase.
+
+    - Several test improvements and code cleanups 
+
 4.00_01
     [ENHANCEMENTS]
 	- The constraints interface has been overhauled to be more intuitive to use
