@@ -1,4 +1,5 @@
-use Test::More tests => 6;
+# Tests for missing_optional_valid
+use Test::More qw/no_plan/;
 use strict;
 
 $^W = 1;
@@ -32,7 +33,7 @@ my ($valids, $missings, $invalids, $unknowns);
 eval{
   ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
 };
-ok (not $@);
+is($@,'',"survived eval");
 
 # "not_filled" should appear valids now. 
 ok (exists $valids->{'not_filled'});
@@ -62,4 +63,18 @@ SKIP: {
 	ok($unknowns->[0] eq 'should_be_unknown');
 
 };
+
+{ 
+    my $res = Data::FormValidator->check(
+        { a => 1, 
+          b => undef, 
+          # c is completely missing 
+        },
+        { optional => [ qw/a b c/ ],
+            missing_optional_valid => 1 } );
+
+    is(join(',',sort $res->valid()),'a,b', "optional fields have to at least exist to be valid" );
+}
+
+__END__
 
