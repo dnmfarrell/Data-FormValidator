@@ -34,143 +34,143 @@ BEGIN {
     $SIG{__WARN__} = \&carp;
     $SIG{__DIE__} = \&confess;
 
-	my @closures = (qw/
-			american_phone
-			cc_exp
-			cc_number
-			cc_type
-			email
-			ip_address
-			phone
-			postcode
-			province
-			state
-			state_or_province
-			zip
-			zip_or_postcode/);
+    my @closures = (qw/
+        american_phone
+        cc_exp
+        cc_number
+        cc_type
+        email
+        ip_address
+        phone
+        postcode
+        province
+        state
+        state_or_province
+        zip
+        zip_or_postcode/);
 
-	# This be optimized with some of the voodoo that CGI.pm
-	# uses to AUTOLOAD dynamic functions. 
-	for my $func (@closures) {
-		# cc_number is defined statically
-		unless ($func eq 'cc_number') {
+    # This be optimized with some of the voodoo that CGI.pm
+    # uses to AUTOLOAD dynamic functions. 
+    for my $func (@closures) {
+        # cc_number is defined statically
+        unless ($func eq 'cc_number') {
             # Notice we have to escape some characters
             # in the subroutine, which is really a string here. 
-			my $code = qq!
-			sub $func  {
+            my $code = qq!
+            sub $func  {
                 return sub {
                     my \$dfv = shift;
                     use UNIVERSAL qw( can ) ;
                     can(\$dfv, "name_this") 
-                        || die "first arg to $func was not an object. Must be called as a constraint_method.";
+                    || die "first arg to $func was not an object. Must be called as a constraint_method.";
 
                     \$dfv->name_this('$func');
                     no strict 'refs';
                     return &{"match_\$func"}(\@_);
                 }
-			}
-			!;
+            }
+            !;
 
             # warn $code;
-			eval "package Data::FormValidator::Constraints; $code";
-			die "couldn't create $func: $@" if $@;
-		}
-	}
+            eval "package Data::FormValidator::Constraints; $code";
+            die "couldn't create $func: $@" if $@;
+        }
+    }
 
-@EXPORT_OK = (
-	@closures,
-   qw(
-	valid_american_phone
-	valid_cc_exp
-	valid_cc_number
-	valid_cc_type
-	valid_email
-	valid_ip_address
-	valid_phone
-	valid_postcode
-	valid_province
-	valid_state
-	valid_state_or_province
-	valid_zip
-	valid_zip_or_postcode
-	match_american_phone
-	match_cc_exp
-	match_cc_number
-	match_cc_type
-	match_email
-	match_ip_address
-	match_phone
-	match_postcode
-	match_province
-	match_state
-	match_state_or_province
-	match_zip
-	match_zip_or_postcode)
-);
+    @EXPORT_OK = (
+        @closures,
+        qw(
+        valid_american_phone
+        valid_cc_exp
+        valid_cc_number
+        valid_cc_type
+        valid_email
+        valid_ip_address
+        valid_phone
+        valid_postcode
+        valid_province
+        valid_state
+        valid_state_or_province
+        valid_zip
+        valid_zip_or_postcode
+        match_american_phone
+        match_cc_exp
+        match_cc_number
+        match_cc_type
+        match_email
+        match_ip_address
+        match_phone
+        match_postcode
+        match_province
+        match_state
+        match_state_or_province
+        match_zip
+        match_zip_or_postcode)
+    );
 
-use  Regexp::Common 'RE_ALL';
+    use  Regexp::Common 'RE_ALL';
 
-%EXPORT_TAGS = (
-	regexp_common => (grep { m/^RE_/}  keys %Data::FormValidator::Constraints:: ),
-	closures => \@closures, 
-	validators => [qw/
-		valid_american_phone
-		valid_cc_exp
-		valid_cc_number
-		valid_cc_type
-		valid_email
-		valid_ip_address
-		valid_phone
-		valid_postcode
-		valid_province
-		valid_state
-		valid_state_or_province
-		valid_zip
-		valid_zip_or_postcode
-/],
-    matchers => [qw/
-		match_american_phone
-		match_cc_exp
-		match_cc_number
-		match_cc_type
-		match_email
-		match_ip_address
-		match_phone
-		match_postcode
-		match_province
-		match_state
-		match_state_or_province
-		match_zip
-		match_zip_or_postcode
-/],		
-);
+    %EXPORT_TAGS = (
+        regexp_common => [ grep { m/^RE_/}  keys %Data::FormValidator::Constraints:: ],
+        closures => \@closures, 
+        validators => [qw/
+        valid_american_phone
+        valid_cc_exp
+        valid_cc_number
+        valid_cc_type
+        valid_email
+        valid_ip_address
+        valid_phone
+        valid_postcode
+        valid_province
+        valid_state
+        valid_state_or_province
+        valid_zip
+        valid_zip_or_postcode
+        /],
+        matchers => [qw/
+        match_american_phone
+        match_cc_exp
+        match_cc_number
+        match_cc_type
+        match_email
+        match_ip_address
+        match_phone
+        match_postcode
+        match_province
+        match_state
+        match_state_or_province
+        match_zip
+        match_zip_or_postcode
+        /],		
+    );
 
-sub import {
-	# This is Regexp::Common support.
-	# Here we are handling cases that look like this:
-	#
-	# my_field => FV_foo_bar(-zoo=>'queue'), 
-	if (grep { m/^:regexp_common$/ } @_) {
-		for my $sub (grep { m/^RE_/}  keys %Data::FormValidator::Constraints:: ) {
-			no strict 'refs';
-            my $new_name = $sub;
-            $new_name =~ s/^RE_/FV_/;
-			*{caller() . "::$new_name"} = sub {
-				my @params =  @_;
-				return sub {
-					my $dfv = shift;
-					$dfv->name_this($new_name);
+    sub import {
+        # This is Regexp::Common support.
+        # Here we are handling cases that look like this:
+        #
+        # my_field => FV_foo_bar(-zoo=>'queue'), 
+        if (grep { m/^:regexp_common$/ } @_) {
+            for my $sub (grep { m/^RE_/}  keys %Data::FormValidator::Constraints:: ) {
+                no strict 'refs';
+                my $new_name = $sub;
+                $new_name =~ s/^RE_/FV_/;
+                *{caller() . "::$new_name"} = sub {
+                    my @params =  @_;
+                    return sub {
+                        my $dfv = shift;
+                        $dfv->name_this($new_name);
 
-					no strict "refs";
-					my $re = &$sub(-keep=>1,@params);
-					return ($dfv->get_current_constraint_value =~ qr/^$re$/) ? $1 : undef; 
-				}
-			}
-		}
-	}
+                        no strict "refs";
+                        my $re = &$sub(-keep=>1,@params);
+                        return ($dfv->get_current_constraint_value =~ qr/^$re$/) ? $1 : undef; 
+                    }
+                }
+            }
+        }
 
-	Data::FormValidator::Constraints->export_to_level(1,@_);
-}
+        Data::FormValidator::Constraints->export_to_level(1,@_);
+    }
 
 }
 
