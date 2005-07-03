@@ -458,10 +458,11 @@ See Data::FormValidator::Filters for details on the built-in filters.
      cc_no => ['digit'],
  },
 
-A hash ref with field names and keys. Values are array references
-of field-specific filters to apply.
+A hash ref with field names as keys. Values are array references of built-in
+filters to apply (trim,digit,etc) or an anonymous subroutine which should take
+one parameter, the field value and return the (possibly) modified value.
 
-See Data::FormValidator::Filters for details on the built-in filters.
+See L<Data::FormValidator::Filters> for details on the built-in filters.
 
 =head2 field_filter_regexp_map
 
