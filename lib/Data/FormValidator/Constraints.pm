@@ -114,34 +114,34 @@ BEGIN {
         regexp_common => [ grep { m/^RE_/}  keys %Data::FormValidator::Constraints:: ],
         closures => \@closures, 
         validators => [qw/
-        valid_american_phone
-        valid_cc_exp
-        valid_cc_number
-        valid_cc_type
-        valid_email
-        valid_ip_address
-        valid_phone
-        valid_postcode
-        valid_province
-        valid_state
-        valid_state_or_province
-        valid_zip
-        valid_zip_or_postcode
+            valid_american_phone
+            valid_cc_exp
+            valid_cc_number
+            valid_cc_type
+            valid_email
+            valid_ip_address
+            valid_phone
+            valid_postcode
+            valid_province
+            valid_state
+            valid_state_or_province
+            valid_zip
+            valid_zip_or_postcode
         /],
         matchers => [qw/
-        match_american_phone
-        match_cc_exp
-        match_cc_number
-        match_cc_type
-        match_email
-        match_ip_address
-        match_phone
-        match_postcode
-        match_province
-        match_state
-        match_state_or_province
-        match_zip
-        match_zip_or_postcode
+            match_american_phone
+            match_cc_exp
+            match_cc_number
+            match_cc_type
+            match_email
+            match_ip_address
+            match_phone
+            match_postcode
+            match_province
+            match_state
+            match_state_or_province
+            match_zip
+            match_zip_or_postcode
         /],		
     );
 
