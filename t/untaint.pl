@@ -93,7 +93,7 @@ my $validator = new Data::FormValidator($profile);
 my ( $valid, $missing, $invalid, $unknown );
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data1, "rules1"); };
 
-ok(!$@,'avoided eval error');
+is($@,'','avoided eval error');
 ok($valid->{firstname}, 'found firstname'); 
 ok(! is_tainted($valid->{firstname}), 'firstname is untainted');
 is($valid->{firstname},$data1->{firstname}, 'firstname has expected value');
@@ -104,7 +104,7 @@ is($valid->{firstname},$data1->{firstname}, 'firstname has expected value');
 #Rules #2
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data2, "rules2"); };   
 
-ok(!$@,'avoided eval error');
+is($@,'','avoided eval error');
 ok($valid->{lastname});
 ok(!is_tainted($valid->{lastname}));
 is($valid->{lastname},$data2->{lastname});
@@ -124,9 +124,9 @@ is($valid->{email2},$data2->{email2});
     is($@,'', 'survived eval');
     $valid = $result->valid();
 
-    ok($valid->{email1});
-    ok(!is_tainted($valid->{email1}));
-    is($valid->{email1},$data2->{email1});
+    ok($valid->{email1}, "found email1 in \%valid") || warn Dumper ($data2,$result);
+    ok(!is_tainted($valid->{email1}), "email one is not tainted");
+    is($valid->{email1},$data2->{email1}, "email1 identity");
 }
 
 
