@@ -39,9 +39,9 @@ eval{
 
 ok(not $@ 
    or 
-   $@ eq "Invalid input profile: keys not recognised [bad_key_which_should_trigger_error, another_bad_key_which_should_trigger_error]\n" 
+   $@ =~ qr/\QInvalid input profile: keys not recognised [bad_key_which_should_trigger_error, another_bad_key_which_should_trigger_error]/ 
    or
-   $@ eq "Invalid input profile: keys not recognised [another_bad_key_which_should_trigger_error, bad_key_which_should_trigger_error]\n"
-  ); 
+   $@ =~ qr/\QInvalid input profile: keys not recognised [another_bad_key_which_should_trigger_error, bad_key_which_should_trigger_error]/
+  ) || warn $@; 
 
 
