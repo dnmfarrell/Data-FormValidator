@@ -1,3 +1,4 @@
+4.00_02 Sun Jul  3 14:31:13 EST 2005
     [BUG FIXES]
     - The preferred MIME type was not being returned by the 'file_format'
       constraint for file uploads. This would have only affected cases where
