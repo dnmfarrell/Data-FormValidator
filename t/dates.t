@@ -62,4 +62,12 @@ ok ((not $@), 'eval') or
 ok ($valids->{date_and_time_field_good}, 'expecting date_and_time success');
 ok ((grep /date_and_time_field_bad/, @$invalids), 'expecting date_and_time failure');
 
-
+{ 
+    my $format = Data::FormValidator::Constraints::Dates::_prepare_date_format('MMDDYYYY');
+    my ($date,$year, $month, $day, $hour, $min, $sec) = 
+          Data::FormValidator::Constraints::Dates::_parse_date_format($format, '12022003');
+    ok ($date eq '12022003','returning date');
+    ok ($year == 2003, 'basic date prepare and parse test');
+    ok ($month == 12);
+    ok ($day == 2);
+}

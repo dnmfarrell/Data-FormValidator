@@ -28,7 +28,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 	match_date_and_time
 );
 
-$VERSION = '1.00_01';
+$VERSION = '1.00_02';
 
 sub date_and_time {
 	my $fmt = shift;
@@ -74,7 +74,7 @@ sub _prepare_date_format {
     #   die if it's not one of: Y M D h m s p  
 
     my ($i, @order) = 0;
-    $format =~ s{([YMDhms]+|pp)(\?)?}{
+    $format =~ s{(Y+|M+|D+|h+|m+|s+|pp)(\?)?}{
         my ($chr,$q) = ($1,$2);
         $chr = '' if not defined $chr;
         $q   = '' if not defined $chr;

@@ -7,6 +7,9 @@
     - Profile re-use when constraint_regexp_map is used is now fixed 
       (Thanks to Cees Hek).
 
+    - The date_and_time constraint now understands this format: MMDDYYYY. 
+      (RT#12111, thanks to JMAY)
+
     [INTERNALS]
     - Regexp::Common is now only loaded if it's needed, making a significant
       speed increase.
