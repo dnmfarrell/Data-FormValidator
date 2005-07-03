@@ -28,7 +28,7 @@ $VERSION = 4.00_01;
 require Exporter;
 @ISA = qw(Exporter);
 
-BEGIN: {
+BEGIN {
     # A gift from Andy Lester, this trick shows me where eval's die. 
     use Carp;
     $SIG{__WARN__} = \&carp;
