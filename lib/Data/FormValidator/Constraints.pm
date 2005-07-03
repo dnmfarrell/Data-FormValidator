@@ -56,6 +56,7 @@ BEGIN {
         unless ($func eq 'cc_number') {
             # Notice we have to escape some characters
             # in the subroutine, which is really a string here. 
+
             my $code = qq!
             sub $func  {
                 return sub {
@@ -66,12 +67,11 @@ BEGIN {
 
                     \$dfv->name_this('$func');
                     no strict 'refs';
-                    return &{"match_\$func"}(\@_);
+                    return &{"match_$func"}(\@_);
                 }
             }
             !;
 
-            # warn $code;
             eval "package Data::FormValidator::Constraints; $code";
             die "couldn't create $func: $@" if $@;
         }
@@ -220,7 +220,7 @@ sub AUTOLOAD {
 
     # Since all the valid_* routines are essentially identical we're
     # going to generate them dynamically from match_ routines with the same names.
-	if ($prefix eq 'valid_') {
+	if ((defined $prefix) and ($prefix eq 'valid_')) {
 		return defined &{$pkg.'match_' . $sub}(@_);
     }
 }
