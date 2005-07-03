@@ -1,6 +1,6 @@
 # Testing new support for 'qr'. -mls
 
-use Test::More tests => 6;
+use Test::More qw/no_plan/;
 
 use Data::FormValidator; 
 
@@ -28,6 +28,7 @@ my $results = Data::FormValidator->check(\%FORM, {
 		field_filter_regexp_map => {
 			qr/_name$/ => 'ucfirst',
 		},
+        required => 'speak',
 		optional => [qw/short_name not_oops untainted_with_qr/],
 		constraints => {
 			not_oops => {
@@ -35,6 +36,8 @@ my $results = Data::FormValidator->check(\%FORM, {
 				constraint => qr/^oop/,
 			},
 			untainted_with_qr => qr/(Slim)/,
+            speak             => qr/quietly|softly/,
+	        stick 	          => qr/big|large/,
 
 		},
 		msgs => {
@@ -47,6 +50,7 @@ my $results = Data::FormValidator->check(\%FORM, {
 	});
 
 ok ($results->valid('stick') eq 'big','using qr for regexp quoting');
+ok ($results->valid('speak'),'using alternation with qr works');
 ok ($results->valid('good_email'), 'expected to pass constraint');
 ok ($results->invalid('bad_email'),  'expected to fail constraint');
 is($results->valid('short_name'),'Tim', 'field_filter_regexp_map');
