@@ -79,12 +79,25 @@ sub valid_file_format {
    if (!$img && $q->cgi_error) {
    		warn $q->cgi_error && return undef;
 	}
-    my $tmp_file = $q->tmpFileName($q->param($field)) || 
-	 (warn "$0: can't find tmp file for field named $field" and return undef);
 
 	require File::MMagic;	
 	my $mm = File::MMagic->new; 
-	my $fm_mt = $mm->checktype_filename($tmp_file);
+	my $fm_mt;
+	
+	# If a CGI::Simple obj was passed in it won't have the
+	# "tmpFileName" method available, so in that case we use
+	# the file handle that Simple provides instead.
+	if ( $q->isa("CGI::Simple") ) {
+	  my $fh = $q->upload( $q->param('filename') ) || 
+	     (warn "$0: can't get filehandle for field named $field" and return undef);
+	  $fm_mt = $mm->checktype_filehandle($fh) || 
+	    (warn "$0: can't get filehandle for field named $field" and return undef);
+	} else {
+	  my $tmp_file = $q->tmpFileName($q->param($field)) || 
+	    (warn "$0: can't find tmp file for field named $field" and return undef);
+	  $fm_mt = $mm->checktype_filename($tmp_file);
+	}
+
 
    my $uploaded_mt = '';
       $uploaded_mt = $q->uploadInfo($img)->{'Content-Type'} if $q->uploadInfo($img);
@@ -224,8 +237,8 @@ Data::FormValidator::Constraints::Upload - Validate File Uploads
 
 =head1 SYNOPSIS
 
-    # Be sure to use a CGI.pm object as the form input
-    # when using this constraint
+    # Be sure to use a CGI.pm or CGI::Simple object as the form
+    # input when using this constraint
     my $q = new CGI;
 
 	use Data::FormValidator::Constraints::Upload qw(
