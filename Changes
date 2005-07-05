@@ -1,3 +1,6 @@
+    [ENHANCEMENTS]
+    - ::Constraints::Upload now supports CGI::Simple, thanks to David Emery. 
+
     [INTERALS]
     - Improved field_filters documentation, thanks to Andrew Brosnan.
 
