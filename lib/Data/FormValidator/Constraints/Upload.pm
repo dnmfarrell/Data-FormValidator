@@ -88,7 +88,7 @@ sub valid_file_format {
 	# "tmpFileName" method available, so in that case we use
 	# the file handle that Simple provides instead.
 	if ( $q->isa("CGI::Simple") ) {
-	  my $fh = $q->upload( $q->param('filename') ) || 
+	  my $fh = $q->upload( $q->param($field) ) || 
 	     (warn "$0: can't get filehandle for field named $field" and return undef);
 	  $fm_mt = $mm->checktype_filehandle($fh) || 
 	    (warn "$0: can't get filehandle for field named $field" and return undef);
