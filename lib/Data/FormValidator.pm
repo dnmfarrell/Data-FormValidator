@@ -1100,6 +1100,12 @@ Albrecht to the MiniVend program.
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-FormValidator> 
 
+=head1 CONTRIBUTING
+
+Patches, questions and feedback are welcome. This project is managed using
+the darcs source control system ( http://www.darcs.net/ ). My darcs archive is here:
+http://mark.stosberg.com/darcs_hive/dfv/
+
 =head1 AUTHOR
 
 Parts Copyright 2001-2003 by Mark Stosberg <markstos@cpan.org>, (Current Maintainer)
