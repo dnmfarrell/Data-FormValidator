@@ -1,4 +1,4 @@
-use Test::More tests => 2;
+use Test::More tests => 4;
 use Data::FormValidator;
 
 my %FORM = (
@@ -13,6 +13,12 @@ my $results = Data::FormValidator->check(\%FORM,
 );
 
 ok($results->success, 'success with unknown');
+
+{
+    my $false;
+    $results || ($false = 1); 
+    ok(!$false,  "returns true in bool context on success");
+}
 
 # test an unsuccessful success
 $FORM{bad} = -1;
@@ -29,4 +35,10 @@ $results = Data::FormValidator->check(
 );
 
 ok(!$results->success, 'not success()');
+
+{
+    my $false;
+    $results || ($false = 1); 
+    ok($false,  "returns false in bool context on not success");
+}
 

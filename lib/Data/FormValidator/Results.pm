@@ -19,6 +19,10 @@ use Symbol;
 use Data::FormValidator::Filters qw/:filters/;
 use Data::FormValidator::Constraints (qw/:validators :matchers/);
 use vars qw/$AUTOLOAD $VERSION/;
+use overload
+  'bool' => \&_bool_overload_based_on_success;
+
+
 
 $VERSION = 4.00_02;
 
@@ -341,6 +345,12 @@ sub _process {
 
 This method returns true if there were no invalid or missing fields,
 else it returns false.
+
+As a shorthand, When the $results object is used in boolean context, it is overloaded
+to use the value of success() instead. That allows creation of a syntax like this one used
+in C<CGI::Application::Plugin::ValidateRM>:
+
+ my $results = $self->check_rm('form_display','_form_profile') || return $self->dfv_error_page;
 
 =cut
 
@@ -977,46 +987,6 @@ sub _create_regexp_common_constraint  {
 	no strict "refs";
 	my $re = &$re_name(-keep=>1,@params) || die 'no matching Regexp::Common routine found';
 	return ($self->get_current_constraint_value =~ qr/^$re$/) ? $1 : undef; 
-}
-
-# _add_constraints_from_map($profile,'constraint',\%valid);
-# Returns:
-#  - a hash to add to either 'constraints' or 'constraint_methods'
-
-sub _add_constraints_from_map {
-	die "_add_constraints_from_map: need 3 arguments" unless (scalar @_ == 3);
-	my ($profile, $name, $valid) = @_;
-	($name =~ m/^constraint(_method)?$/) || die "unexpected input.";
-
-	my $key_name = $name.'s';
-	my $map_name = $name.'_regexp_map';
-
-	my %result = ();
-	foreach my $re (keys %{ $profile->{$map_name} }) {
-		my $sub = _create_sub_from_RE($re);
-
-		# find all the keys that match this RE and add a constraint for them
-		for my $key (keys %$valid) {
-			if ($sub->($key)) {
-					my $cur = $profile->{$key_name}{$key};
-					my $new = $profile->{$map_name}{$re};
-					# If they already have an arrayref of constraints, add to the list
-					if (ref $cur eq 'ARRAY') {
-						push @{ $result{$key} }, $new;
-					} 
-					# If they have a single constraint defined, create an array ref with with this plus the new one
-					elsif ($cur) {
-						$result{$key} = [$cur,$new];
-					}
-					# otherwise, a new constraint is created with this as the single constraint
-					else {
-						$result{$key} = $new;
-					}
-					warn "constraint_regexp_map: $key matches\n" if $profile->{debug};
-				}
-			}
-	}
-	return %result;
 }
 
 # =head2 _check_constraints()

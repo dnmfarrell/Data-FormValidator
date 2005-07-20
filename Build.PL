@@ -41,6 +41,7 @@ $class->new(
 		'File::MMagic'   => 1.17,
 		'MIME::Types'	 => 1.005,
 		'Regexp::Common' => 0,
+        'overload'       => 0,
 	},
 )->create_build_script;
 
