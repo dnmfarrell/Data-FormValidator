@@ -69,7 +69,7 @@ example, if you want to access the I<trim> function directly, you could either d
 
     use Data::FormValidator::Filters (qw/filter_trim/);
     or
-    use Data::FormValidator::Filters (:filters);
+    use Data::FormValidator::Filters (qw/:filters/);
 
     $string = filter_trim($string);
 
