@@ -354,8 +354,8 @@ spaces will be reported as missing.
 
  required_regexp => qr/city|state|zipcode/,
 
-This is a regular expression used to specify additional fields which are
-required.
+This is a regular expression used to specify additional field names for which values
+will be required.
 
 =head2 require_some
 
