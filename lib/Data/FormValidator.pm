@@ -185,6 +185,46 @@ multiple values for a single key should be presented as an array reference.
 
 The second argument is a reference to the profile you are validating.
 
+=head2 validate()
+
+    my( $valids, $missings, $invalids, $unknowns ) = 
+        Data::FormValidator->validate( \%input_hash, \%dfv_profile);
+
+C<validate()> provides a deprecated alternative to C<check()>. It has the same input
+syntax, but returns a four element array, described as follows
+
+=over
+
+=item valids
+
+This is a hash reference to the valid fields which were submitted in
+the data. The data may have been modified by the various filters specified.
+
+=item missings
+
+This is a reference to an array which contains the name of the missing
+fields. Those are the fields that the user forget to fill or filled
+with spaces. These fields may comes from the I<required> list or the
+I<dependencies> list.
+
+=item invalids
+
+This is a reference to an array which contains the name of the fields
+which failed one or more of their constraint checks.
+
+Fields defined with multiple constraints will have an array ref returned in the
+@invalids array instead of a string. The first element in this array is the
+name of the field, and the remaining fields are the names of the failed
+constraints. 
+
+=item unknowns
+
+This is a list of fields which are unknown to the profile. Whether or
+not this indicates an error in the user input is application
+dependant.
+
+=back
+
 =head2 new()
 
 Using C<new()> is only needed for advanced usage, including these cases:
@@ -270,7 +310,7 @@ sub validate {
 
     my $valid   = $data_set->valid();
     my $missing = $data_set->missing();
-    my $invalid = $data_set->{validate_invalid};
+    my $invalid = $data_set->{validate_invalid} || [];
     my $unknown = [ $data_set->unknown ];
 
     return ( $valid, $missing, $invalid, $unknown );
