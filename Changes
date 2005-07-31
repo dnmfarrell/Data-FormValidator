@@ -3,6 +3,7 @@
 
     [INTERALS]
     - Improved field_filters documentation, thanks to Andrew Brosnan.
+    - Add many failing TODO tests for built-in filters. See t/filters_builtin.t 
 
 4.00_02 Sun Jul  3 14:31:13 EST 2005
     [BUG FIXES]
