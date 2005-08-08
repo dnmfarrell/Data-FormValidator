@@ -441,8 +441,8 @@ will be returned with the other valid data.
  # trim leading and trailing whitespace on all fields
  filters       => ['trim'],
 
-This is a reference to an array of filters that will be applied to ALL
-optional and required fields. 
+This is a reference to an array of filters that will be applied to ALL optional
+and required fields, B<before> any constraints are applied. 
 
 This can be the name of a built-in filter
 (trim,digit,etc) or an anonymous subroutine which should take one parameter, 
@@ -461,6 +461,8 @@ See Data::FormValidator::Filters for details on the built-in filters.
 A hash ref with field names as keys. Values are array references of built-in
 filters to apply (trim,digit,etc) or an anonymous subroutine which should take
 one parameter, the field value and return the (possibly) modified value.
+
+Filters are applied B<before> any constraints are applied. 
 
 See L<Data::FormValidator::Filters> for details on the built-in filters.
 
