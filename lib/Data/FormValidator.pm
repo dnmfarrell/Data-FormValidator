@@ -1,4 +1,4 @@
-#
+
 #    FormValidator.pm - Object that validates form input data.
 #
 #    This file is part of Data::FormValidator.
@@ -209,8 +209,9 @@ I<dependencies> list.
 
 =item invalids
 
-This is a reference to an array which contains the name of the fields
-which failed one or more of their constraint checks.
+This is a reference to an array which contains the name of the fields which
+failed one or more of their constraint checks. If there are no invalid fields,
+an empty arrayref will be returned. 
 
 Fields defined with multiple constraints will have an array ref returned in the
 @invalids array instead of a string. The first element in this array is the

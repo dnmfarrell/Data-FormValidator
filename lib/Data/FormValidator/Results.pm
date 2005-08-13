@@ -989,6 +989,51 @@ sub _create_regexp_common_constraint  {
 	return ($self->get_current_constraint_value =~ qr/^$re$/) ? $1 : undef; 
 }
 
+# _add_constraints_from_map($profile,'constraint',\%valid);
+# Returns:
+#  - a hash to add to either 'constraints' or 'constraint_methods'
+
+sub _add_constraints_from_map {
+	die "_add_constraints_from_map: need 3 arguments" unless (scalar @_ == 3);
+	my ($profile, $name, $valid) = @_;
+	($name =~ m/^constraint(_method)?$/) || die "unexpected input.";
+
+	my $key_name = $name.'s';
+	my $map_name = $name.'_regexp_map';
+
+	my %result = ();
+	foreach my $re (keys %{ $profile->{$map_name} }) {
+		my $sub = _create_sub_from_RE($re);
+
+		# find all the keys that match this RE and add a constraint for them
+		for my $key (keys %$valid) {
+			if ($sub->($key)) {
+					my $cur = $profile->{$key_name}{$key};
+					my $new = $profile->{$map_name}{$re};
+					# If they already have an arrayref of constraints, add to the list
+					if (ref $cur eq 'ARRAY') {
+						push @{ $result{$key} }, $new;
+					} 
+					# If they have a single constraint defined, create an array ref with with this plus the new one
+					elsif ($cur) {
+						$result{$key} = [$cur,$new];
+					}
+					# otherwise, a new constraint is created with this as the single constraint
+					else {
+						$result{$key} = $new;
+					}
+					warn "constraint_regexp_map: $key matches\n" if $profile->{debug};
+				}
+			}
+	}
+	return %result;
+}
+
+sub _bool_overload_based_on_success {
+    my $results = shift;
+    return $results->success()
+}
+
 # =head2 _check_constraints()
 #
 # $self->_check_constraints(
