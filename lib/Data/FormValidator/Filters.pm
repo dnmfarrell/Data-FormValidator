@@ -361,7 +361,21 @@ __END__
 
 =head1 SEE ALSO
 
-Data::FormValidator(3) Data::FormValidator::Constraints(3)
+=over
+
+=item o
+
+ L<Data::FormValidator>
+
+=item o
+
+ L<Data::FormValidator::Constraints>
+
+=item o
+
+ L<Data::FormValidator::Filters::Image> - shrink incoming image uploads
+
+=back
 
 =head1 AUTHOR
 
