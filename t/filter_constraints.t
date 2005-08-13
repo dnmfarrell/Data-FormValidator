@@ -51,7 +51,7 @@ my $input_hashref =
 my ($valids, $missings, $invalids, $unknowns) =
     $validator->validate($input_hashref, 'default');
    
-is($invalids, undef, "all fields are valid");
+is_deeply($invalids, [], "all fields are valid");
 
 { # RT#13078
     my $res;
