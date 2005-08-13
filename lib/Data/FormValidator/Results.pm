@@ -262,8 +262,14 @@ sub _process {
 	}
 
     # Fill defaults
-	while ( my ($field,$value) = each %{$profile->{defaults}} ) {
-		$valid{$field} = $value unless exists $valid{$field};
+    while ( my ($field,$value) = each %{$profile->{defaults}} ) {
+        unless(exists $valid{$field}) {
+            if (ref($value) && ref($value) eq "CODE") {
+                $valid{$field} = $value->($self);
+            } else {
+                $valid{$field} = $value;
+            }
+        }
 	}
 
     # Check for required fields

@@ -19,6 +19,7 @@
     [ENHANCEMENTS]
     - ::Constraints::Upload now supports CGI::Simple, thanks to David Emery. 
     - Documentation for required_regexp has been improved. (William McKee)
+    - support for coderefs as default values (Marcello)
 
     [INTERALS]
     - Improved field_filters documentation, thanks to Andrew Brosnan.

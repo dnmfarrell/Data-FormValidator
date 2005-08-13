@@ -473,9 +473,12 @@ the values are references to arrays of the field names in each group.
 This is a hash reference where keys are field names and 
 values are defaults to use if input for the field is missing. 
 
+The values can be code refs which will be used to calculate the 
+value if needed. These code refs will be passed in the DFV::Results
+object as the only parameter. 
+
 The defaults are set shortly before the constraints are applied, and
 will be returned with the other valid data.
-
 
 =head2 filters
 
