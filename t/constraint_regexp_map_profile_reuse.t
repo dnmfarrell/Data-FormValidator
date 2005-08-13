@@ -17,7 +17,7 @@ my $c1 = {%{ $profile->{constraints} }};
 my $results2 = Data::FormValidator->check($data, $profile);
 my $c2 = {%{ $profile->{constraints} }};
 
-is_deeply($results1,$results2, "constraints aren't duped when profile with constraint_regexp_map is reused");
+is_deeply($results1->{profile},$results2->{profile}, "constraints aren't duped when profile with constraint_regexp_map is reused");
 is_deeply($c1,$c2, "constraints aren't duped when profile with constraint_regexp_map is reused");
 
 {
