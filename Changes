@@ -1,5 +1,24 @@
+    [BUG FIXES]
+    - This one is worth a brief explanation. When this old syntax was used:
+
+      my ( $valid, $missing, $invalid, $unknown ) = Data::FormValidator->validate({}, {} );
+
+      $invalid would be returned as an empty arrayref if there were no
+      invalids.  This return value was undocumented, and was later changed to
+      be 'undef' sometime between 3.50 and 3.70. However, I found that some
+      applications, including Cascade, depended on the undocumented return
+      value (which they shouldn't have). 
+
+      I have now reverted the behavior to returning an empty arrayref in this
+      case, added a test for it, and updated the docs to be explicit about the
+      return value. This will save some people unexpected breakages when
+      upgrading DFV from a very old version with very old applications. 
+
+      Those who use the $results object are unaffected.
+
     [ENHANCEMENTS]
     - ::Constraints::Upload now supports CGI::Simple, thanks to David Emery. 
+    - Documentation for required_regexp has been improved. (William McKee)
 
     [INTERALS]
     - Improved field_filters documentation, thanks to Andrew Brosnan.
