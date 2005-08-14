@@ -26,7 +26,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 	file_max_bytes
 );
 
-$VERSION = 1.00_02;
+$VERSION = 1.01;
 
 sub file_format {
 	my %params = @_;

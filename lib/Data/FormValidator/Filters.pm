@@ -15,7 +15,7 @@ package Data::FormValidator::Filters;
 use strict;
 use vars qw/$AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS $VERSION/;
 
-$VERSION = '3.50';
+$VERSION = 4.00;
 
 require Exporter;
 @ISA = qw(Exporter);
