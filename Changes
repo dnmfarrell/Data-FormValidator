@@ -1,50 +1,11 @@
-    [BUG FIXES]
-    - This one is worth a brief explanation. When this old syntax was used:
+4.00 Sun Aug 14 10:57:25 EST 2005
 
-      my ( $valid, $missing, $invalid, $unknown ) = Data::FormValidator->validate({}, {} );
+    *** NOTE ***
+    This a major update with a significant code changes. While the test suite
+    indicates we have 100% compatibility with 3.x, you are encouraged to test
+    this release with your own applications before deploying it in a production
+    environment. 
 
-      $invalid would be returned as an empty arrayref if there were no
-      invalids.  This return value was undocumented, and was later changed to
-      be 'undef' sometime between 3.50 and 3.70. However, I found that some
-      applications, including Cascade, depended on the undocumented return
-      value (which they shouldn't have). 
-
-      I have now reverted the behavior to returning an empty arrayref in this
-      case, added a test for it, and updated the docs to be explicit about the
-      return value. This will save some people unexpected breakages when
-      upgrading DFV from a very old version with very old applications. 
-
-      Those who use the $results object are unaffected.
-
-    [ENHANCEMENTS]
-    - ::Constraints::Upload now supports CGI::Simple, thanks to David Emery. 
-    - Documentation for required_regexp has been improved. (William McKee)
-    - support for coderefs as default values (Marcello)
-
-    [INTERALS]
-    - Improved field_filters documentation, thanks to Andrew Brosnan.
-    - Add many failing TODO tests for built-in filters. See t/filters_builtin.t 
-
-4.00_02 Sun Jul  3 14:31:13 EST 2005
-    [BUG FIXES]
-    - The preferred MIME type was not being returned by the 'file_format'
-      constraint for file uploads. This would have only affected cases where
-      the mime type sent by the browser differed from the one detected by DFV.
-      Thanks to Randal Schwartz for spotting this. (RT#12744). 
-
-    - Profile re-use when constraint_regexp_map is used is now fixed 
-      (Thanks to Cees Hek).
-
-    - The date_and_time constraint now understands this format: MMDDYYYY. 
-      (RT#12111, thanks to JMAY)
-
-    [INTERNALS]
-    - Regexp::Common is now only loaded if it's needed, making a significant
-      speed increase.
-
-    - Several test improvements and code cleanups 
-
-4.00_01
     [ENHANCEMENTS]
 	- The constraints interface has been overhauled to be more intuitive to use
 	  with parameterized constraints. This included added new two new profile
@@ -69,12 +30,53 @@
 	- The 'msgs' hash in the profile is now validated to make sure it includes only
 	  valid keys. This should help to spot some errors faster.  
 
-    [INTERNALS]
+    - ::Constraints::Upload now supports CGI::Simple, thanks to David Emery. 
+
+    - Documentation for required_regexp has been improved. (William McKee)
+
+    - support for coderefs as default values (Marcello)
+
+    - Improved field_filters documentation, thanks to Andrew Brosnan.
+
+    [BUG FIXES]
+	- RT#12220: Canadian Province RE were updated. (Steve Simms).   
+
+    - The preferred MIME type was not being returned by the 'file_format'
+      constraint for file uploads. This would have only affected cases where
+      the mime type sent by the browser differed from the one detected by DFV.
+      Thanks to Randal Schwartz for spotting this. (RT#12744). 
+
+    - Profile re-use when constraint_regexp_map is used is now fixed 
+      (Thanks to Cees Hek).
+
+    - The date_and_time constraint now understands this format: MMDDYYYY. 
+      (RT#12111, thanks to JMAY)
+
+    - This one is worth a brief explanation. When this old syntax was used:
+
+      my ( $valid, $missing, $invalid, $unknown ) = Data::FormValidator->validate({}, {} );
+
+      $invalid would be returned as an empty arrayref if there were no
+      invalids.  This return value was undocumented, and was later changed to
+      be 'undef' sometime between 3.50 and 3.70. However, I found that some
+      applications, including Cascade, depended on the undocumented return
+      value (which they shouldn't have). 
+
+      I have now reverted the behavior to returning an empty arrayref in this
+      case, added a test for it, and updated the docs to be explicit about the
+      return value. This will save some people unexpected breakages when
+      upgrading DFV from a very old version with very old applications. 
+
+      Those who use the $results object are unaffected.
+
+    [INTERALS]
+    - Add many failing TODO tests for built-in filters. See t/filters_builtin.t 
+
     - A new test was added to check that no warnings are emitted when an untainted
       constraint returns undef (Michael Peters)
 
-	[BUG FIXES]
-	- RT#12220: Canadian Province RE were updated. (Steve Simms).   
+* 3.x releases after 3.63 happened on a different branch. All of the
+  improvements there should be reflected above. 
 
 3.63
 	[BUG FIXES]
