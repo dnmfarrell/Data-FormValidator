@@ -379,8 +379,8 @@ __END__
 
 =head1 AUTHOR
 
-Author:  Francis J. Lacoste <francis.lacoste@iNsu.COM>
-Maintainer: Mark Stosberg <mark@summersault.com>
+ Author:  Francis J. Lacoste <francis.lacoste@iNsu.COM>
+ Maintainer: Mark Stosberg <mark@summersault.com>
 
 =head1 COPYRIGHT
 
