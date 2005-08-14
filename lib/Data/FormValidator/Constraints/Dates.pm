@@ -167,20 +167,27 @@ This older, more awkward interface is supported:
 		},
 	}
 
-=head1 TODO 
-
-Find a way to make standard formats available.  For example, having a format
-that you know PostgreSQL will accept as a valid. 
-
 =head1 SEE ALSO
 
-L<Data::FormValidator>, L<DateTime::Format::Pg>, L<DateTime::Format::MySQL>, L<DateTime::Format::Mail>
+=over 
+
+=item o
+
+L<Data::FormValidator>
+
+=item o 
+
+L<Data::FormValidator::Constraints::DateTime>  - This alternative features
+returning dates as DateTime objects and validating against the date formats
+required for the MySQL and PostgreSQL databases. 
+
+=back 
 
 =head1 AUTHOR
 
 Mark Stosberg, E<lt>mark@summersault.comE<gt>
 
-With magic code by Jan Krynicky. 
+Featuring clever code by Jan Krynicky. 
 
 =head1 COPYRIGHT AND LICENSE
 
