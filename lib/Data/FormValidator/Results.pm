@@ -22,7 +22,7 @@ use vars qw/$AUTOLOAD $VERSION/;
 use overload
   'bool' => \&_bool_overload_based_on_success;
 
-$VERSION = 4.00;
+$VERSION = 4.01;
 
 =pod
 
