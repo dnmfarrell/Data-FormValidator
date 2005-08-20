@@ -21,8 +21,11 @@
 \.patch$
 \.orig$
 \.diff$
+\.rej$
 _darcs
 _build
+patches
+rejects
 ^Build$
 
 
