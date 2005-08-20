@@ -1,8 +1,14 @@
 4.01
+    [ENHANCEMENTS]
+    - get_input_data() now supports the parameters "as_hashref => 1" to 
+      return the input data in a uniform way. 
+
     [INTERNALS] 
     - Constraints may refer to fields that are 'unknown' to
       Data::FormValidator, but these unknown values wll remain unfiltered
       as before. (Michael Peters). 
+
+    - _get_data() was renamed to _get_input_as_hash(). You shouldn't care. 
 
 4.00 Sun Aug 14 10:57:25 EST 2005
 

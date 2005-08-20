@@ -735,14 +735,18 @@ available to you to use inside of your routine.
 
 =over 4
 
-=item get_input_data
+=item get_input_data()
 
 Returns the raw input data. This may be a CGI object if that's what 
 was used in the constraint routine. 
 
-B<Example>
+B<Examples:>
 
+ # Raw and uncensored
  my $data = $self->get_input_data;
+
+ # tamed to be a hashref, if it wasn't already
+ my $data = $self->get_input_data( as_hashref => 1 );
 
 =item get_current_constraint_field
 
