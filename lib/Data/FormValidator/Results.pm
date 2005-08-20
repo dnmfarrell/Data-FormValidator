@@ -1083,9 +1083,10 @@ sub _check_constraints {
 			$c->{is_method} = 1 if $force_method_p;
 
 			my $is_value_list = 1 if (ref $valid->{$field} eq 'ARRAY');
+            my %param_data = ( $self->_get_data($self->get_input_data) , %$valid );
 			if ($is_value_list) {
 				foreach (my $i = 0; $i < scalar @{ $valid->{$field}} ; $i++) {
-					my @params = $self->_constraint_input_build($c,$valid->{$field}->[$i],$valid);
+					my @params = $self->_constraint_input_build($c,$valid->{$field}->[$i],\%param_data);
 
 					# set current constraint field for use by get_current_constraint_value
 					$self->{__CURRENT_CONSTRAINT_VALUE} = $valid->{$field}->[$i];
@@ -1100,7 +1101,7 @@ sub _check_constraints {
 				}
 			}
 			else {
-				my @params = $self->_constraint_input_build($c,$valid->{$field},$valid);
+				my @params = $self->_constraint_input_build($c,$valid->{$field},\%param_data);
 
 				# set current constraint field for use by get_current_constraint_value
 				$self->{__CURRENT_CONSTRAINT_VALUE} = $valid->{$field};

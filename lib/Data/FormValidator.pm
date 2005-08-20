@@ -779,9 +779,11 @@ Using the original syntax, one key should be named C<constraint> and should
 have a value set to the reference of the subroutine or the name of a built-in
 validator.  Another required key is C<params>. The value of the C<params> key
 is a reference to an array of the other elements to use in the validation. If
-the element is a scalar, it is assumed to be a field name. If the value is a
-reference, the reference is passed directly to the routine. Don't forget to
-include the name of the field to check in that list, if you are using this syntax.
+the element is a scalar, it is assumed to be a field name. The field is known
+to Data::FormValidator, the value will be filtered through any defined filteres
+before it is passed in.  If the value is a reference, the reference is passed
+directly to the routine.  Don't forget to include the name of the field to
+check in that list, if you are using this syntax.
 
 B<Example>:
 
@@ -1053,7 +1055,7 @@ The C<params> value is a reference to an array of the parameters to pass
 to the constraint method. 
 If an element of the C<params> list is a scalar, it is assumed to be naming
 a key of the %input_hash and that value is passed to the routine. 
-If the parameter is a '\' reference, then it is treated literally and passed 
+If the parameter is a reference, then it is treated literally and passed 
 unchanged to the routine.
 
 If you are using the older C<constraint> over 

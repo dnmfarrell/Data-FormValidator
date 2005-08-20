@@ -1,3 +1,9 @@
+4.01
+    [INTERNALS] 
+    - Constraints may refer to fields that are 'unknown' to
+      Data::FormValidator, but these unknown values wll remain unfiltered
+      as before. (Michael Peters). 
+
 4.00 Sun Aug 14 10:57:25 EST 2005
 
     *** NOTE ***
