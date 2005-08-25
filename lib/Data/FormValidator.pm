@@ -361,7 +361,7 @@ keys.
 Here is a very simple input profile. Examples of more advanced options are
 described below.
 
-    use Data::FormValidator::Constraints qw(:all);
+    use Data::FormValidator::Constraints qw(:closures);
 
     my $profile = {
         optional => [qw( company
@@ -524,7 +524,7 @@ match a regular expression.
 
 =head2 constraint_methods
 
- use Data::FormValidator::Constraints (qw:all);
+ use Data::FormValidator::Constraints (qw:closures);
 
  constraint_methods => {
     cc_no      => cc_number({fields => ['cc_type']}),
@@ -610,7 +610,7 @@ For more details see L<VALIDATING INPUT BASED ON MULTIPLE FIELDS>.
 
 =head2 constraint_method_regexp_map
 
- use Data::FormValidator::Constraints qw(:all);
+ use Data::FormValidator::Constraints qw(:closures);
 
  # In your profile. 
  constraint_method_regexp_map => {
