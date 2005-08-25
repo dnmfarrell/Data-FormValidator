@@ -18,3 +18,17 @@ my $result = Data::FormValidator->check({ field => 'value' }, {
         },
     });
 
+{
+    my $result = Data::FormValidator->check({
+            to_pass => 'value', 
+            to_fail => 'value', 
+        }, {
+            required => [qw/to_pass to_fail/],
+            constraint_methods => {
+                to_pass =>  qr/value/,
+                to_fail =>  qr/wrong/,
+            }});
+
+    ok ( $result->invalid('to_fail'), "using qr with constraint_method fails as expected");
+    ok ( $result->valid('to_pass'), "using qr with constraint_method succeeds as expected");
+}

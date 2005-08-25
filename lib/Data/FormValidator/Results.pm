@@ -715,12 +715,14 @@ sub prefix_hash {
 sub _create_sub_from_RE {
 	my $re = shift || return undef;
 	my $untaint_this = shift;
+    my $force_method_p = shift;
 
 	my $sub;
 	# If it's "qr" style
 	if (substr($re,0,1) eq '(') {
 		$sub = sub { 
-            my $val = shift;
+            # With methods, the value is the second argument
+            my $val = $force_method_p ? $_[1] : $_[0];
 			my ($match) = ($val =~ $re); 
 			if ($untaint_this && defined $match) {
                 # pass the value through a RE that matches anything to untaint it.
@@ -735,7 +737,13 @@ sub _create_sub_from_RE {
 	}
 	else {
         my $return_code = ($untaint_this) ? '; return ($& =~ m/(.*)/s)[0] if defined($`);' : '';
-		$sub = eval 'sub { $_[0] =~ '.$re.$return_code. '}';
+        # With methods, the value is the second argument
+        if ($force_method_p) {
+            $sub = eval 'sub { $_[1] =~ '.$re.$return_code. '}';
+        }
+        else {
+            $sub = eval 'sub { $_[0] =~ '.$re.$return_code. '}';
+        }
 	    die "Error compiling regular expression $re: $@" if $@;
 	}
 	return $sub;
@@ -790,8 +798,9 @@ sub _filter_apply {
 # $constraint_href = $self->_constraint_hash_build($spec,$untaint_p)
 #
 # Input:
-#   - $spec     # Any constraint valid in the profile
-#   - $untaint  # bool for whether we could try to untaint the field. 
+#   - $spec           # Any constraint valid in the profile
+#   - $untaint        # bool for whether we could try to untaint the field. 
+#   - $force_method_p # bool for if it's  a method ?
 #
 # Output:
 #  - $constraint_hashref
@@ -802,8 +811,8 @@ sub _filter_apply {
 # 		is_method  - bool for whether this was a 'constraint' or 'constraint_method'
 
 sub _constraint_hash_build {
-	my ($self,$constraint_spec,$untaint_this) = @_;
-	die "_constraint_hash_build received wrong number of arguments" unless (scalar @_ == 3);
+	my ($self,$constraint_spec,$untaint_this,$force_method_p) = @_;
+	die "_constraint_hash_build received wrong number of arguments" unless (scalar @_ == 4);
 
 	my	$c = {
 			name 		=> $constraint_spec,
@@ -821,7 +830,7 @@ sub _constraint_hash_build {
 	# Check for regexp constraint
 	if ((ref $c->{constraint} eq 'Regexp')
 			or ( $c->{constraint} =~ m@^\s*(/.+/|m(.).+\2)[cgimosx]*\s*$@ )) {
-		$c->{constraint} = _create_sub_from_RE($c->{constraint},$untaint_this);
+		$c->{constraint} = _create_sub_from_RE($c->{constraint},$untaint_this,$force_method_p);
 	}
 	# check for code ref
 	elsif (ref $c->{constraint} eq 'CODE') {
@@ -1086,7 +1095,7 @@ sub _check_constraints {
 			# from being accidently shared
 			$self->{__CURRENT_CONSTRAINT_NAME} = undef;
 
-			my $c = $self->_constraint_hash_build($constraint_spec,$untaint_this);
+			my $c = $self->_constraint_hash_build($constraint_spec,$untaint_this, $force_method_p);
 			$c->{is_method} = 1 if $force_method_p;
 
 			my $is_value_list = 1 if (ref $valid->{$field} eq 'ARRAY');
