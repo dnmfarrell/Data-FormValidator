@@ -1042,7 +1042,7 @@ sub _add_constraints_from_map {
 					else {
 						$result{$key} = $new;
 					}
-					warn "constraint_regexp_map: $key matches\n" if $profile->{debug};
+					warn "$map_name: $key matches\n" if $profile->{debug};
 				}
 			}
 	}

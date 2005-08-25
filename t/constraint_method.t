@@ -40,7 +40,6 @@ my $result = Data::FormValidator->check({ field => 'value' }, {
                 qr/map_to_f.*/   => qr/fail/,
 
             },
-            debug => 1,
         });
 
     ok ( $result->invalid('to_fail'), "using qr with constraint_method fails as expected");
