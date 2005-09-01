@@ -1,3 +1,7 @@
+    [ENHANCEMENTS]
+    - the use of custom signal handers for "die" has now been localized to
+      avoid interfering with other applications. (Josh Miller). 
+
 4.01 Sat Aug 20 13:16:47 EST 2005
 
     [ENHANCEMENTS]

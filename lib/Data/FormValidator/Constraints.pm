@@ -29,11 +29,7 @@ require Exporter;
 @ISA = qw(Exporter);
 
 BEGIN {
-    # A gift from Andy Lester, this trick shows me where eval's die. 
     use Carp;
-    $SIG{__WARN__} = \&carp;
-    $SIG{__DIE__} = \&confess;
-
     my @closures = (qw/
         american_phone
         cc_exp
@@ -57,6 +53,7 @@ BEGIN {
             # Notice we have to escape some characters
             # in the subroutine, which is really a string here. 
 
+            local $SIG{__DIE__} = \&confess;
             my $code = qq!
             sub $func  {
                 return sub {

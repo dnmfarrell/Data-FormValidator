@@ -15,6 +15,7 @@ use strict;
 
 package Data::FormValidator::Results;
 
+use Carp;
 use Symbol;
 use Data::FormValidator::Filters qw/:filters/;
 use Data::FormValidator::Constraints (qw/:validators :matchers/);
@@ -97,6 +98,7 @@ sub _process {
     # import valid_* subs from requested packages
 	foreach my $package (_arrayify($profile->{validator_packages})) {
 		if ( !exists $imported_validators{$package} ) {
+			local $SIG{__DIE__}  = \&confess;
 			eval "require $package";
 			if ($@) {
 				die "Couldn't load validator package '$package': $@";
@@ -736,6 +738,7 @@ sub _create_sub_from_RE {
 
 	}
 	else {
+        local $SIG{__DIE__}  = \&confess;
         my $return_code = ($untaint_this) ? '; return ($& =~ m/(.*)/s)[0] if defined($`);' : '';
         # With methods, the value is the second argument
         if ($force_method_p) {
@@ -849,6 +852,7 @@ sub _constraint_hash_build {
 			}
 			# If the constraint name starts with RE_, try looking for it in the Regexp::Common package
 			elsif ($c->{constraint} =~ m/^RE_/) {
+				local $SIG{__DIE__}  = \&confess;
 				$c->{is_method} = 1;
 				$c->{constraint} = eval 'sub { &_create_regexp_common_constraint(@_)}' 
 					|| die "could not create Regexp::Common constraint: $@";
@@ -860,6 +864,7 @@ sub _constraint_hash_build {
 			# try to use match_* first
 			my $routine = 'match_'.$c->{constraint};			
 			if (defined *{qualify_to_ref($routine)}{CODE}) {
+				local $SIG{__DIE__}  = \&confess;
 				$c->{constraint} = eval 'sub { no strict qw/refs/; return defined &{"match_'.$c->{constraint}.'"}(@_)}';
 			}
 			# match_* doesn't exist; if it is supposed to be from the
@@ -869,6 +874,7 @@ sub _constraint_hash_build {
 			}
 			# Load it from Regexp::Common 
 			elsif ($c->{constraint} =~ m/^RE_/) {
+				local $SIG{__DIE__}  = \&confess;
 				$c->{is_method} = 1;
 				$c->{constraint} = eval 'sub { return defined &_create_regexp_common_constraint(@_)}' ||
 					die "could not create Regexp::Common constraint: $@";
