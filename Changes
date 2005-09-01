@@ -4,6 +4,14 @@
     - the use of custom signal handers for "die" has now been localized to
       avoid interfering with other applications. (Josh Miller). 
 
+    - initial support for qr in constraint_method profile key
+
+    [BUG FIXES]
+     - Updated ::Constraints example docs to be accurate: recommend :closures, not :all
+
+    [INTERNALS] 
+    - provide a more accurate debugging message for constraint_method_regexp_map
+
 4.01 Sat Aug 20 13:16:47 EST 2005
 
     [ENHANCEMENTS]
