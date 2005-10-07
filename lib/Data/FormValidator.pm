@@ -576,8 +576,8 @@ a subroutine reference, to supply custom code
 This will check the input and return true or false depending on the input's validity.
 By default, the constraint function recieves a L<Data::FormValidator::Results>
 object as its first argument, and the value to be validated as the second.  To
-validate a field based more inputs than just the field itself, see C<VALIDATING
-INPUT BASED ON MULTIPLE FIELDS>.
+validate a field based more inputs than just the field itself, see 
+L<VALIDATING INPUT BASED ON MULTIPLE FIELDS>.
 
 B<Examples>:
 
@@ -771,8 +771,9 @@ Deprecated, but supported
 
 You can pass more than one value into a constraint routine.  For that, the
 value of the constraint should be a hash reference. If you are creating your
-own routines, be sure to read the section labeled L<WRITING YOUR OWN VALIDATION
-ROUTINES>, in the Data::FormValidator::Constraints documentation.  It describes
+own routines, be sure to read the section labeled 
+L<WRITING YOUR OWN CONSTRAINT ROUTINES>, 
+in the Data::FormValidator::Constraints documentation.  It describes
 a newer and more flexible syntax. 
 
 Using the original syntax, one key should be named C<constraint> and should
