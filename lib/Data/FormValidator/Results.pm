@@ -45,7 +45,7 @@ Data::FormValidator::Results - results of form input validation.
     # Print the name of invalid fields
     if ( $results->has_invalid ) {
 	foreach my $f ( $results->invalid ) {
-	    print $f, " is invalid: ", $results->invalid( $f ) \n";
+	    print $f, " is invalid: ", $results->invalid( $f ), "\n";
 	}
     }
 
@@ -58,7 +58,7 @@ Data::FormValidator::Results - results of form input validation.
 
     # Print valid fields
     foreach my $f ( $results->valid() ) {
-	print $f, " =  ", $result->valid( $f ), "\n";
+        print $f, " =  ", $results->valid( $f ), "\n";
     }
 
 =head1 DESCRIPTION
