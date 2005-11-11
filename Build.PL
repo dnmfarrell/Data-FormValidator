@@ -1,5 +1,4 @@
 shift(@ARGV) if $ARGV[0] eq 'Build'; # accomodate with CPAN autoinstall
-#arch-tag: Mark_Stosberg_<mark@summersault.com>--2004-03-20_18:34:25
 use Module::Build;
 
 my $class = Module::Build->subclass(
@@ -37,7 +36,7 @@ $class->new(
 	requires => {
 		'Image::Size' 	 => 0,
 		'Test::More'  	 => 0,
-		'Date::Calc'	 => 0,
+		'Date::Calc'	 => 5.0,
 		'File::MMagic'   => 1.17,
 		'MIME::Types'	 => 1.005,
 		'Regexp::Common' => 0,
