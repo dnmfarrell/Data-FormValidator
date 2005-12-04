@@ -213,7 +213,7 @@ sub _process {
 
     # Check if the presence of some fields makes other optional fields required.
     while ( my ( $field, $deps) = each %{$profile->{dependencies}} ) {
-        if ($valid{$field}) {
+        if (defined $valid{$field}) {
 			if (ref($deps) eq 'HASH') {
 				foreach my $key (keys %$deps) {
                     # Handle case of a key with a single value given as an arrayref

@@ -1,4 +1,8 @@
-    [INTERNALS] 
+   [BUG FIXES]
+   - bug was fixed for dependent fields that had false values, but were valid
+     (Emanuele Zeppieri)
+
+   [INTERNALS] 
    - bump Date::Calc requirement (RT#15715) 
 
 4.02 Wed Aug 31 21:22:58 EST 2005

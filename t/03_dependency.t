@@ -10,11 +10,12 @@ my $input_profile = {
 	dependencies => {
 		pay_type => {
 			Check => [qw( cc_num )],
-			Visa  => [qw( cc_num cc_exp cc_name )],
+            # Value of Zero is used for test for a specific bug
+			0  => [qw( cc_num cc_exp cc_name )],
 		},
 	},
 };
-my $input_hashref = {pay_type=>'Visa'};
+my $input_hashref = {pay_type=>'0'};
 
 
 ##
@@ -92,7 +93,7 @@ is($result->missing('cc_name'), undef, "missing('cc_name') returned false");
 
 ## Now, some tests using a CGI.pm object as input
 use CGI;
-my $q = CGI->new('pay_type=Visa');
+my $q = CGI->new('pay_type=0');
 my $results;
 eval {
     $results = $validator->check($q, 'default');
