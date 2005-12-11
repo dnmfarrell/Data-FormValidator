@@ -1,4 +1,4 @@
-use Test::More tests => 15;
+use Test::More qw/no_plan/;
 use strict;
 
 use Data::FormValidator;
@@ -197,6 +197,27 @@ ok ((not $@), 'calling msgs method without hash definition');
 
     my $msgs = $results->msgs;
     like($msgs->{field},qr/##/,$test_name);
+}
+
+### 
+{
+    my $test_name  = 'A callback can be used for msgs';
+    my $results = Data::FormValidator->check(
+        {
+            field => 'value',
+        },
+        {
+            required => [qw/field/],
+            constraints => {
+                field => ['email','province'],
+            },
+            msgs => sub { {  field => 'callback!' } }, 
+        }
+    );
+
+    my $msgs = $results->msgs;
+    like($msgs->{field},qr/callback/,$test_name);
+
 }
 
 

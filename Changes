@@ -1,3 +1,8 @@
+   [ENHANCEMENTS] 
+   - The msgs key can now take a callback, allow users to override how error
+     message generation is done. Some alternative message generate routines 
+     will hopefully be published soon.  (Cees Hek, Chris Laco and others)
+
    [BUG FIXES]
    - bug was fixed for dependent fields that had false values, but were valid
      (Emanuele Zeppieri)

@@ -519,6 +519,11 @@ This method returns a hash reference to error messages. The exact format
 is determined by parameters in the C<msgs> area of the validation profile,
 described in the L<Data::FormValidator> documentation.
 
+B<NOTE:> the C<msgs> parameter in the profile can take a code reference as a
+value, allowing complete control of how messages are generated. If such a code
+reference was provided there, it will be called here instead of the usual
+processing, described below. 
+
 This method takes one possible parameter, a hash reference containing the same 
 options that you can define in the validation profile. This allows you to separate
 the controls for message display from the rest of the profile. While validation profiles
@@ -532,6 +537,17 @@ C<msgs> as "global" and override them in a specific profile if needed.
 =cut
 
 sub msgs {
+  my $self = shift;
+  my $msgs = $self->{profile}{msgs} || {};
+  if ((ref $msgs eq 'CODE')) {
+    return $msgs->($self,@_);
+  } else {
+    return $self->_generate_msgs(@_);
+  }
+}
+
+
+sub _generate_msgs {
 	my $self = shift;
 	my $controls = shift || {};
 	if (defined $controls and ref $controls ne 'HASH') {
