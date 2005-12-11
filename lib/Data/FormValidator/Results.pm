@@ -606,7 +606,9 @@ sub _generate_msgs {
 
 	my $msgs_ref = prefix_hash($profile{prefix},\%msgs);
 
-	$msgs_ref->{ $profile{any_errors} } = 1 if defined $profile{any_errors};
+    if (! $self->success) {
+    	$msgs_ref->{ $profile{any_errors} } = 1 if defined $profile{any_errors};
+    }
 
 	return $msgs_ref;
 
