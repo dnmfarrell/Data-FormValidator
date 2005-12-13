@@ -1110,6 +1110,8 @@ sub _check_constraints {
 		my $untaint_this =  ($untaint_all || $untaint_href->{$field} || 0);
 
 		my @invalid_list;
+        # used to insure we only bother recording each failed constraint once
+		my %constraints_seen;
 		foreach my $constraint_spec (_arrayify($constraint_list)) {
 
 			# set current constraint field for use by get_current_constraint_field
@@ -1126,18 +1128,22 @@ sub _check_constraints {
             my %param_data = ( $self->_get_input_as_hash($self->get_input_data) , %$valid );
 			if ($is_value_list) {
 				foreach (my $i = 0; $i < scalar @{ $valid->{$field}} ; $i++) {
-					my @params = $self->_constraint_input_build($c,$valid->{$field}->[$i],\%param_data);
+                    if( !exists $constraints_seen{\$c} ) {
 
-					# set current constraint field for use by get_current_constraint_value
-					$self->{__CURRENT_CONSTRAINT_VALUE} = $valid->{$field}->[$i];
+                        my @params = $self->_constraint_input_build($c,$valid->{$field}->[$i],\%param_data);
 
-					my ($match,$failed) = $self->_constraint_check_match($c,\@params,$untaint_this);
-					if ($failed->{failed}) {
-						push @invalid_list, $failed;
-					}
-					else {
-						 $valid->{$field}->[$i] = $match if $untaint_this;
-					}
+                        # set current constraint field for use by get_current_constraint_value
+                        $self->{__CURRENT_CONSTRAINT_VALUE} = $valid->{$field}->[$i];
+
+                        my ($match,$failed) = $self->_constraint_check_match($c,\@params,$untaint_this);
+                        if ($failed->{failed}) {
+                            push @invalid_list, $failed;
+                            $constraints_seen{\$c} = 1;
+                        }
+                        else {
+                            $valid->{$field}->[$i] = $match if $untaint_this;
+                        }
+                    }
 				}
 			}
 			else {

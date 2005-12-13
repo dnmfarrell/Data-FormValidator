@@ -9,7 +9,7 @@
 #    Copyright (C) 1999 Francis J. Lacoste, iNsu Innovations
 #    Parts Copyright 1996-1999 by Michael J. Heins 
 #    Parts Copyright 1996-1999 by Bruce Albrecht  
-#    Parts Copyright 2001-2003 by Mark Stosberg 
+#    Parts Copyright 2001-2005 by Mark Stosberg 
 #
 #    Parts of this module are based on work by
 #    Bruce Albrecht,  contributed to

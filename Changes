@@ -7,6 +7,9 @@
    - bug was fixed for dependent fields that had false values, but were valid
      (Emanuele Zeppieri)
 
+   - Failed constraints for multiple fields with the same name no longer return duplicate  
+     error messages (Will Hawes)
+
    - value of any_errors was wrongly added to msgs even when there are no errors 
      (RT#14942, report and test script by Michael Graham)
 
