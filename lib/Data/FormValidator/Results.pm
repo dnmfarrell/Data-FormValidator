@@ -771,7 +771,7 @@ sub _create_sub_from_RE {
 }
 
 
-sub _error_msg_fmt ($$) {
+sub _error_msg_fmt  {
 	my ($fmt,$msg) = @_;
 	$fmt ||= 
 			'<span style="color:red;font-weight:bold"><span class="dfv_errors">* %s</span></span>';
