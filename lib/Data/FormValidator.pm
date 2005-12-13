@@ -735,14 +735,23 @@ as providing custom messages per field, and handling multiple constraints:
 The hash that's prepared can be retrieved through the C<msgs> method
 described in the L<Data::FormValidator::Results> documentation.
 
-=head2 msgs - callback
+=head2 msgs - callback 
+
+I<This is a new feature. While it expected to be forward-compatible, it hasn't
+yet received the testing the rest of the API has.>   
 
 If the built-in message generation doesn't suit you, it is also possible to
 provide your own by specifying a code reference:
 
  msgs  =>  \&my_msgs_callback
 
-This will be called as a L<Data::FormValidator::Results> method.
+This will be called as a L<Data::FormValidator::Results> method.  It may
+receive as arguments an additional hash reference of control parameters,
+corresponding to the key names in the usually used in the C<msgs> area of the
+profile. You can ignore this information if you'd like. 
+
+If you have an alternative error message handler you'd like to share, 
+stick in the C<Data::FormValidator::ErrMsgs> and upload it to CPAN. 
 
 =head2 debug
 

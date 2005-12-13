@@ -522,13 +522,14 @@ described in the L<Data::FormValidator> documentation.
 B<NOTE:> the C<msgs> parameter in the profile can take a code reference as a
 value, allowing complete control of how messages are generated. If such a code
 reference was provided there, it will be called here instead of the usual
-processing, described below. 
+processing, described below. It will receive as arguments the L<Data::FormValidator::Results>
+object and a hash reference of control parameters.
 
-This method takes one possible parameter, a hash reference containing the same 
-options that you can define in the validation profile. This allows you to separate
-the controls for message display from the rest of the profile. While validation profiles
-may be different for every form, you may wish to format messages the same way
-across many projects.
+The hashref passed in should contain the same options that you can define in
+the validation profile. This allows you to separate the controls for message
+display from the rest of the profile. While validation profiles may be
+different for every form, you may wish to format messages the same way across
+many projects.
 
 Controls passed into the <msgs> method will be applied first, followed by ones
 applied in the profile. This allows you to keep the controls you pass to
