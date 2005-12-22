@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More qw/no_plan/;
+use Test::More (tests => 45);
 use Data::FormValidator;
 use Data::FormValidator::Constraints qw/:closures/;
 
@@ -38,6 +38,25 @@ my $data3 = {
 my $data4 = {
 	zip_field1 => [$ARGV[7],$ARGV[7]],  #12345 , 12345
 	zip_field2 => [$ARGV[7],$ARGV[8]],  #12345 , oops
+};
+
+my $data5 = {
+	zip_field1 => [$ARGV[7],$ARGV[7]],  #12345 , 12345
+	zip_field2 => [$ARGV[7],$ARGV[7]],  #12345 , oops
+};
+
+my $data6 = {
+	zip_field1 => [$ARGV[7],$ARGV[7]],  #12345 , 12345
+	zip_field2 => [$ARGV[7],$ARGV[7]],  #12345 , oops
+    email1     => $ARGV[2], #jim@foo.bar
+    email2     => $ARGV[3], #james@bar.foo
+};
+
+my $data7 = {
+	zip_field1 => [$ARGV[7],$ARGV[7]],  #12345 , 12345
+	zip_field2 => [$ARGV[7],$ARGV[7]],  #12345 , oops
+    email1     => $ARGV[2], #jim@foo.bar
+    email2     => $ARGV[3], #james@bar.foo
 };
 
 
@@ -85,6 +104,34 @@ my $profile =
 			zip_field1=>'zip',
 		},
 	},
+    rules5 => {
+        untaint_regexp_map => qr/^zip_field\d/,
+        required_regexp    => qr/^zip_field\d/,
+        constraint_method_regexp_map => {
+            qr/^zip_field\d/ => 'zip',
+        },
+    },
+    rules6 => {
+        untaint_regexp_map => [qr/^zip_field\d/, qr/^email\d/],
+        required_regexp    => qr/^(zip_field|email)\d/,
+        constraint_method_regexp_map => {
+            qr/^zip_field\d/ => 'zip',
+            qr/^email\d/ => 'email',
+        },
+    },
+    rules7 => {
+        required_regexp    => qr/^zip_field\d/,
+        required           => [qw(email1 email2)],
+        untaint_regexp_map => [qr/^zip_field\d/, qr/^email\d/],
+        untaint_constraint_fields => [qw(email1 email2)],
+        constraint_method_regexp_map => {
+            qr/^zip_field\d/ => 'zip',
+        },
+        constraints        => {
+            email1     => 'email',
+            email2     => 'email',
+        },
+    },
 };
 
 my $validator = new Data::FormValidator($profile);
@@ -175,3 +222,25 @@ my $results = Data::FormValidator->check(
 
 is($results->valid('qr_re_no_parens'),0,'qr RE without parens in untainted');
 is($results->valid('qr_re_parens')   ,0,'qr RE with    parens in untainted');
+
+# Rules #5
+eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data5, "rules5"); };
+ok(!$@, 'avoided eval error');
+ok(!is_tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
+ok(!is_tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
+
+# Rules #6
+eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data6, "rules6"); };
+ok(!$@, 'avoided eval error');
+ok(!is_tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
+ok(!is_tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
+ok(!is_tainted($valid->{email1}->[0]), 'email1 should be untainted');
+ok(!is_tainted($valid->{email2}->[0]), 'email2 should be untainted');
+
+# Rules #7
+eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data7, "rules7"); };
+ok(!$@, 'avoided eval error');
+ok(!is_tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
+ok(!is_tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
+ok(!is_tainted($valid->{email1}), 'email1 should be untainted');
+ok(!is_tainted($valid->{email2}), 'email2 should be untainted');

@@ -289,23 +289,6 @@ sub _process {
 		push @missings, $field unless ($enough_required_fields >= $num_fields_to_require);
 	}
 
-    #Decide which fields to untaint
-    my ($untaint_all, %untaint_hash);
-	if (defined($profile->{untaint_constraint_fields})) {
-		if (ref $profile->{untaint_constraint_fields} eq "ARRAY") {
-			foreach my $field (@{$profile->{untaint_constraint_fields}}) {
-				$untaint_hash{$field} = 1;
-			}
-		}
-		elsif ($valid{$profile->{untaint_constraint_fields}}) {
-			$untaint_hash{$profile->{untaint_constraint_fields}} = 1;
-		}
-	}
-    elsif ((defined($profile->{untaint_all_constraints}))
-	   && ($profile->{untaint_all_constraints} == 1)) {
-	   $untaint_all = 1;
-    }
-
     # add in the constraints from the regexp maps
     # We don't want to modify the profile, so we use a new variable.
 	$profile->{constraints} ||= {};
@@ -318,6 +301,45 @@ sub _process {
 	    %{ $profile->{constraint_methods} }, 	
 		_add_constraints_from_map($profile,'constraint_method',\%valid),
 	};
+
+    #Decide which fields to untaint
+    my ($untaint_all, %untaint_hash);
+    if (defined $profile->{untaint_regexp_map} or defined $profile->{untaint_constraint_fields} ) {
+        # first deal with untaint_constraint_fields
+        if (defined($profile->{untaint_constraint_fields})) {
+            if (ref $profile->{untaint_constraint_fields} eq "ARRAY") {
+                foreach my $field (@{$profile->{untaint_constraint_fields}}) {
+                    $untaint_hash{$field} = 1;
+                }
+            }
+            elsif ($valid{$profile->{untaint_constraint_fields}}) {
+                $untaint_hash{$profile->{untaint_constraint_fields}} = 1;
+            }
+        }
+
+        # now look at untaint_regexp_map
+        if(defined($profile->{untaint_regexp_map})) {
+            my @untaint_regexes;
+            if(ref $profile->{untaint_regexp_map} eq "ARRAY") {
+                @untaint_regexes = @{$profile->{untaint_regexp_map}};
+            }
+            else {
+                push(@untaint_regexes, $profile->{untaint_regexp_map});
+            }
+
+            foreach my $regex (@untaint_regexes) {
+                # look at both constraints and constraint_methods
+                foreach my $field (keys %$private_constraints, keys %$private_constraint_methods) {
+                    next if($untaint_hash{$field}); 
+                    $untaint_hash{$field} = 1 if( $field =~ $regex );
+                }
+            }
+        }
+    }
+    elsif ((defined($profile->{untaint_all_constraints}))
+	   && ($profile->{untaint_all_constraints} == 1)) {
+	   $untaint_all = 1;
+    }
 
 	$self->_check_constraints($private_constraints,\%valid,$untaint_all,\%untaint_hash);
 
@@ -1108,7 +1130,7 @@ sub _check_constraints {
 		next unless exists $valid->{$field};
 
 		my $is_constraint_list = 1 if (ref $constraint_list eq 'ARRAY');
-		my $untaint_this =  ($untaint_all || $untaint_href->{$field} || 0);
+		my $untaint_this = ($untaint_all || $untaint_href->{$field} || 0);
 
 		my @invalid_list;
         # used to insure we only bother recording each failed constraint once

@@ -3,6 +3,8 @@
      message generation is done. Some alternative message generate routines 
      will hopefully be published soon.  (Cees Hek, Chris Laco and others)
 
+   - New profile key: untaint_regexp_map (Michael Peters)
+
    [BUG FIXES]
    - bug was fixed for dependent fields that had false values, but were valid
      (Emanuele Zeppieri)

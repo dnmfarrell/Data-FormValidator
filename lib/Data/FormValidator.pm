@@ -563,8 +563,8 @@ B<Example>:
 
  my_zipcode_field   => qr/^\d{5}$/, # match exactly 5 digits
 
-If this field is named in the C<untaint_constraint_fields>, or 
-C<untaint_all_constraints> is effective, be aware of the following: If you
+If this field is named in C<untaint_constraint_fields> or C<untaint_regexp_map>,
+or C<untaint_all_constraints> is effective, be aware of the following: If you
 write your own regular expressions and only match part of the string then
 you'll only get part of the string in the valid hash. It is a good idea to
 write you own constraints like /^regex$/. That way you match the whole string.
@@ -637,7 +637,7 @@ may not provide untainting.
 See L<WRITING YOUR OWN CONSTRAINT ROUTINES> in the Data::FormValidator::Constraints
 documention for more information.
 
-This is overridden by C<untaint_constraint_fields>
+This is overridden by C<untaint_constraint_fields> and C<untaint_regexp_map>.
 
 =head2 untaint_constraint_fields
 
@@ -646,6 +646,20 @@ This is overridden by C<untaint_constraint_fields>
 Specifies that one or more fields will be untainted if they pass their
 constraint(s). This can be set to a single field name or an array reference of
 field names. The untainted data will be returned in the valid hash. 
+
+This overrides the untaint_all_constraints flag.
+
+=head2 untaint_regexp_map
+
+ untaint_regexp_map => [qr/some_field_\d/],
+
+Specifies that certain fields will be untained if they pass their constraints
+and match one of the regular expressions supplied. This can be set to a single
+regex, or an array reference of regexes. The untainted data will be returned
+in the valid hash.
+
+The above example would untaint the fields named C<some_field_1>, and C<some_field_2>
+but not C<some_field>. 
 
 This overrides the untaint_all_constraints flag.
 
@@ -889,6 +903,7 @@ sub _check_profile_syntax {
         untaint_all_constraints=> undef,
         validator_packages=> undef,
         untaint_constraint_fields=> undef,
+        untaint_regexp_map => undef,
         debug=> undef,
     );
 
