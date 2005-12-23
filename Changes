@@ -1,3 +1,5 @@
+4.10 Thu Dec 22 19:55:34 EST 2005
+
    [ENHANCEMENTS] 
    - The msgs key can now take a callback, allow users to override how error
      message generation is done. Some alternative message generate routines 
