@@ -1,11 +1,32 @@
 #########################
 
-use Test::More tests => 18;
+use Test::More;
 use strict;
+
 BEGIN { 
     use_ok('CGI');
     use_ok('Data::FormValidator::Constraints::Upload') 
 };
+
+my $all_suite_tests = 2;
+my $single_suite_tests = 24;
+my $suite_count = 1;
+my $cgi_simple_test = 0;
+
+eval {
+	require CGI::Simple;
+};
+
+if ($@) { 
+	diag "Skipping CGI::Simple Tests";
+} 
+else {
+	diag "Adding CGI::Simple tests";		
+	$suite_count++;
+	$cgi_simple_test = 1;
+} 
+
+plan tests => ($single_suite_tests * $suite_count) + $all_suite_tests;
 
 #########################
 
@@ -37,12 +58,32 @@ BEGIN {
 );
 
 diag "testing with CGI.pm version: $CGI::VERSION";
+diag "testing with CGI::Simple version: $CGI::Simple::VERSION" if $cgi_simple_test;
 
+## testing vars
+my $cgi_pm_q;
+my $cgi_simple_q;
+
+## setup input (need cleaner way)
 open(IN,'<t/upload_post_text.txt') || die 'missing test file';
 binmode(IN);
 
 *STDIN = *IN;
-my $q = new CGI;
+$cgi_pm_q = new CGI;
+close(IN);
+
+## setup CGI::Simple testing
+if ($cgi_simple_test) {
+	open(IN,'<t/upload_post_text.txt') || die 'missing test file';
+	binmode(IN);
+	*STDIN = *IN;
+	## annoying context
+	$CGI::Simple::DISABLE_UPLOADS = 0;
+    # Repeat to avoid warning..
+	$CGI::Simple::DISABLE_UPLOADS = 0;
+	$cgi_simple_q = CGI::Simple->new();
+	close(IN);
+}
 
 use Data::FormValidator;
 my $default = {
@@ -74,43 +115,46 @@ my $default = {
 		},
 	};
 
-my $dfv = Data::FormValidator->new({ default => $default});
-my ($results);
-eval {
+## same set of tests with each one (does this work?)
+foreach my $q ($cgi_pm_q, $cgi_simple_q) {
+	diag "Running tests with ", ref $q;
+
+	my $dfv = Data::FormValidator->new({ default => $default });
+	my ($results);
+	eval {
 	$results = $dfv->check($q, 'default');
-};
-ok(not $@) or diag $@;
+	};
+	ok(not $@) or diag $@;
 
-my $valid   = $results->valid;
-my $invalid = $results->invalid; # as hash ref
-my @invalids = $results->invalid;
-my $missing = $results->missing;
-
-
-# Test to make sure hello world fails because it is the wrong type
-ok((grep {m/hello_world/} @invalids), 'expect format failure');
-
-# should fail on empty/missing source file data
-ok((grep {m/does_not_exist_gif/} @invalids), 'expect non-existent failure');
+	my $valid   = $results->valid;
+	my $invalid = $results->invalid; # as hash ref
+	my @invalids = $results->invalid;
+	my $missing = $results->missing;
 
 
-# Make sure 100x100 passes because it is the right type and size
-ok(exists $valid->{'100x100_gif'});
+	# Test to make sure hello world fails because it is the wrong type
+	ok((grep {m/hello_world/} @invalids), 'expect format failure');
 
-my $meta = $results->meta('100x100_gif');
-is(ref $meta, 'HASH', 'meta() returns hash ref');
+	# should fail on empty/missing source file data
+	ok((grep {m/does_not_exist_gif/} @invalids), 'expect non-existent failure');
 
-ok($meta->{extension}, 'setting extension meta data');
-ok($meta->{mime_type}, 'setting mime_type meta data');
+	# Make sure 100x100 passes because it is the right type and size
+	ok(exists $valid->{'100x100_gif'}, "valid");
 
-# 300x300 should fail because it is too big
-ok((grep {m/300x300/} @invalids), 'max_bytes');
+	my $meta = $results->meta('100x100_gif');
+	is(ref $meta, 'HASH', 'meta() returns hash ref');
 
-ok($results->meta('100x100_gif')->{bytes}>0, 'setting bytes meta data');
+	ok($meta->{extension}, 'setting extension meta data');
+	ok($meta->{mime_type}, 'setting mime_type meta data');
+
+	# 300x300 should fail because it is too big
+	ok((grep {m/300x300/} @invalids), 'max_bytes');
+
+	ok($results->meta('100x100_gif')->{bytes}>0, 'setting bytes meta data');
 
 
-# Revalidate to usefully re-use the same fields
-my $profile_2  = {
+	# Revalidate to usefully re-use the same fields
+	my $profile_2  = {
 	required=>[qw/hello_world 100x100_gif 300x300_gif/],
 	validator_packages=> 'Data::FormValidator::Constraints::Upload',
 	constraints => {
@@ -123,27 +167,27 @@ my $profile_2  = {
 			params => [\200,\200],
 		},
 	},
-};
+	};
 
-$dfv = Data::FormValidator->new({ profile_2 => $profile_2});
-eval {
+	$dfv = Data::FormValidator->new({ profile_2 => $profile_2});
+	eval {
 	$results = $dfv->check($q, 'profile_2');
-};
-ok(not $@) or diag $@;
+	};
+	ok(not $@) or diag $@;
 
-$valid   = $results->valid;
-$invalid = $results->invalid; # as hash ref
-@invalids = $results->invalid;
-$missing = $results->missing;
+	$valid   = $results->valid;
+	$invalid = $results->invalid; # as hash ref
+	@invalids = $results->invalid;
+	$missing = $results->missing;
 
-ok(exists $valid->{'100x100_gif'}, 'expecting success with max_dimensions');
-ok((grep /300x300/, @invalids), 'expecting failure with max_dimensions');
+	ok(exists $valid->{'100x100_gif'}, 'expecting success with max_dimensions');
+	ok((grep /300x300/, @invalids), 'expecting failure with max_dimensions');
 
-ok( $results->meta('100x100_gif')->{width} > 0, 'setting width as meta data');
-ok( $results->meta('100x100_gif')->{width} > 0, 'setting height as meta data');
+	ok( $results->meta('100x100_gif')->{width} > 0, 'setting width as meta data');
+	ok( $results->meta('100x100_gif')->{width} > 0, 'setting height as meta data');
 
-# Now test trying constraint_regxep_map
-my $profile_3  = {
+	# Now test trying constraint_regxep_map
+	my $profile_3  = {
 	required=>[qw/hello_world 100x100_gif 300x300_gif/],
 	validator_packages=> 'Data::FormValidator::Constraints::Upload',
 	constraint_regexp_map => {
@@ -152,12 +196,107 @@ my $profile_3  = {
 			params => [\200,\200],
 		}
 	}
-};
+	};
 
-$dfv = Data::FormValidator->new({ profile_3 => $profile_3});
-($valid,$missing,$invalid) = $dfv->validate($q, 'profile_3');
+	$dfv = Data::FormValidator->new({ profile_3 => $profile_3});
+	($valid,$missing,$invalid) = $dfv->validate($q, 'profile_3');
+	
+	ok(exists $valid->{'100x100_gif'}, 'expecting success with max_dimensions using constraint_regexp_map');
+	ok((grep {m/300x300/} @$invalid), 'expecting failure with max_dimensions using constraint_regexp_map');
 
-ok(exists $valid->{'100x100_gif'}, 'expecting success with max_dimensions using constraint_regexp_map');
-ok((grep {m/300x300/} @$invalid), 'expecting failure with max_dimensions using constraint_regexp_map');
+	## min test
+	my $profile_4  = {
+		required=>[qw/hello_world 100x100_gif 300x300_gif/],
+		validator_packages=> 'Data::FormValidator::Constraints::Upload',
+		constraints => {
+			'100x100_gif' => {
+				constraint_method => 'image_min_dimensions',
+				params => [\200,\200],
+			},
+			'300x300_gif' => {
+				constraint_method => 'image_min_dimensions',
+				params => [\200,\200],
+			},
+		},
+	};
 
+	$dfv = Data::FormValidator->new({ profile_4 => $profile_4});
+	eval {
+		$results = $dfv->check($q, 'profile_4');
+	};
+	ok(not $@) or diag $@;
+	
+	$valid   = $results->valid;
+	$invalid = $results->invalid; # as hash ref
+	@invalids = $results->invalid;
+	$missing = $results->missing;
+	
+	ok(exists $valid->{'300x300_gif'}, 'expecting success with min_dimensions');
+	ok((grep /100x100/, @invalids), 'expecting failure with min_dimensions');
 
+	## file type tests
+	## with new interface
+	{
+		use Data::FormValidator::Constraints::Upload qw(file_format);
+	
+		my $profile_5  = {
+			required=> [qw/hello_world 100x100_gif 300x300_gif/],
+			constraint_methods => {
+				'100x100_gif' => [ file_format( mime_types => [ qw(image/gif) ] ) ],
+				'300x300_gif' => [ file_format( mime_types => [ qw(image/png) ] ) ] 
+			}
+		};
+	
+		$dfv = Data::FormValidator->new({ profile_5 => $profile_5});
+		eval {
+			$results = $dfv->check($q, 'profile_5');
+		};
+
+		ok(not $@) or diag $@;
+
+		$valid   = $results->valid;
+		$invalid = $results->invalid; # as hash ref
+		@invalids = $results->invalid;
+		$missing = $results->missing;
+
+		ok(exists $valid->{'100x100_gif'}, 'expecting success with mime_type');
+		ok((grep /300x300/, @invalids), 'expecting failure with mime_type');
+	} 
+
+	## range checks with new format
+	{
+		use Data::FormValidator::Constraints::Upload qw(image_max_dimensions image_min_dimensions);
+		my $profile_6 = {
+			required => [ qw/hello_world 100x100_gif 300x300_gif/ ],
+			constraint_methods => {
+				'100x100_gif' => [ 
+					image_max_dimensions(200, 200),
+					image_min_dimensions(110, 100) 
+				],
+				'300x300_gif' => [
+					image_max_dimensions(400, 400),
+					image_min_dimensions(245, 100) 
+				]
+			}
+		};
+
+		$dfv = Data::FormValidator->new({ profile_6 => $profile_6});
+		eval {
+			$results = $dfv->check($q, 'profile_6');
+		};
+
+		ok(not $@) or diag $@;
+	
+		$valid    = $results->valid;
+		$invalid  = $results->invalid; # as hash ref
+		@invalids = $results->invalid;
+		$missing  = $results->missing;
+	
+		ok((grep /100x100/, @invalids), 'expecting failure with size range');
+		ok(exists $valid->{'300x300_gif'}, 'expecting success with size range');
+
+	}
+
+} ## end of foreach loop
+
+## end of tests

@@ -18,12 +18,14 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 	valid_file_format		
 	valid_image_max_dimensions
 	valid_file_max_bytes	
+	valid_image_min_dimensions
 );
 
 @EXPORT_OK = qw(
 	file_format
 	image_max_dimensions
 	file_max_bytes
+	image_min_dimensions
 );
 
 $VERSION = 1.01;
@@ -56,6 +58,16 @@ sub file_max_bytes {
 	}
 }
 
+sub image_min_dimensions {
+	my $w  = shift || die 'image_min_dimensions: missing minimum width value';
+	my $h  = shift || die 'image_min_dimensions: missing minimum height value';
+	return sub {
+		my $self = shift;
+		$self->set_current_constraint_name('image_min_dimensions');
+		valid_image_min_dimensions($self,\$w,\$h);
+	}
+}
+
 sub valid_file_format {
 	my $self = shift;
 	$self->isa('Data::FormValidator::Results') ||
@@ -69,38 +81,28 @@ sub valid_file_format {
 
 	my $q = $self->get_input_data;
 
-    require UNIVERSAL;
-	$q->UNIVERSAL::can('param')||
+	$q->can('param') ||
 		die 'file_format: data object missing param() method';
 
 	my $field = $self->get_current_constraint_field;
+	my $fh = _get_upload_fh($self);
 
-   my $img = $q->upload($field);
-   if (!$img && $q->cgi_error) {
-   		warn $q->cgi_error && return undef;
+	## load filehandle 
+	if (!$fh) {
+	     warn "$0: can't get filehandle for field named $field" and return undef;
 	}
 
+	## load file magic stuff
 	require File::MMagic;	
 	my $mm = File::MMagic->new; 
 	my $fm_mt;
 	
-	# If a CGI::Simple obj was passed in it won't have the
-	# "tmpFileName" method available, so in that case we use
-	# the file handle that Simple provides instead.
-	if ( $q->isa("CGI::Simple") ) {
-	  my $fh = $q->upload( $q->param($field) ) || 
-	     (warn "$0: can't get filehandle for field named $field" and return undef);
+	## only use filehandle bits for magic data
 	  $fm_mt = $mm->checktype_filehandle($fh) || 
 	    (warn "$0: can't get filehandle for field named $field" and return undef);
-	} else {
-	  my $tmp_file = $q->tmpFileName($q->param($field)) || 
-	    (warn "$0: can't find tmp file for field named $field" and return undef);
-	  $fm_mt = $mm->checktype_filename($tmp_file);
-	}
 
-
-   my $uploaded_mt = '';
-      $uploaded_mt = $q->uploadInfo($img)->{'Content-Type'} if $q->uploadInfo($img);
+	## fetch mime type universally (or close) 
+	my $uploaded_mt = _get_upload_mime_type($self);
 
    # XXX perhaps this should be in a global variable so it's easier
    # for other apps to change the defaults;	
@@ -111,15 +113,16 @@ sub valid_file_format {
    my $mt = ($fm_mt || $uploaded_mt) or return undef;
 
    # figure out an extension
-
    use MIME::Types;
    my $mimetypes = MIME::Types->new;
    my MIME::Type $t = $mimetypes->type($mt);
    my @mt_exts = $t ? $t->extensions : ();
 
-   my ($uploaded_ext) = ($img =~ m/\.([\w\d]*)?$/);
-
+	## setup filename to retrieve extension
+	my $fn = $q->param($field);
+   	my ($uploaded_ext) = ($fn =~ m/\.([\w\d]*)?$/);
    my $ext;
+	
    if (scalar @mt_exts) {
    		# If the upload extension is one recognized by MIME::Type, use it.
 		if (grep {/^$uploaded_ext$/} @mt_exts) 	 {
@@ -135,7 +138,6 @@ sub valid_file_format {
 	   # It's possible that there no extension uploaded or found)
 	   $ext = $uploaded_ext;
    }
-
 
    # Add the mime_type and extension to the valid data set
    my $info = $self->meta($field) || {};
@@ -157,30 +159,14 @@ sub valid_image_max_dimensions {
 	($max_height > 0) || die 'image_max_dimensions: maximum height must be > 0';
 
 	my $q = $self->get_input_data;
-    require UNIVERSAL;
-	$q->UNIVERSAL::can('param')||
-		die 'image_max_dimensions: data object missing param() method';
-
 	my $field = $self->get_current_constraint_field;
+	my ($width,$height) = _get_img_size($self);
 
-   my $img = $q->upload($field);
-   if (!$img && $q->cgi_error) {
-   		warn $q->cgi_error && return undef;
-	}
-
-	require Image::Size;
-	import Image::Size;
-
-    my $tmp_file = $q->tmpFileName($q->param($field)) || 
-	 (warn "$0: can't find tmp file for field named $field" and return undef);
-
-    my ($width,$height,$err) = imgsize($tmp_file);
 	unless ($width) {
-		warn "$0: imgsize test failed: $err";
+		warn "$0: imgsize test failed";
 		return undef;
 	}
 
-   
    # Add the dimensions to the valid hash
    my $info = $self->meta($field) || {};
    $info = { %$info, width => $width, height => $height };
@@ -194,9 +180,10 @@ sub valid_file_max_bytes {
 
 	$self->isa('Data::FormValidator::Results') ||
 		die "first argument is not a Data::FormValidator::Results object.";
-	my $max_bytes_ref = shift;
 	
+	my $max_bytes_ref = shift;
 	my $max_bytes;
+
 	if ((ref $max_bytes_ref) and defined $$max_bytes_ref) {
 		$max_bytes = $$max_bytes_ref;
 	}
@@ -205,18 +192,17 @@ sub valid_file_max_bytes {
 	}
 
 	my $q = $self->get_input_data;
-    require UNIVERSAL;
-	$q->UNIVERSAL::can('param') ||
+	$q->can('param') ||
 		die 'file_max_bytes: object missing param() method';
 
 	my $field = $self->get_current_constraint_field;
 
-   my $img = $q->upload($field);
-   if (!$img && $q->cgi_error) {
-   		warn $q->cgi_error && return undef;
-	}
+	## retrieve upload fh for field
+	my $fh = _get_upload_fh($self);
+	if (!$fh) { warn "Failed to load filehandle for $field" && return undef; }
 
-   my $file_size = (stat ($img))[7];
+	## retrieve size
+   	my $file_size = (stat ($fh))[7];
 
    # Add the size to the valid hash
    my $info = $self->meta($field) || {};
@@ -226,6 +212,159 @@ sub valid_file_max_bytes {
    return ($file_size <= $max_bytes);
 }
 
+sub valid_image_min_dimensions {
+	my $self = shift;
+	$self->isa('Data::FormValidator::Results') ||
+		die "image_min_dimensions: first argument is not a Data::FormValidator::Results object. ";
+	my $min_width_ref  = shift || 
+		die 'image_min_dimensions: missing minimum width value';
+	my $min_height_ref = shift || 
+		die 'image_min_dimensions: missing minimum height value';
+	my $min_width  = $$min_width_ref;
+	my $min_height = $$min_height_ref;
+
+	## do these matter?
+	($min_width > 0)  || die 'image_min_dimensions: minimum width must be > 0';
+	($min_height > 0) || die 'image_min_dimensions: minimum height must be > 0';
+
+	my $q = $self->get_input_data;
+	my $field = $self->get_current_constraint_field;
+	my ($width, $height) = _get_img_size($self);
+
+	unless ($width) {
+		warn "image failed processing";
+		return undef;
+	}
+
+	# Add the dimensions to the valid hash
+	my $info = $self->meta($field) || {};
+	$info = { %$info, width => $width, height => $height };
+	$self->meta($field,$info);
+
+	return (($width >= $min_width) and ($height >= $min_height));
+}
+
+sub _get_img_size
+{
+	my $self = shift;
+	my $q    = $self->get_input_data;
+
+	## setup caller to make can errors more useful
+	my $caller = (caller(1))[3];
+	my $pkg  = __PACKAGE__ . "::";
+	$caller =~ s/$pkg//g;
+
+	$q->can('param')  || die "$caller: data object missing param() method";
+	$q->can('upload') || die "$caller: data object missing upload() method";
+
+	my $field = $self->get_current_constraint_field;
+
+	## retrieve filehandle from query object.
+	my $fh = _get_upload_fh($self);
+
+	## check error
+	if (!$fh) { warn "Unable to load filehandle" && return undef; }
+
+	require Image::Size;
+	import  Image::Size;
+
+	## check size
+	my ($width, $height, $err) = imgsize($fh);
+
+	unless ($width) {
+		warn "$caller: imgsize test failed: $err";
+		return undef;
+	}
+
+	return ($width, $height);
+}
+
+## fetch filehandle for use with various file type checking
+## call it with (_get_upload_fh($self)) since kind of mock object 
+sub _get_upload_fh
+{
+	my $self  = shift;
+	my $q	  = $self->get_input_data;
+	my $field = $self->get_current_constraint_field;
+
+	## CGI::Simple object processing (slighly different from others)
+	if ($q->isa('CGI::Simple')) {
+		## get filename 
+		my $fn = $q->param($field);
+		if (!$fn) {
+			warn sprintf("Failed to locate filename '%s'", $q->cgi_error);
+			return undef;
+		}
+
+		## return filename
+		return $q->upload($fn);
+	}
+
+	## NOTE: Both Apache::Upload and CGI filehandles are not seekable
+	## this causes issues with File::MMagic...
+
+	## Apache::Request object processing 
+	if ($q->isa('Apache::Request')) {
+		use IO::File;
+		my $upload = $q->upload($field); ## return Apache::Upload
+	
+		## error checking 
+		warn "Failed to locate upload object" && return undef unless $upload; 
+
+		## return filehandle
+		return IO::File->new_from_fd(fileno($upload->fh), "r");
+	}
+
+
+	## only CGI.pm just incase for wierd subclasses
+	## generic data object (or CGI), CGi.pm has incomplete fh's nice huh
+	if ($q->isa('CGI')) {
+		use IO::File;
+		my $fh = $q->upload($field);
+
+		warn "Failed to load fh for $field" && return undef unless $fh;
+
+		#my $tmpfile = $q->tmpFileName($q->param($field)) || return undef;
+		#return FileHandle->new($tmpfile);
+
+		## convert into seekable handle
+		return IO::File->new_from_fd(fileno($fh), "r");
+	}
+
+	## not going to figure it out
+	return undef;
+}
+
+## returns mime type if included as part of the send
+sub _get_upload_mime_type
+{
+	my $self  = shift;
+	my $q     = $self->get_input_data;
+	my $field = $self->get_current_constraint_field;
+
+	if ($q->isa('CGI')) {
+		my $fn = $q->param($field); 
+		
+		## nicely check for info
+		if ($q->uploadInfo($fn)) {
+			return $q->uploadInfo($fn)->{'Content-Type'}
+		} 
+
+		return undef;
+	}
+
+	if ($q->isa('CGI::Simple')) {
+		my $fn = $q->param($field);
+		return $q->upload_info($fn, 'mime');
+	}
+
+	if ($q->isa('Apache::Request')) {
+		my $upload = $q->upload($field);
+		return $upload->info('Content-type');
+	}
+
+	return undef;
+}
 
 
 1;
@@ -245,6 +384,7 @@ Data::FormValidator::Constraints::Upload - Validate File Uploads
 			file_format
 			file_max_bytes
 		    image_max_dimensions
+		    image_min_dimensions
 	);
     my $dfv = Data::FormValidator->check($q,$my_profile);
 
@@ -254,6 +394,7 @@ Data::FormValidator::Constraints::Upload - Validate File Uploads
 			file_format(),
 			file_max_bytes(10),
 		    image_max_dimensions(200,200),	
+		    image_min_dimensions(100,100),
 		 ],
 	}
 
@@ -315,6 +456,20 @@ some maximum dimensions. The params are:
  reference to max pixel height
 
     image_max_dimensions(200,200),
+
+Calling this function sets some meta data which can be retrieved through
+the C<meta()> method of the Data::FormValidator::Results object.
+The meta data added is C<width> and C<height>.
+
+=item image_min_dimensions
+
+This function checks to make sure an uploaded image is longer than
+some minimum dimensions. The params are: 
+
+ reference to min pixel width
+ reference to min pixel height
+
+    image_min_dimensions(100,100),
 
 Calling this function sets some meta data which can be retrieved through
 the C<meta()> method of the Data::FormValidator::Results object.
