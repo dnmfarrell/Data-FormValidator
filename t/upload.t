@@ -8,8 +8,8 @@ BEGIN {
     use_ok('Data::FormValidator::Constraints::Upload') 
 };
 
-my $all_suite_tests = 2;
-my $single_suite_tests = 24;
+my $all_suite_tests = 0; ## use_ok tests seem to not be counted
+my $single_suite_tests = 25;
 my $suite_count = 1;
 my $cgi_simple_test = 0;
 
@@ -117,6 +117,7 @@ my $default = {
 
 ## same set of tests with each one (does this work?)
 foreach my $q ($cgi_pm_q, $cgi_simple_q) {
+    next unless $q;
 	diag "Running tests with ", ref $q;
 
 	my $dfv = Data::FormValidator->new({ default => $default });
