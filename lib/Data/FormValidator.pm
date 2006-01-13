@@ -239,7 +239,7 @@ want by name later with C<check()>. Here's an example:
 
  my $dfv = Data::FormValidator->new({
     profile_1 => { # usual profile definition here },
-    profile_1 => { # another profile definition },
+    profile_2 => { # another profile definition },
  });
 
 
