@@ -1,4 +1,4 @@
-
+4.14 Fri Feb 17 08:59:40 EST 2006
     [ENHANCEMENTS] 
     - Consider a field with only a null character to be invalid  (Jamie Krasnoo)
 
