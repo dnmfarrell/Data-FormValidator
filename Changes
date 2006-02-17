@@ -1,4 +1,7 @@
 
+    [ENHANCEMENTS] 
+    - Consider a field with only a null character to be invalid  (Jamie Krasnoo)
+
 4.13
     [BUG FIXES]
     - Updated overloading syntax to work with Template::Stash (frank)

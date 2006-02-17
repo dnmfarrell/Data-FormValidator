@@ -200,7 +200,7 @@ sub _process {
 		if (ref $valid{$field}) {
 			if ( ref $valid{$field} eq 'ARRAY' ) {
 				for (my $i = 0; $i < scalar @{ $valid{$field} }; $i++) {
-					$valid{$field}->[$i] = undef unless (defined $valid{$field}->[$i] and length $valid{$field}->[$i]);
+					$valid{$field}->[$i] = undef unless (defined $valid{$field}->[$i] and length $valid{$field}->[$i] and $valid{$field}->[$i] !~ /^\x00$/);
 			    }	
                 # If all fields are empty, we delete it.
                 delete $valid{$field} unless grep { defined $_ } @{$valid{$field}};
@@ -208,7 +208,7 @@ sub _process {
 			}
 		}
 		else {
-			delete $valid{$field} unless (defined $valid{$field} and length $valid{$field});
+			delete $valid{$field} unless (defined $valid{$field} and length $valid{$field} and $valid{$field} !~ /^\x00$/);
 		}
 	}
 
