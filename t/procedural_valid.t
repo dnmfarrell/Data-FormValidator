@@ -52,12 +52,18 @@ foreach my $function (keys(%tests)) {
 #Test cc_number seperately since i do not know a valid cc number
 {
     my $rv;
-    eval "\$rv = valid_cc_number('$invalid', 'm')";
+    my $num = '4111111111111111';
 
+    eval "\$rv = match_cc_number('$num', 'v')";
+    ok(not $@ and ($rv eq $num)) or
+      diag sprintf("%-25s using %-16s", "match_cc_number", "valid value. ");
+
+    eval "\$rv = valid_cc_number('$invalid', 'm')";
     ok(not $@ and not $rv) or
       diag sprintf("%-25s using %-16s", "valid_cc_number", "(invalid value)");
 }
 
+$i++;
 $i++;
 
 #Test fake validation routine

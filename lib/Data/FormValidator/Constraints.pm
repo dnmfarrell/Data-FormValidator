@@ -429,15 +429,22 @@ CHECK IF THERE IS AN ACCOUNT ASSOCIATED WITH THE NUMBER.
 # MiniVend by Bruce Albrecht
 
 sub cc_number {
-	my $dfv = shift;
-	my $attrs = pop; 
-	my $data = $dfv->get_input_data;
+    my $attrs = shift; 
+    return undef unless $attrs && ref($attrs) eq 'HASH'
+      && exists $attrs->{fields} && ref($attrs->{fields}) eq 'ARRAY';
 
-	my ($cc_type_field) = @{ $attrs->{fields} };
-	return match_cc_number( 
-		$dfv->get_current_constraint_value,
-		$data->{$cc_type_field}
-	);
+    my ($cc_type_field) = @{ $attrs->{fields} };
+    return undef unless $cc_type_field;
+
+    return sub {
+        my $dfv = shift;
+        my $data = $dfv->get_input_data;
+
+        return match_cc_number( 
+            $dfv->get_current_constraint_value,
+            $data->{$cc_type_field}
+        );
+    };
 }
 
 sub match_cc_number {

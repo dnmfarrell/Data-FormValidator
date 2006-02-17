@@ -3,7 +3,7 @@ use strict;
 
 $^W = 1;
 
-use Test::More tests => 25;
+use Test::More tests => 26;
 
 
 use Data::FormValidator qw(:validators :matchers);
@@ -47,10 +47,13 @@ foreach my $function (keys(%tests)) {
     $i++;
 }
     
-#Test cc_number seperately since i do not know a valid cc number
+#Test cc_number separately since it takes multiple parameters
 my $rv;
-eval "\$rv = match_cc_number('$invalid', 'm')";
+my $num = '4111111111111111';
+eval "\$rv = match_cc_number('$num', 'v')";
+ok(not $@ and ($rv eq $num)) or
+  diag sprintf("%-25s using %-16s", "match_cc_number", "valid value. ");
 
+eval "\$rv = match_cc_number('$invalid', 'm')";
 ok(not $@ and not $rv) or
   diag sprintf("%-25s using %-16s", "match_cc_number", "invalid value. ");
-

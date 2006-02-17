@@ -2,6 +2,9 @@
     [ENHANCEMENTS] 
     - Consider a field with only a null character to be invalid  (Jamie Krasnoo)
 
+    [BUG FIXES]
+    - Fix bug in cc_number constraint, which was only present when used as a "constraint_method". (Evan A. Zacks)
+
 4.13
     [BUG FIXES]
     - Updated overloading syntax to work with Template::Stash (frank)
