@@ -167,9 +167,9 @@ sub new {
 
  my $results = Data::FormValidator->check(\%input_hash, \%dfv_profile);
 
-C<check> is the recommended method to use to validate forms. It returns it's results as a
+C<check> is the recommended method to use to validate forms. It returns its results as a
 L<Data::FormValidator::Results|Data::FormValidator::Results> object.  A
-deprecated method C<validate> is also available, returning it's results as an
+deprecated method C<validate> is also available, returning its results as an
 array described below.
 
  use Data::FormValidator;
@@ -524,7 +524,7 @@ match a regular expression.
 
 =head2 constraint_methods
 
- use Data::FormValidator::Constraints (qw:closures);
+ use Data::FormValidator::Constraints qw(:closures);
 
  constraint_methods => {
     cc_no      => cc_number({fields => ['cc_type']}),

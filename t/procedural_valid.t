@@ -49,7 +49,7 @@ foreach my $function (keys(%tests)) {
     $i++;
 }
     
-#Test cc_number seperately since i do not know a valid cc number
+#Test cc_number separately since it takes multiple parameters
 {
     my $rv;
     my $num = '4111111111111111';
