@@ -492,9 +492,9 @@ This can be the name of a built-in filter
 (trim,digit,etc) or an anonymous subroutine which should take one parameter, 
 the field value and return the (possibly) modified value.
 
-Filters modify the data, so use them carefully. 
+Filters modify the data returned through the results object, so use them carefully. 
 
-See Data::FormValidator::Filters for details on the built-in filters.
+See L<Data::FormValidator::Filters> for details on the built-in filters.
 
 =head2 field_filters
 
