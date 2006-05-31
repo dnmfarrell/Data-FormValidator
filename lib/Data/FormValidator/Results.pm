@@ -1020,7 +1020,14 @@ sub _get_input_as_hash {
 	}
 	# otherwise, it's already a hash reference
     elsif (ref $data eq 'HASH') {
-		return %$data;	
+        # be careful to actually copy array references
+        my %copy = %$data;
+        for (grep { ref $data->{$_} eq 'ARRAY' } keys %$data) {
+            my @array_copy = @{ $data->{$_} };
+            $copy{$_} = \@array_copy;
+        }
+
+		return %copy;
     }
 	else {
 		die "Data::FormValidator->validate() or check() called with invalid input data structure.";

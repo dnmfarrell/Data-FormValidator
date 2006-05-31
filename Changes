@@ -1,3 +1,9 @@
+4.15
+    [BUG FIXES]
+    - For input given as a hashref containing array references, values in that array could 
+      have been mistakenly modified by reference through filters. We now explicitly copy
+      elements in these case, to avoid modifying the input. (RT#19592) 
+
 4.14 Fri Feb 17 08:59:40 EST 2006
     [ENHANCEMENTS] 
     - Consider a field with only a null character to be invalid  (Jamie Krasnoo)
