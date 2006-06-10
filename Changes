@@ -1,6 +1,9 @@
 4.15
     [ENHANCEMENTS]
     - Documentation in Data::FormValidator::Filters has been improved. (Mark Stosberg}
+    - Added FV_split() a new filter that makes it super-easy to apply the same constraint
+      to a list of values passed in a single field, such as a comma separated list of e-mail
+      addresses. (Mark Stosberg). 
 
     [BUG FIXES]
     - For input given as a hashref containing array references, values in that array could 

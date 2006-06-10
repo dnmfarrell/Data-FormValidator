@@ -35,6 +35,7 @@ require Exporter;
 	filter_trim
 	filter_uc
 	filter_ucfirst
+    FV_split
 );
 
 %EXPORT_TAGS = (
@@ -98,6 +99,43 @@ Notice that when you call filters directly, you'll need to prefix the filter nam
 "filter_".
 
 =head1 THE FILTERS
+
+=head2 FV_split
+
+  use Data::FormValidator::Filters qw(FV_split);
+
+  # Validate every e-mail in a comma separated list 
+
+  field_filters => {
+     several_emails  => FV_split(qr/\s*,\s*/),
+
+     # Any pattern that can be used by the 'split' builtin works. 
+     tab_sep_field   => FV_split('\t'),
+  },
+  constraint_methods => {
+    several_emails => email(),
+  },
+
+With this filter, you can split a field into multiple values. The constraint for
+the field will then be applied to every value. 
+
+This filter has a different naming convention because a higher-order function.
+Rather than returning a value directly, it returns a code reference to a
+standard Data::FormValidator filter. 
+
+After successfully being validated the values will appear as an arrayref.
+
+=cut
+
+sub FV_split {
+    my $splitter = shift || die "nothing to split on!";
+    return sub { 
+        my $value = shift;
+        return undef unless defined $value;
+        my @a = split $splitter, $value; 
+        return \@a; 
+    };
+}
 
 =head2 trim
 
