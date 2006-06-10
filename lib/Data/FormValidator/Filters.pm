@@ -1,15 +1,13 @@
-#
 #    Filters.pm - Common filters for use in Data::FormValidator.
-#
 #    This file is part of Data::FormValidator.
 #
 #    Author: Francis J. Lacoste <francis.lacoste@iNsu.COM>
+#    Maintainer: Mark Stosberg <mark@summersault.com>
 #
 #    Copyright (C) 1999,2000 iNsu Innovations Inc.
 #
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms same terms as perl itself.
-#
+#    This program is free software; you can redistribute it and/or modify 
+#    it under the terms same terms as perl itself.  
 
 package Data::FormValidator::Filters;
 use strict;
@@ -54,19 +52,44 @@ Data::FormValidator::Filters - Basic set of filters available in an Data::FormVa
 =head1 SYNOPSIS
 
     use Data::FormValidator;
+
+    %profile = (
+        filters => 'trim',
+        ...
+    );
+
     my $results = Data::FormValidator->check(  \%data, \%profile );
 
 =head1 DESCRIPTION
 
 These are the builtin filters which may be specified as a name in the
 I<filters>, I<field_filters>, and I<field_filter_regexp_map> parameters of the
-input profile. You may also call these functions directly through the
+input profile. 
+
+Filters are applied as the first step of validation, possibily modifying a copy
+of the validation before any constraints are checked. 
+
+=head1 RECOMMENDED USE
+
+As a long time maintainer and user of Data::FormValidator, I recommend that
+filters be used with caution. They are immediately modifying the input
+provided, so the original data is lost. The few I recommend include C<trim>,
+which removes leading and trailing whitespace. I have this turned on by default 
+by using L<CGI::Application::Plugin::ValidateRM>. It's also generally safe to use
+the C<lc> and C<uc> filters if you need that kind of data transformation. 
+
+Beyond simple filters, I recommend transforming the C<"valid"> hash returned
+from validation if further changes are needed. 
+
+=head1 PROCEDURAL INTERFACE
+
+You may also call these functions directly through the
 procedural interface by either importing them directly or importing the whole
 I<:filters> group. For example, if you want to access the I<trim> function
 directly, you could either do:
 
     use Data::FormValidator::Filters (qw/filter_trim/);
-    or
+    # or
     use Data::FormValidator::Filters (qw/:filters/);
 
     $string = filter_trim($string);
@@ -74,9 +97,9 @@ directly, you could either do:
 Notice that when you call filters directly, you'll need to prefix the filter name with
 "filter_".
 
-=over
+=head1 THE FILTERS
 
-=item trim
+=head2 trim
 
 Remove white space at the front and end of the fields.
 
@@ -97,7 +120,7 @@ sub filter_trim {
 
 =pod
 
-=item strip
+=head2 strip
 
 Runs of white space are replaced by a single space.
 
@@ -115,7 +138,7 @@ sub filter_strip {
 
 =pod
 
-=item digit
+=head2 digit
 
 Remove non digits characters from the input.
 
@@ -132,7 +155,7 @@ sub filter_digit {
 
 =pod
 
-=item alphanum
+=head2 alphanum
 
 Remove non alphanumerical characters from the input.
 
@@ -147,7 +170,7 @@ sub filter_alphanum {
 
 =pod
 
-=item integer
+=head2 integer
 
 Extract from its input a valid integer number.
 
@@ -163,9 +186,11 @@ sub filter_integer {
 
 =pod
 
-=item pos_integer
+=head2 pos_integer
 
 Extract from its input a valid positive integer number.
+
+Bugs: This filter won't extract "9" from "a9+", it will instead extract "9+"
 
 =cut
 
@@ -179,9 +204,12 @@ sub filter_pos_integer {
 
 =pod
 
-=item neg_integer
+=head2 neg_integer
 
 Extract from its input a valid negative integer number.
+
+Bugs: This filter will currently filter the case of "a9-" to become "9-",
+which it should leave it alone. 
 
 =cut
 
@@ -195,9 +223,11 @@ sub filter_neg_integer {
 
 =pod
 
-=item decimal
+=head2 decimal
 
 Extract from its input a valid decimal number.
+
+Bugs: Given "1,000.23", it will currently return "1.000.23"
 
 =cut
 
@@ -213,9 +243,11 @@ sub filter_decimal {
 
 =pod
 
-=item pos_decimal
+=head2 pos_decimal
 
 Extract from its input a valid positive decimal number.
+
+Bugs: Given "1,000.23", it will currently return "1.000.23"
 
 =cut
 
@@ -231,9 +263,11 @@ sub filter_pos_decimal {
 
 =pod
 
-=item neg_decimal
+=head2 neg_decimal
 
 Extract from its input a valid negative decimal number.
+
+Bugs: Given "1,000.23", it will currently return "1.000.23"
 
 =cut
 
@@ -249,9 +283,11 @@ sub filter_neg_decimal {
 
 =pod
 
-=item dollars
+=head2 dollars
 
 Extract from its input a valid number to express dollars like currency.
+
+Bugs: This filter won't currently remove trailing numbers like "1.234".
 
 =cut
 
@@ -266,7 +302,7 @@ sub filter_dollars {
 
 =pod
 
-=item phone
+=head2 phone
 
 Filters out characters which aren't valid for an phone number. (Only
 accept digits [0-9], space, comma, minus, parenthesis, period and pound [#].)
@@ -282,7 +318,7 @@ sub filter_phone {
 
 =pod
 
-=item sql_wildcard
+=head2 sql_wildcard
 
 Transforms shell glob wildcard (*) to the SQL like wildcard (%).
 
@@ -297,7 +333,7 @@ sub filter_sql_wildcard {
 
 =pod
 
-=item quotemeta
+=head2 quotemeta
 
 Calls the quotemeta (quote non alphanumeric character) builtin on its
 input.
@@ -311,7 +347,7 @@ sub filter_quotemeta {
 
 =pod
 
-=item lc
+=head2 lc
 
 Calls the lc (convert to lowercase) builtin on its input.
 
@@ -324,7 +360,7 @@ sub filter_lc {
 
 =pod
 
-=item uc
+=head2 uc
 
 Calls the uc (convert to uppercase) builtin on its input.
 
@@ -337,7 +373,7 @@ sub filter_uc {
 
 =pod
 
-=item ucfirst
+=head2 ucfirst
 
 Calls the ucfirst (Uppercase first letter) builtin on its input.
 
@@ -353,13 +389,9 @@ sub filter_ucfirst {
 
 __END__
 
-=pod
-
-=back
-
 =head1 SEE ALSO
 
-=over
+=over 4
 
 =item o
 

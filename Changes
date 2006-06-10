@@ -1,4 +1,7 @@
 4.15
+    [ENHANCEMENTS]
+    - Documentation in Data::FormValidator::Filters has been improved. (Mark Stosberg}
+
     [BUG FIXES]
     - For input given as a hashref containing array references, values in that array could 
       have been mistakenly modified by reference through filters. We now explicitly copy
