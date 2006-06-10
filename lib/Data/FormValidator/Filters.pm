@@ -59,10 +59,11 @@ Data::FormValidator::Filters - Basic set of filters available in an Data::FormVa
 =head1 DESCRIPTION
 
 These are the builtin filters which may be specified as a name in the
-I<filters> and I<field_filters> parameters of the input profile. You may
-also call these functions directly through the procedural interface by 
-either importing them directly or importing the whole I<:filters> group. For
-example, if you want to access the I<trim> function directly, you could either do:
+I<filters>, I<field_filters>, and I<field_filter_regexp_map> parameters of the
+input profile. You may also call these functions directly through the
+procedural interface by either importing them directly or importing the whole
+I<:filters> group. For example, if you want to access the I<trim> function
+directly, you could either do:
 
     use Data::FormValidator::Filters (qw/filter_trim/);
     or
