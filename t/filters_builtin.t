@@ -17,11 +17,11 @@ TODO: {
 
     is( filter_pos_integer('a9+'),
         '9', 
-        "filter_pos_integer should car which side a + is on.");
+        "filter_pos_integer should care which side a + is on.");
 
     is( filter_integer('a9+'),
         '9', 
-        "filter_integer should car which side a + is on.");
+        "filter_integer should care which side a + is on.");
 
     is( filter_decimal('1,000.23'),
         '1000.23', 
