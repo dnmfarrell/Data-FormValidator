@@ -51,13 +51,10 @@ sub DESTROY {}
 
 Data::FormValidator::Filters - Basic set of filters available in an Data::FormValidator profile.
 
-
 =head1 SYNOPSIS
 
     use Data::FormValidator;
-
-    my $validator = new Data::FormValidator( "/home/user/input_profiles.pl" );
-    my $results = $validator->check(  \%fdat, "customer_infos" );
+    my $results = Data::FormValidator->check(  \%data, \%profile );
 
 =head1 DESCRIPTION
 
