@@ -119,9 +119,9 @@ Notice that when you call filters directly, you'll need to prefix the filter nam
 With this filter, you can split a field into multiple values. The constraint for
 the field will then be applied to every value. 
 
-This filter has a different naming convention because a higher-order function.
-Rather than returning a value directly, it returns a code reference to a
-standard Data::FormValidator filter. 
+This filter has a different naming convention because it is a higher-order
+function.  Rather than returning a value directly, it returns a code reference
+to a standard Data::FormValidator filter. 
 
 After successfully being validated the values will appear as an arrayref.
 
