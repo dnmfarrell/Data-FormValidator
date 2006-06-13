@@ -1,4 +1,4 @@
-4.15
+4.20 Mon Jun 12 20:44:36 EDT 2006
     [ENHANCEMENTS]
     - Documentation in Data::FormValidator::Filters has been improved. (Mark Stosberg}
     - Added FV_split() a new filter that makes it super-easy to apply the same constraint
@@ -6,9 +6,10 @@
       addresses. (Mark Stosberg). 
 
     [BUG FIXES]
-    - For input given as a hashref containing array references, values in that array could 
-      have been mistakenly modified by reference through filters. We now explicitly copy
-      elements in these case, to avoid modifying the input. (RT#19592) 
+    - For input given as a hashref containing array references, values could
+      have been mistakenly modified by reference through filters. We now
+      explicitly copy elements in these case, to avoid modifying the input.
+      (RT#19592) 
 
 4.14 Fri Feb 17 08:59:40 EST 2006
     [ENHANCEMENTS] 
