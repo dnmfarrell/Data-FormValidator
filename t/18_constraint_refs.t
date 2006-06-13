@@ -51,7 +51,7 @@ $validator = new Data::FormValidator({default => $input_profile});
 eval {
 ($valids, $missings, $invalids, $unknowns) = $validator->validate({ email => 'invalid'}, 'default');
 };
-ok(not $@);
+is($@,'','survived eval');
 
 is($invalids->[0]->[0], 'email');
 is($invalids->[0]->[1], 'Your email address is invalid.');
