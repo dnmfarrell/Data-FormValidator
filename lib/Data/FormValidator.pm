@@ -1180,17 +1180,29 @@ Albrecht to the MiniVend program.
 
 =head1 BUGS
 
+Bug reports and patches are welcome. Reports which include a failing Test::More
+style test are helpful will receive priority. 
+
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-FormValidator> 
 
 =head1 CONTRIBUTING
 
-Patches, questions and feedback are welcome. This project is managed using
-the darcs source control system ( http://www.darcs.net/ ). My darcs archive is here:
+This project is managed using the darcs source control system (
+http://www.darcs.net/ ). My darcs archive is here:
 http://mark.stosberg.com/darcs_hive/dfv/
+
+B<Support Mailing List>
+ 
+If you have any questions, comments, or feature suggestions, post them to the
+support mailing list!  To join the mailing list, visit
+
+L<http://lists.sourceforge.net/lists/listinfo/cascade-dataform>
+
+Messages about DFV sent directly to the maintainer may be redirected here. 
 
 =head1 AUTHOR
 
-Parts Copyright 2001-2003 by Mark Stosberg <markstos@cpan.org>, (Current Maintainer)
+Parts Copyright 2001-2006 by Mark Stosberg <mark at summersault.com>, (Current Maintainer)
 
 Copyright (c) 1999 Francis J. Lacoste and iNsu Innovations Inc.  All rights reserved.
 (Original Author)
@@ -1198,12 +1210,6 @@ Copyright (c) 1999 Francis J. Lacoste and iNsu Innovations Inc.  All rights rese
 Parts Copyright 1996-1999 by Michael J. Heins <mike@heins.net>
 
 Parts Copyright 1996-1999 by Bruce Albrecht  <bruce.albrecht@seag.fingerhut.com>
-
-B<Support Mailing List>
- 
-If you have any questions, comments, bug reports or feature suggestions,
-post them to the support mailing list!  To join the mailing list, visit 
-L<http://lists.sourceforge.net/lists/listinfo/cascade-dataform>
 
 =head1 LICENSE 
 
