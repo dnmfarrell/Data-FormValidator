@@ -549,10 +549,6 @@ sub match_ip_address {
 
 __END__
 
-=pod
-
-=back
-
 =head1 REGEXP::COMMON SUPPORT
 
 Data::FormValidator also includes built-in support for using any of regular expressions
@@ -717,9 +713,7 @@ with C<constraint_regexp_map>.
 A few useful methods to use on the Data::FormValidator::Results object are
 available to you to use inside of your routine.
 
-=over 4
-
-=item get_input_data()
+=head3 get_input_data()
 
 Returns the raw input data. This may be a CGI object if that's what 
 was used in the constraint routine. 
@@ -732,7 +726,7 @@ B<Examples:>
  # tamed to be a hashref, if it wasn't already
  my $data = $self->get_input_data( as_hashref => 1 );
 
-=item get_current_constraint_field
+=head3 get_current_constraint_field()
 
 Returns the name of the current field being tested in the constraint.
 
@@ -745,7 +739,7 @@ and allows multi-valued constraints to be used with C<constraint_regexp_map>.
 
 For complete examples of multi-valued constraints, see L<Data::FormValidator::Constraints::Upload>
 
-=item get_current_constraint_value
+=head3 get_current_constraint_value()
 
 Returns the name of the current value being tested in the constraint.
 
@@ -756,7 +750,7 @@ B<Example>:
 This reduces the number of parameters that need to be passed into the routine
 and allows multi-valued constraints to be used with C<constraint_regexp_map>.
 
-=item get_current_constraint_name
+=head3 get_current_constraint_name()
 
 Returns the name of the current constraint being applied
 
@@ -768,8 +762,9 @@ This is useful for building a constraint on the fly based on its name.
 It's used internally as part of the interface to the L<Regexp::Commmon>
 regular expressions.
 
-=item name_this
-=item set_current_constraint_name
+=head3 name_this()
+
+=head3 set_current_constraint_name()
 
 Sets the name of the current constraint being applied.
 
@@ -791,8 +786,6 @@ that will be used later. See Data::FormValidator::Constraints::Upload for an
 example.
 
 C<name_this> is a provided as a shorter synonym.
-
-=back
 
 The C<meta()> method may also be useful to communicate meta data that
 may have been found. See L<Data::FormValidator::Results> for documentation
