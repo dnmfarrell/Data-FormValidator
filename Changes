@@ -1,3 +1,6 @@
+    [INTERNALS]
+    - Improved documentation for built-in constraints.
+
 4.20 Mon Jun 12 20:44:36 EDT 2006
     [ENHANCEMENTS]
     - Documentation in Data::FormValidator::Filters has been improved. (Mark Stosberg}

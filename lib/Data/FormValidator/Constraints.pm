@@ -224,11 +224,9 @@ sub AUTOLOAD {
     }
 }
 
-=pod
-
 =over 
 
-=item email
+=head2 email
 
 Checks if the email LOOKS LIKE an email address. This should be sufficient
 99% of the time. 
@@ -263,9 +261,7 @@ my $province = <<EOF;
 AB BC MB NB NF NL NS NT NU ON PE QC SK YT YK
 EOF
 
-=pod
-
-=item state_or_province
+=head2 state_or_province
 
 This one checks if the input correspond to an american state or a canadian
 province.
@@ -282,12 +278,10 @@ sub match_state_or_province {
 	}
 }
 
-=pod
-
-=item state
+=head2 state
 
 This one checks if the input is a valid two letter abbreviation of an 
-american state.
+American state.
 
 =cut
 
@@ -299,11 +293,9 @@ sub match_state {
     else { return undef; }
 }
 
-=pod
+=head2 province
 
-=item province
-
-This checks if the input is a two letter canadian province
+This checks if the input is a two letter Canadian province
 abbreviation.
 
 =cut
@@ -316,12 +308,10 @@ sub match_province {
     else { return undef; }
 }
 
-=pod
+=head2 zip_or_postcode
 
-=item zip_or_postcode
-
-This constraints checks if the input is an american zipcode or a
-canadian postal code.
+This constraints checks if the input is an American zipcode or a
+Canadian postal code.
 
 =cut
 
@@ -336,7 +326,7 @@ sub match_zip_or_postcode {
 }
 =pod
 
-=item postcode
+=head2 postcode
 
 This constraints checks if the input is a valid Canadian postal code.
 
@@ -351,9 +341,7 @@ sub match_postcode {
     else { return undef; }
 }
 
-=pod
-
-=item zip
+=head2 zip
 
 This input validator checks if the input is a valid american zipcode :
 5 digits followed by an optional mailbox number.
@@ -368,9 +356,7 @@ sub match_zip {
     else { return undef; }
 }
 
-=pod
-
-=item phone
+=head2 phone
 
 This one checks if the input looks like a phone number, (if it
 contains at least 6 digits.)
@@ -386,9 +372,7 @@ sub match_phone {
     else { return undef; }
 }
 
-=pod
-
-=item american_phone
+=head2 american_phone
 
 This constraints checks if the number is a possible North American style
 of phone number : (XXX) XXX-XXXX. It has to contains 7 or more digits.
@@ -405,9 +389,7 @@ sub match_american_phone {
 }
 
 
-=pod
-
-=item cc_number
+=head2 cc_number
 
 This constraint references the value of a credit card type field.
 
@@ -499,9 +481,7 @@ sub match_cc_number {
     }
 }
 
-=pod
-
-=item cc_exp
+=head2 cc_exp
 
 This one checks if the input is in the format MM/YY or MM/YYYY and if
 the MM part is a valid month (1-12) and if that date is not in the past.
@@ -528,9 +508,7 @@ sub match_cc_exp {
     return "$matched_month/$matched_year";
 }
 
-=pod
-
-=item cc_type
+=head2 cc_type
 
 This one checks if the input field starts by M(asterCard), V(isa),
 A(merican express) or D(iscovery).
@@ -543,11 +521,12 @@ sub match_cc_type {
     else { return undef; }
 }
 
-=pod
+=head2 ip_address
 
-=item ip_address
-
-This checks if the input is formatted like an IP address (v4)
+This checks if the input is formatted like a dotted decimal IP address (v4).
+For other kinds of IP address method, See L<Regexp::Common::net> which provides 
+several more options. L<REGEXP::COMMON SUPPORT> explains how we easily integrate
+with Regexp::Common. 
 
 =cut
 
@@ -846,16 +825,31 @@ and the names were given as strings, like this:
 
 =head1 SEE ALSO
 
-L<Data::FormValidator::Constraints::Upload> - validate the bytes, format and dimensions of file uploads,
-L<Data::FormValidator::Constraints::DateTime> - 
-  A newer DateTime constraint module. May save you a step of tranforming the date into
-  a more useful format after it's validated. 
-L<Data::FormValidator::Constraints::Dates> - the original DFV date constraint module
-L<Regexp::Common> -- lost of useful regular expressions to choose from!
+=head2 Constraints available in other modules
 
-L<Data::FormValidator>
-L<Data::FormValidator::Filters>
-L<Data::FormValidator::ConstraintsFactory>
+=over
+
+=item L<Data::FormValidator::Constraints::Upload> - validate the bytes, format and dimensions of file uploads
+
+=item L<Data::FormValidator::Constraints::DateTime> - A newer DateTime constraint module. May save you a step of tranforming the date into a more useful format after it's validated. 
+
+=item L<Data::FormValidator::Constraints::Dates> - the original DFV date constraint module. Try the newer one first!
+
+=item L<Data::FormValidator::Constraints::Japanese> - Japan-specific constraints
+
+=back
+
+=head2 Related modules in this package
+
+=over
+
+=item L<Data::FormValidator::Filters> - transform data before constraints are applied
+
+=item L<Data::FormValidator::ConstraintsFactory> - This is a historical collection of constraints that suffer from cumbersome names. They are worth reviewing though-- C<make_and_constraint> will allow to validate against a list of constraints and shortcircuit if the first one fails. That's perfect if the second constraint depends on the first one having passed.
+
+=item L<Data::FormValidator>
+
+=back
 
 =head1 CREDITS
 
