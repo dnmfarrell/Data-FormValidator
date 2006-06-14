@@ -162,7 +162,8 @@ BEGIN {
 
                         no strict "refs";
                         my $re = &$sub(-keep=>1,@params);
-                        return ($dfv->get_current_constraint_value =~ qr/^$re$/) ? $1 : undef; 
+                        my ($match) = ($dfv->get_current_constraint_value =~ qr/^($re)$/);
+                        return ($dfv->get_current_constraint_untaint) ? $match : length $match;
                     }
                 }
             }
@@ -761,6 +762,15 @@ B<Example>:
 This is useful for building a constraint on the fly based on its name.
 It's used internally as part of the interface to the L<Regexp::Commmon>
 regular expressions.
+
+=head3 get_current_constraint_untaint() 
+
+   return $dfv->get_current_constraint_untaint ? $match : length $match;
+
+An accessor to let you know if the current constraint has been selected for
+untainting in the profile. This is useful if you write constraints that work
+with and without untainting turned on.
+    
 
 =head3 name_this()
 

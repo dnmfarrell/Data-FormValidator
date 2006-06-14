@@ -725,6 +725,11 @@ sub get_current_constraint_name {
 	return $self->{__CURRENT_CONSTRAINT_NAME};
 }
 
+sub get_current_constraint_untaint {
+    my $self = shift;
+    return $self->{__UNTAINT_THIS};
+}
+
 sub set_current_constraint_name {
 	my $self = shift;
 	my $value = shift;
@@ -981,6 +986,10 @@ sub _constraint_input_build {
 sub _constraint_check_match {
 	my 	($self,$c,$params,$untaint_this) = @_;
 	die "_constraint_check_match received wrong number of arguments" unless (scalar @_ == 4);
+
+    # Store whether or not we want untainting in the object so that constraints
+    # can do the right thing conditionally.
+    $self->{__UNTAINT_THIS} = $untaint_this;
 
     my $match = $c->{constraint}->( @$params );
 

@@ -1,6 +1,6 @@
 # Integration with Regexp::Common;
 
-use Test::More tests => 11;
+use Test::More tests => 13;
 
 use Data::FormValidator; 
 
@@ -8,6 +8,7 @@ my %FORM = (
 	bad_ip      => '127 0 0 1',
 	good_ip     => '127.0.0.1',
     embedded_ip => 'The address is 127.0.0.1 or something close to that',
+    valid_int   => 0,
 );
 
 my $results;
@@ -16,29 +17,37 @@ BEGIN { use_ok('Data::FormValidator::Constraints', qw/:regexp_common/) }
 
 eval {
 $results = Data::FormValidator->check(\%FORM, { 
-		required => [qw/good_ip bad_ip/],
+		required => [qw/good_ip bad_ip valid_int/],
 		constraint_method_regexp_map => {
-			qr/_ip$/ => FV_net_IPv4(),
-		}
+			qr/_ip$/  => FV_net_IPv4(),
+		},
+        constraint_methods => {
+            valid_int => FV_num_int(),
+        }
 	});
 };
-ok((not $@), 'runtime errors') or diag $@;
+is($@,'', 'survived eval');
 ok($results->valid->{good_ip}, 'good ip'); 
 ok($results->invalid->{bad_ip}, 'bad ip'); 
+is($results->valid->{valid_int},0, 'zero is valid int');
 
 
 $results = Data::FormValidator->check(\%FORM, { 
 		untaint_all_constraints => 1,
-		required => [qw/good_ip bad_ip/],
+		required => [qw/good_ip bad_ip valid_int/],
 		constraint_method_regexp_map => {
 			qr/_ip$/ => FV_net_IPv4(),
-		}
+		},
+        constraint_methods => {
+            valid_int => FV_num_int(),
+        }
 	});
 
 
-ok((not $@), 'runtime errors') or diag $@;
+is($@,'', 'survived eval');
 ok($results->valid->{good_ip}, 'good ip with tainting'); 
 ok($results->invalid->{bad_ip}, 'bad ip with tainting'); 
+is($results->valid->{valid_int},0, 'zero is valid int with untainting');
 
 # Test passing flags
 $results = Data::FormValidator->check(\%FORM, { 
