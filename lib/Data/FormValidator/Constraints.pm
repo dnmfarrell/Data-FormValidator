@@ -77,7 +77,7 @@ BEGIN {
     @EXPORT_OK = (
         @closures,
         qw(
-        FV_length
+        FV_length_between
         FV_min_length
         FV_max_length
         valid_american_phone
@@ -228,22 +228,22 @@ sub AUTOLOAD {
     }
 }
 
-=head2 FV_length(1,23) 
+=head2 FV_length_between(1,23) 
 
 =head2 FV_max_length(23)
 
 =head2 FV_min_length(1)
 
   use Data::FormValidator::Constraints qw(
-    FV_length
+    FV_length_between
     FV_min_length
     FV_max_length
   );
 
   constraint_methods => {
 
-    # specify a min and max
-    last_name        => FV_length(1,23),
+    # specify a min and max, inclusive
+    last_name        => FV_length_between(1,23),
 
   }
 
@@ -251,7 +251,7 @@ Specify a length constraint for a field.
 
 These constraints have a different naming convention because they are higher-order
 functions. They take input and return a code reference to a standard constraint
-method. A constraint name of C<length>, C<min_length>, or C<max_length> will be set,
+method. A constraint name of C<length_between>, C<min_length>, or C<max_length> will be set,
 corresponding to the function name you choose. 
 
 The checks are all inclusive, so a max length of '100' will allow the length 100. 
@@ -262,14 +262,14 @@ Using additional constraints to check the data is encouraged.
 
 =cut
 
-sub FV_length {
+sub FV_length_between {
     my ($min,$max) = @_;
     if (not (defined $min and defined $max)) {
             croak "min and max are required";
     }
     return sub {
         my ($dfv,$value) = @_;
-        $dfv->name_this('length');
+        $dfv->name_this('length_between');
         my ($match) = ($value =~ m/^(.{$min,$max})$/);
         return $dfv->untainted_constraint_value($match);
     }

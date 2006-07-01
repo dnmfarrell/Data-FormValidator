@@ -8,7 +8,7 @@ BEGIN {
 use Data::FormValidator::Constraints qw( 
     FV_max_length 
     FV_min_length 
-    FV_length 
+    FV_length_between
 );
 
 my $result = Data::FormValidator->check({
@@ -20,10 +20,10 @@ my $result = Data::FormValidator->check({
         required => [qw/first_names keywords ok/],
         constraint_methods => {
             first_names => FV_max_length(3),
-            keywords    => FV_length(5,8),
+            keywords    => FV_length_between(5,8),
             too_long    => FV_min_length(3),  
             ok          => {
-                constraint_method => FV_length(3,6),
+                constraint_method => FV_length_between(3,6),
                 name => 'ok_length',
             }
 

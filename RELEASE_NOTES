@@ -19,7 +19,7 @@ syntax will still work.
 
   constraint_methods allows normal looking parameter passing:
 
-  my_field => length_is_between(10,20);
+  my_field => FV_length_between(10,20);
 
 * Using a 'constraint_method' as a hash was awkward, because you had  
   to use a hashref to pass it in:
