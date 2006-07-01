@@ -4,7 +4,10 @@ use strict;
 
 use Test::More (tests => 45);
 use Data::FormValidator;
-use Data::FormValidator::Constraints qw/:closures/;
+use Data::FormValidator::Constraints qw/
+    :closures
+    FV_max_length
+/;
 
 # A gift from Andy Lester, this trick shows me where eval's die. 
 use Carp;
@@ -65,9 +68,12 @@ my $profile =
     rules1 => {
 		untaint_constraint_fields => "firstname",
 		required => "firstname",
-		constraints => {
-			firstname => '/^\w{1,15}$/'
-		},
+        # constraints => {
+		# 	firstname => '/^\w{1,15}$/'
+		# },
+        constraint_methods => {
+			firstname => FV_max_length(15),
+        },
 	},
     rules2 => {
 		untaint_constraint_fields => [ qw( lastname email1 )],

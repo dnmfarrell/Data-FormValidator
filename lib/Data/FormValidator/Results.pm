@@ -725,9 +725,12 @@ sub get_current_constraint_name {
 	return $self->{__CURRENT_CONSTRAINT_NAME};
 }
 
-sub get_current_constraint_untaint {
+sub untainted_constraint_value {
     my $self = shift;
-    return $self->{__UNTAINT_THIS};
+    my $match = shift;
+
+    return undef unless defined $match;
+    return $self->{__UNTAINT_THIS} ? $match : length $match;
 }
 
 sub set_current_constraint_name {

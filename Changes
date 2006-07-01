@@ -1,11 +1,19 @@
     [ENHANCEMENTS]
-    - A new method for constraint writers has been added: get_current_constraint_untaint().    
-      An accessor to let you know if the current constraint has been selected for
-      untainting in the profile. This is useful if you write constraints that work
-      with and without untainting turned on. (Mark Stosberg)
+    - A new method for constraint writers has been added: untainted_constraint_value().    
+      If you have written a constraint which untaints, use this method to return the
+      untainted result. It will prepare the right result whether the user has requested
+      untainting or not. (Mark Stosberg)
+
+    - New built-in constraints added:
+
+        FV_min_length(3),
+        FV_max_length(100),
+        FV_length(3,100),
+
+        These constraints can optionally perform untainting. (Mark Stosberg)
 
     [BUG FIXES]
-    - Regexp::Common regular expressions which excepted zero as a valid input would
+    - Regexp::Common regular expressions which accepted zero as a valid input would
       have wrongly failed their constraints unless untainting was enabled. (Mark Stosberg)
 
     [INTERNALS]

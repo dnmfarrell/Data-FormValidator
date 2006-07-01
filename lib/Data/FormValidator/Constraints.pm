@@ -77,6 +77,9 @@ BEGIN {
     @EXPORT_OK = (
         @closures,
         qw(
+        FV_length
+        FV_min_length
+        FV_max_length
         valid_american_phone
         valid_cc_exp
         valid_cc_number
@@ -163,7 +166,7 @@ BEGIN {
                         no strict "refs";
                         my $re = &$sub(-keep=>1,@params);
                         my ($match) = ($dfv->get_current_constraint_value =~ qr/^($re)$/);
-                        return ($dfv->get_current_constraint_untaint) ? $match : length $match;
+                        return $dfv->untainted_constraint_value($match);
                     }
                 }
             }
@@ -225,7 +228,74 @@ sub AUTOLOAD {
     }
 }
 
-=over 
+=head2 FV_length(1,23) 
+
+=head2 FV_max_length(23)
+
+=head2 FV_min_length(1)
+
+  use Data::FormValidator::Constraints qw(
+    FV_length
+    FV_min_length
+    FV_max_length
+  );
+
+  constraint_methods => {
+
+    # specify a min and max
+    last_name        => FV_length(1,23),
+
+  }
+
+Specify a length constraint for a field. 
+
+These constraints have a different naming convention because they are higher-order
+functions. They take input and return a code reference to a standard constraint
+method. A constraint name of C<length>, C<min_length>, or C<max_length> will be set,
+corresponding to the function name you choose. 
+
+The checks are all inclusive, so a max length of '100' will allow the length 100. 
+
+This constraint I<will> untaint your data if you have untainting turned on. However,
+a length check alone may not be enough to insure the safety of the data you are receiving.
+Using additional constraints to check the data is encouraged. 
+
+=cut
+
+sub FV_length {
+    my ($min,$max) = @_;
+    if (not (defined $min and defined $max)) {
+            croak "min and max are required";
+    }
+    return sub {
+        my ($dfv,$value) = @_;
+        $dfv->name_this('length');
+        my ($match) = ($value =~ m/^(.{$min,$max})$/);
+        return $dfv->untainted_constraint_value($match);
+    }
+}
+
+sub FV_max_length {
+    my ($max) = @_;
+    croak "max is required" unless defined $max;
+    return sub {
+        my ($dfv,$value) = @_;
+        $dfv->name_this('max_length');
+        my ($match) = ($value =~ m/^(.{0,$max}$)/);
+        return $dfv->untainted_constraint_value($match);
+    }
+}
+
+sub FV_min_length {
+    my ($min) = @_;
+    croak "min is required" unless defined $min;
+    return sub {
+        my ($dfv,$value) = @_;
+        $dfv->name_this('min_length');
+        my ($match) = ($value =~ m/^(.{$min,})$/);
+        return $dfv->untainted_constraint_value($match);
+    }
+}
 
 =head2 email
 
@@ -763,14 +833,13 @@ This is useful for building a constraint on the fly based on its name.
 It's used internally as part of the interface to the L<Regexp::Commmon>
 regular expressions.
 
-=head3 get_current_constraint_untaint() 
+=head3 untainted_constaint_value()
 
-   return $dfv->get_current_constraint_untaint ? $match : length $match;
+   return $dfv->untainted_constraint_value($match);
 
-An accessor to let you know if the current constraint has been selected for
-untainting in the profile. This is useful if you write constraints that work
-with and without untainting turned on.
-    
+If you have written a constraint which untaints, use this method to return the
+untainted result. It will prepare the right result whether the user has requested
+untainting or not. 
 
 =head3 name_this()
 
