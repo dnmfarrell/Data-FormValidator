@@ -12,6 +12,9 @@
 
         These constraints can optionally perform untainting. (Mark Stosberg)
 
+    - We now work around a bug in File::MMagic which could cause some filehandles
+      to be corrupted after after the file_format constraint was used.  
+
     [BUG FIXES]
     - Regexp::Common regular expressions which accepted zero as a valid input would
       have wrongly failed their constraints unless untainting was enabled. (Mark Stosberg)
