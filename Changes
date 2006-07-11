@@ -1,3 +1,4 @@
+4.30 Mon Jul 10 21:41:37 EDT 2006
     [ENHANCEMENTS]
     - A new method for constraint writers has been added: untainted_constraint_value().    
       If you have written a constraint which untaints, use this method to return the
