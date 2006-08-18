@@ -80,6 +80,7 @@ BEGIN {
         FV_length_between
         FV_min_length
         FV_max_length
+        FV_eq_with
         valid_american_phone
         valid_cc_exp
         valid_cc_number
