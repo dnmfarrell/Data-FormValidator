@@ -307,6 +307,7 @@ sub FV_min_length {
   }
 
 Compares the current field to another field.
+A constraint name of C<eq_with> will be set.
 
 =cut
 
