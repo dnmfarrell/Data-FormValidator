@@ -297,6 +297,36 @@ sub FV_min_length {
     }
 }
 
+=head2 FV_eq_with 
+
+  use Data::FormValidator::Constraints qw( FV_eq_with );
+
+  constraint_methods => {  
+    password  => FV_eq_with('password_confirm'),
+  }
+
+Compares the current field to another field.
+
+=cut
+
+sub FV_eq_with {
+    my ($other_field) = @_;
+    return sub {
+        my $dfv = shift;
+        $dfv->name_this('eq_with');
+
+        my $curr_val  = $dfv->get_current_constraint_value;
+
+        my $data = $dfv->get_input_data;
+        # Sometimes the data comes through both ways...
+        my $other_val = (ref $data->{$other_field}) ? $data->{$other_field}[0] : $data->{$other_field};
+
+        return ($curr_val eq $other_val);
+    }
+
+}
+
+
 =head2 email
 
 Checks if the email LOOKS LIKE an email address. This should be sufficient

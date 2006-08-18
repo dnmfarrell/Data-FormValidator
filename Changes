@@ -1,3 +1,12 @@
+
+    [ENHANCEMENTS]
+    - Added new constraint for the common case of comparing one field with another,
+      such as a word confirmation field. Example:
+          constraint_methods => {  
+            password  => FV_eq_with('password_confirm'),
+          }
+      (Mark Stosberg)  
+
 4.30 Mon Jul 10 21:41:37 EDT 2006
     [ENHANCEMENTS]
     - A new method for constraint writers has been added: untainted_constraint_value().    
