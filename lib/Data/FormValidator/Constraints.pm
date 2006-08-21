@@ -74,13 +74,17 @@ BEGIN {
         }
     }
 
-    @EXPORT_OK = (
-        @closures,
-        qw(
+    my @FVs = (qw/
         FV_length_between
         FV_min_length
         FV_max_length
         FV_eq_with
+    /);
+
+    @EXPORT_OK = (
+        @closures,
+        @FVs,
+        qw(
         valid_american_phone
         valid_cc_exp
         valid_cc_number
@@ -112,7 +116,7 @@ BEGIN {
     %EXPORT_TAGS = (
         # regexp common is correctly empty here, because we handle the case on the fly with the import function below. 
         regexp_common => [],
-        closures => \@closures, 
+        closures => [ @closures, @FVs ], 
         validators => [qw/
             valid_american_phone
             valid_cc_exp

@@ -1,4 +1,7 @@
 
+    [BUG FIXES]
+    - All FV_ closures are now exported with ":closures". (Ed Pigg, Mark Stosberg)
+
     [ENHANCEMENTS]
     - Added new constraint for the common case of comparing one field with another,
       such as a word confirmation field. Example:
