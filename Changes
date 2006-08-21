@@ -1,3 +1,4 @@
+4.40 Mon Aug 21 19:41:24 EDT 2006
 
     [BUG FIXES]
     - All FV_ closures are now exported with ":closures". (Ed Pigg, Mark Stosberg)
