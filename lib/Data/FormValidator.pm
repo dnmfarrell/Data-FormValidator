@@ -26,8 +26,8 @@ package Data::FormValidator;
 use 5.005; # for "qr" support, which isn't strictly required. 
 
 use Data::FormValidator::Results;
-use Data::FormValidator::Filters (qw/:filters/);
-use Data::FormValidator::Constraints (qw/:validators :matchers/);
+use Data::FormValidator::Filters ':filters';
+use Data::FormValidator::Constraints qw(:validators :matchers);
 
 use vars qw( $VERSION $AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS );
 
