@@ -480,6 +480,19 @@ object as the only parameter.
 The defaults are set shortly before the constraints are applied, and
 will be returned with the other valid data.
 
+=head2 defaults_regexp_map
+
+  defaults_regexp_map => {
+      qr/^opt_/ => 1,
+  },
+
+This is a hash reference that maps  regular expressions to default values to
+use for matching optional or required fields. 
+
+It's useful if you have generated many checkbox fields with the similiar names.
+Since checkbox fields submit nothing at all when they are not checked, it's
+useful to set defaults for them.
+
 =head2 filters
 
  # trim leading and trailing whitespace on all fields
@@ -888,6 +901,7 @@ sub _check_profile_syntax {
 		constraint_regexp_map        => undef,
 		constraints                  => undef,
 		defaults                     => undef,
+		defaults_regexp_map          => undef,
 		dependencies                 => undef,
 		dependency_groups            => undef,
 		field_filter_regexp_map      => undef,

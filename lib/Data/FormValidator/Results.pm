@@ -262,8 +262,22 @@ sub _process {
 		delete $valid{$field};
 	}
 
+    # Add defaults from defaults_regexp_map
+    my %private_defaults;
+    my @all_possible = keys %optional, keys %required, keys %require_some;
+    while ( my ($re,$value) = each %{$profile->{defaults_regexp_map}} ) {
+        # We only add defaults for known fields. 
+        for (@all_possible) {
+            $private_defaults{$_} = $value if m/$re/;
+        }
+    }
+
     # Fill defaults
-    while ( my ($field,$value) = each %{$profile->{defaults}} ) {
+    my %combined_defaults = ( 
+        %private_defaults, 
+        %{ $profile->{defaults} || {} } 
+    );
+    while ( my ($field,$value) = each %combined_defaults ) {
         unless(exists $valid{$field}) {
             if (ref($value) && ref($value) eq "CODE") {
                 $valid{$field} = $value->($self);
