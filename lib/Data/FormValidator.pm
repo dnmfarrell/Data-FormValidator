@@ -493,6 +493,11 @@ It's useful if you have generated many checkbox fields with the similar names.
 Since checkbox fields submit nothing at all when they are not checked, it's
 useful to set defaults for them.
 
+Note that it doesn't make sense to use a default for a field handled by
+C<optional_regexp> or C<required_regexp>.  When the field is not submitted,
+there is no way know that it should be optional or required, and thus there's
+no way to know that a default should be set for it. 
+
 =head2 filters
 
  # trim leading and trailing whitespace on all fields
