@@ -489,7 +489,7 @@ will be returned with the other valid data.
 This is a hash reference that maps  regular expressions to default values to
 use for matching optional or required fields. 
 
-It's useful if you have generated many checkbox fields with the similiar names.
+It's useful if you have generated many checkbox fields with the similar names.
 Since checkbox fields submit nothing at all when they are not checked, it's
 useful to set defaults for them.
 
