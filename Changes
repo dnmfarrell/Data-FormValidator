@@ -1,3 +1,5 @@
+    - Fix an issue with constraint methods given as strings (Evan A. Zacks)
+
 4.49_01 Tue Oct  3 14:13:59 EDT 2006
 
     [ENHANCEMENTS]

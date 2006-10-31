@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More (tests => 45);
+use Test::More (tests => 55);
 use Data::FormValidator;
 use Data::FormValidator::Constraints qw/
     :closures
@@ -232,21 +232,31 @@ is($results->valid('qr_re_parens')   ,0,'qr RE with    parens in untainted');
 # Rules #5
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data5, "rules5"); };
 ok(!$@, 'avoided eval error');
+ok($valid->{zip_field1}, "zip_field1 should be valid");
 ok(!is_tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
+ok($valid->{zip_field2}, "zip_field2 should be valid");
 ok(!is_tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
 
 # Rules #6
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data6, "rules6"); };
 ok(!$@, 'avoided eval error');
+ok($valid->{zip_field1}, "zip_field1 should be valid");
 ok(!is_tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
+ok($valid->{zip_field2}, "zip_field2 should be valid");
 ok(!is_tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
-ok(!is_tainted($valid->{email1}->[0]), 'email1 should be untainted');
-ok(!is_tainted($valid->{email2}->[0]), 'email2 should be untainted');
+ok($valid->{email1}, "email1 should be valid");
+ok(!is_tainted($valid->{email1}), 'email1 should be untainted');
+ok($valid->{email2}, "email2 should be valid");
+ok(!is_tainted($valid->{email2}), 'email2 should be untainted');
 
 # Rules #7
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data7, "rules7"); };
 ok(!$@, 'avoided eval error');
+ok($valid->{zip_field1}, "zip_field1 should be valid");
 ok(!is_tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
+ok($valid->{zip_field2}, "zip_field2 should be valid");
 ok(!is_tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
+ok($valid->{email1}, "email1 should be valid");
 ok(!is_tainted($valid->{email1}), 'email1 should be untainted');
+ok($valid->{email2}, "email2 should be valid");
 ok(!is_tainted($valid->{email2}), 'email2 should be untainted');
