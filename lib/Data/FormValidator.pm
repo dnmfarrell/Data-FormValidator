@@ -567,7 +567,7 @@ A named constraint.
 
 B<Example>: 
 
- my_zipcode_field     => 'zip',
+ my_zipcode_field     => zip(),
 
 See L<Data::FormValidator::Constraints> for the details of which
 built-in constraints that are available.
