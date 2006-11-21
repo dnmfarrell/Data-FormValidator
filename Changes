@@ -1,6 +1,10 @@
     [BUG FIXES]
     - Fix documented example of using constraint methods. (Brian Lozier)
     - Fix an issue with constraint methods given as strings (Evan A. Zacks)
+    - When a constraint and a constraint_regexp_map matched the same field, 
+      only the ones from the map where being used in one case. This was a regression
+      since the 4.0 release. A new regression test was also added for this case.
+      (Matt Christian)
 
 4.49_01 Tue Oct  3 14:13:59 EDT 2006
 

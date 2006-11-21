@@ -1117,7 +1117,7 @@ sub _add_constraints_from_map {
 					my $new = $profile->{$map_name}{$re};
 					# If they already have an arrayref of constraints, add to the list
 					if (ref $cur eq 'ARRAY') {
-						push @{ $result{$key} }, $new;
+                        push @{ $result{$key} }, @$cur, $new;
 					} 
 					# If they have a single constraint defined, create an array ref with with this plus the new one
 					elsif ($cur) {
