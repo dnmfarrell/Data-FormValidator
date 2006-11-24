@@ -323,7 +323,7 @@ sub FV_eq_with {
 
         my $curr_val  = $dfv->get_current_constraint_value;
 
-        my $data = $dfv->get_input_data;
+        my $data = $dfv->get_input_data( as_hashref => 1 );
         # Sometimes the data comes through both ways...
         my $other_val = (ref $data->{$other_field}) ? $data->{$other_field}[0] : $data->{$other_field};
 

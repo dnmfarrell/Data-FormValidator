@@ -1,4 +1,5 @@
     [BUG FIXES]
+    - FV_eq_with now works with CGI.pm-style objects as input (Jason Crummack)
     - Fix documented example of using constraint methods. (Brian Lozier)
     - Fix an issue with constraint methods given as strings (Evan A. Zacks)
     - When a constraint and a constraint_regexp_map matched the same field, 
