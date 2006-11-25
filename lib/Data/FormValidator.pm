@@ -961,14 +961,14 @@ sub _check_profile_syntax {
     }
 
 	my %valid_msgs_hash_keys = (
-            prefix => undef,
-            missing => undef,
-            invalid => undef,
+            prefix            => undef,
+            missing           => undef,
+            invalid           => undef,
             invalid_separator => undef,
             invalid_seperator => undef,
-            format  => undef,
-            constraints  => undef,
-            any_errors => undef,
+            format            => undef,
+            constraints       => undef,
+            any_errors        => undef,
 	);
 	if (ref $profile->{msgs} eq 'HASH') {
 		for my $key (keys %{ $profile->{msgs} }) {
