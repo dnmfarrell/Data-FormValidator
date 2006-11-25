@@ -884,7 +884,6 @@ sub _constraint_hash_build {
 	my	$c = {
 			name 		=> $constraint_spec,
 			constraint  => $constraint_spec, 
-			is_method   => $force_method_p || 0, 
 		};
 
    # constraints can be passed in directly via hash
@@ -892,7 +891,7 @@ sub _constraint_hash_build {
 			$c->{constraint} = ($constraint_spec->{constraint_method} || $constraint_spec->{constraint});
 			$c->{name}       = $constraint_spec->{name};
 			$c->{params}     = $constraint_spec->{params};
-			$c->{is_method}  = $c->{constraint_method_supplied} = $constraint_spec->{constraint_method};
+			$c->{is_method}  = 1 if $constraint_spec->{constraint_method};
 	}
 
 	# Check for regexp constraint
@@ -914,7 +913,6 @@ sub _constraint_hash_build {
 			my $match_sub = *{qualify_to_ref($routine)}{CODE};
 			if ($match_sub) {
 				$c->{constraint} = $match_sub; 
-			        $c->{is_method}  = 0 if ! $c->{constraint_method_supplied};
 			}
 			# If the constraint name starts with RE_, try looking for it in the Regexp::Common package
 			elsif ($c->{constraint} =~ m/^RE_/) {
@@ -932,13 +930,11 @@ sub _constraint_hash_build {
 			if (defined *{qualify_to_ref($routine)}{CODE}) {
 				local $SIG{__DIE__}  = \&confess;
 				$c->{constraint} = eval 'sub { no strict qw/refs/; return defined &{"match_'.$c->{constraint}.'"}(@_)}';
-			        $c->{is_method}  = 0 if ! $c->{constraint_method_supplied};
 			}
 			# match_* doesn't exist; if it is supposed to be from the
 			# validator_package(s) there may be only valid_* defined
 			elsif (my $valid_sub = *{qualify_to_ref('valid_'.$c->{constraint})}{CODE}) {
 				$c->{constraint} = $valid_sub;
-			        $c->{is_method}  = 0 if ! $c->{constraint_method_supplied};
 			}
 			# Load it from Regexp::Common 
 			elsif ($c->{constraint} =~ m/^RE_/) {
@@ -1183,6 +1179,7 @@ sub _check_constraints {
 			$self->{__CURRENT_CONSTRAINT_NAME} = undef;
 
 			my $c = $self->_constraint_hash_build($constraint_spec,$untaint_this, $force_method_p);
+			$c->{is_method} = 1 if $force_method_p;
 
 			my $is_value_list = 1 if (ref $valid->{$field} eq 'ARRAY');
             my %param_data = ( $self->_get_input_as_hash($self->get_input_data) , %$valid );

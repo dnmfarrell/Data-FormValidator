@@ -114,15 +114,15 @@ my $profile =
         untaint_regexp_map => qr/^zip_field\d/,
         required_regexp    => qr/^zip_field\d/,
         constraint_method_regexp_map => {
-            qr/^zip_field\d/ => 'zip',
+            qr/^zip_field\d/ => zip(),
         },
     },
     rules6 => {
         untaint_regexp_map => [qr/^zip_field\d/, qr/^email\d/],
         required_regexp    => qr/^(zip_field|email)\d/,
         constraint_method_regexp_map => {
-            qr/^zip_field\d/ => 'zip',
-            qr/^email\d/ => 'email',
+            qr/^zip_field\d/ => zip(),
+            qr/^email\d/ => email(),
         },
     },
     rules7 => {
@@ -131,7 +131,7 @@ my $profile =
         untaint_regexp_map => [qr/^zip_field\d/, qr/^email\d/],
         untaint_constraint_fields => [qw(email1 email2)],
         constraint_method_regexp_map => {
-            qr/^zip_field\d/ => 'zip',
+            qr/^zip_field\d/ => zip(),
         },
         constraints        => {
             email1     => 'email',

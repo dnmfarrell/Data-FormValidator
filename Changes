@@ -1,7 +1,12 @@
+    [ENHANCEMENTS]
+    - Stronger profile checking, to insure that all constraint_method values
+      are code references. Note: This explicitly simplifies things compared to
+      the 'constraints' system. Bare strings and hashref-style constraint
+      declarations are not allowed with 'constraint_methods'. (Mark Stosberg)
+
     [BUG FIXES]
-    - FV_eq_with now works with CGI.pm-style objects as input (Jason Crummack)
+    - FV_eq_with now works with CGI.pm-style objects as input. (Jason Crummack)
     - Fix documented example of using constraint methods. (Brian Lozier)
-    - Fix an issue with constraint methods given as strings (Evan A. Zacks)
     - When a constraint and a constraint_regexp_map matched the same field, 
       only the ones from the map where being used in one case. This was a regression
       since the 4.0 release. A new regression test was also added for this case.

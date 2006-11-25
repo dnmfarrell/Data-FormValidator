@@ -19,13 +19,14 @@
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms same terms as perl itself.
-#
+
 
 package Data::FormValidator;
 
 use 5.005; # for "qr" support, which isn't strictly required. 
 
 use Data::FormValidator::Results;
+*_arrayify = \&Data::FormValidator::Results::_arrayify;
 use Data::FormValidator::Filters ':filters';
 use Data::FormValidator::Constraints qw(:validators :matchers);
 
@@ -942,26 +943,56 @@ sub _check_profile_syntax {
         }
     }
 
-    my @valid_constraint_hash_keys = (qw/
-        constraint        
-        constraint_method 
-        name              
-        params            
-    /);
+    # Check that constraint_methods are always code refs or REs
+    {
+        # Cases:
+        # 1. constraint_methods          => { field      => func() }
+        # 2. constraint_methods          => { field      => [ func() ] } 
+        # 3. constraint_method_regex_map => { qr/^field/ => func()   }
+        # 4. constraint_method_regex_map => { qr/^field/ => [ func() ] }
+        # 5. constraint_methods => { field => { constraint_method => func() } }
 
-    my @constraint_hashrefs = grep { ref $_ eq 'HASH' } values %{ $profile->{constraints} } 
-        if $profile->{constraints};
-    push @constraint_hashrefs, grep { ref $_ eq 'HASH' } values %{ $profile->{constraint_regexp_map} } 
-        if $profile->{constraint_regexp_map};
-
-    for my $href (@constraint_hashrefs) {
-        for my $key (keys %$href) {
-            push @invalid, $key unless ($key eq any(@valid_constraint_hash_keys));
+        # Could be improved by also naming the associated key for the bad value.
+        for my $key (grep { $profile->{$_} } qw/constraint_methods constraint_method_regexp_map/) {
+            for my $val (map { _arrayify($_) } values %{ $profile->{$key} }) {
+                if ((ref $val eq 'HASH') and ref $val->{constraint_method} eq none('CODE','Regexp'))  {
+                    die "Value for constraint_method within hashref '$val->{constraint_method}' not a code reference or Regexp . Do you need func(), not 'func'?";
+                }
+                # Cases 1 through 4. 
+                elsif (ref $val eq none('HASH','CODE','Regexp')) {
+                    die "Value for constraint_method '$val' not a code reference or Regexp . Do you need func(), not 'func'?";
+                }
+                # Case 5.
+                else {
+                    # We're cool. Nothing to do. 
+                }
+            }
         }
     }
 
-    if (@invalid) {
-        die "Invalid input profile: constraint hashref keys not recognised [@invalid]\n";
+    # Check constraint hash keys
+    {
+        my @valid_constraint_hash_keys = (qw/
+            constraint        
+            constraint_method 
+            name              
+            params            
+        /);
+
+        my @constraint_hashrefs = grep { ref $_ eq 'HASH' } values %{ $profile->{constraints} } 
+            if $profile->{constraints};
+        push @constraint_hashrefs, grep { ref $_ eq 'HASH' } values %{ $profile->{constraint_regexp_map} } 
+            if $profile->{constraint_regexp_map};
+
+        for my $href (@constraint_hashrefs) {
+            for my $key (keys %$href) {
+                push @invalid, $key unless ($key eq any(@valid_constraint_hash_keys));
+            }
+        }
+
+        if (@invalid) {
+            die "Invalid input profile: constraint hashref keys not recognised [@invalid]\n";
+        }
     }
 
     # Check msgs keys
@@ -988,25 +1019,53 @@ sub _check_profile_syntax {
 
 }
 
-sub any { return Data::FormValidator::Any->any(@_) }
+sub any  { return Data::FormValidator::Any->any(@_) }
+sub none { return Data::FormValidator::None->none(@_) }
 
 1;
 
 # Just what we need from Perl6::Junction::Any;
+# See Perl6::Junction for docs, details, tests, etc. 
 package Data::FormValidator::Any;
-use overload( 'eq'  => \&str_eq );
-sub any {
-    my ($proto, @param) = @_;
-    return bless \@param, $proto;
+ use overload( 
+    'eq'  => \&str_eq,
+ );
+ sub any {
+     my ($proto, @param) = @_;
+     return bless \@param, $proto;
+ }
+ 
+ sub str_eq {
+     my ($self, $test) = @_;
+     for (@$self) {
+         return 1 if $_ eq $test;
+     }
+     return;
+ }
+
+package Data::FormValidator::None;
+ use overload( 
+    'eq'  => \&str_eq,
+ );
+
+ sub none {
+     my ($class, @param) = @_;
+     return bless \@param, $class;
+ }
+
+ sub str_eq {
+    my ($self, $test) = @_;
+    
+    for (@$self) {
+        return if $_ eq $test;
+    }
+    
+    return 1;
 }
 
-sub str_eq {
-    my ($self, $test) = @_;
-    for (@$self) {
-        return 1 if $_ eq $test;
-    }
-    return;
-}
+
+
+
 
 1;
 
