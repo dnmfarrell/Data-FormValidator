@@ -900,50 +900,54 @@ sub _check_profile_syntax {
     (ref $profile eq 'HASH') or
         die "Invalid input profile: needs to be a hash reference\n";
 
-    my %valid_profile_keys = (
-		constraint_methods           => undef,
-		constraint_method_regexp_map => undef,
-		constraint_regexp_map        => undef,
-		constraints                  => undef,
-		defaults                     => undef,
-		defaults_regexp_map          => undef,
-		dependencies                 => undef,
-		dependency_groups            => undef,
-		field_filter_regexp_map      => undef,
-		field_filters                => undef,
-		filters                      => undef,
-		missing_optional_valid       => undef,
-		msgs                         => undef,
-		optional                     => undef,
-		optional_regexp              => undef,
-		require_some                 => undef,
-		required                     => undef,
-		required_regexp              => undef,
-		untaint_all_constraints      => undef,
-		validator_packages           => undef,
-		untaint_constraint_fields    => undef,
-		untaint_regexp_map           => undef,
-		debug                        => undef,
-    );
-
-    # If any of the keys in the profile are not listed as 
-    # valid keys here, we die with an error    
     my @invalid;
-    for my $key (keys %$profile) {
-        push @invalid, $key unless exists $valid_profile_keys{$key};
+
+    # check top level keys
+    { 
+        my @valid_profile_keys = (qw/
+            constraint_methods           
+            constraint_method_regexp_map 
+            constraint_regexp_map        
+            constraints                  
+            defaults                     
+            defaults_regexp_map          
+            dependencies                 
+            dependency_groups            
+            field_filter_regexp_map      
+            field_filters                
+            filters                      
+            missing_optional_valid       
+            msgs                         
+            optional                     
+            optional_regexp              
+            require_some                 
+            required                     
+            required_regexp              
+            untaint_all_constraints      
+            validator_packages           
+            untaint_constraint_fields    
+            untaint_regexp_map           
+            debug                        
+        /);
+
+        # If any of the keys in the profile are not listed as 
+        # valid keys here, we die with an error    
+        for my $key (keys %$profile) {
+            push @invalid, $key unless ($key eq any(@valid_profile_keys));
+        }
+
+        local $" = ', ';
+        if (@invalid) {
+            die "Invalid input profile: keys not recognised [@invalid]\n";
+        }
     }
 
-    local $" = ', ';
-    if (@invalid) {
-        die "Invalid input profile: keys not recognised [@invalid]\n";
-    }
-
-    my %valid_constraint_hash_keys = (
-        constraint        => undef,
-        constraint_method => undef,
-        name              => undef,
-        params            => undef,
-    );
+    my @valid_constraint_hash_keys = (qw/
+        constraint        
+        constraint_method 
+        name              
+        params            
+    /);
 
     my @constraint_hashrefs = grep { ref $_ eq 'HASH' } values %{ $profile->{constraints} } 
         if $profile->{constraints};
@@ -952,7 +956,7 @@ sub _check_profile_syntax {
 
     for my $href (@constraint_hashrefs) {
         for my $key (keys %$href) {
-            push @invalid, $key unless exists $valid_constraint_hash_keys{$key};
+            push @invalid, $key unless ($key eq any(@valid_constraint_hash_keys));
         }
     }
 
@@ -960,30 +964,49 @@ sub _check_profile_syntax {
         die "Invalid input profile: constraint hashref keys not recognised [@invalid]\n";
     }
 
-	my %valid_msgs_hash_keys = (
-            prefix            => undef,
-            missing           => undef,
-            invalid           => undef,
-            invalid_separator => undef,
-            invalid_seperator => undef,
-            format            => undef,
-            constraints       => undef,
-            any_errors        => undef,
-	);
-	if (ref $profile->{msgs} eq 'HASH') {
-		for my $key (keys %{ $profile->{msgs} }) {
-			push @invalid, $key unless exists $valid_msgs_hash_keys{$key};
-		}
-	}
-    if (@invalid) {
-        die "Invalid input profile: msgs keys not recognized: [@invalid]\n";
+    # Check msgs keys
+    {
+        my @valid_msgs_hash_keys = (qw/
+                prefix            
+                missing           
+                invalid           
+                invalid_separator 
+                invalid_seperator 
+                format            
+                constraints       
+                any_errors        
+        /);
+        if (ref $profile->{msgs} eq 'HASH') {
+            for my $key (keys %{ $profile->{msgs} }) {
+                push @invalid, $key unless ($key eq any(@valid_msgs_hash_keys));
+            }
+        }
+        if (@invalid) {
+            die "Invalid input profile: msgs keys not recognized: [@invalid]\n";
+        }
     }
-
 
 }
 
+sub any { return Data::FormValidator::Any->any(@_) }
 
+1;
 
+# Just what we need from Perl6::Junction::Any;
+package Data::FormValidator::Any;
+use overload( 'eq'  => \&str_eq );
+sub any {
+    my ($proto, @param) = @_;
+    return bless \@param, $proto;
+}
+
+sub str_eq {
+    my ($self, $test) = @_;
+    for (@$self) {
+        return 1 if $_ eq $test;
+    }
+    return;
+}
 
 1;
 
