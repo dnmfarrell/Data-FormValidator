@@ -193,7 +193,7 @@ Data::FormValidator::Constraints - Basic sets of constraints on input profile.
 
 =head1 SYNOPSIS
 
- use Data::FormValidator::Constraints qw(:all);
+ use Data::FormValidator::Constraints qw(:closures);
 
 In an Data::FormValidator profile:
 
@@ -682,10 +682,10 @@ than to Data::FormValidator.
 
 =head1 PROCEDURAL INTERFACE
 
-You may also call these functions directly through the procedural
-interface by either importing them directly or importing the whole
-I<:validators> group. This is useful if you want to use the built-in validators
-out of the usual profile specification interface. 
+You may also call these functions directly through the procedural interface by
+either importing them directly or importing the whole I<:validators> group.
+This is useful if you want to use the built-in validators out of the usual
+profile specification interface. 
 
 
 For example, if you want to access the I<email> validator

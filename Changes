@@ -5,6 +5,8 @@
       declarations are not allowed with 'constraint_methods'. (Mark Stosberg)
 
     [BUG FIXES]
+    - ':all' was documented as a group of constraints to import, but it didn't work.
+      The documentation was updated to recommend ':closures' instead. (PURDY, RT#21052)
     - FV_eq_with now works with CGI.pm-style objects as input. (Jason Crummack)
     - Fix documented example of using constraint methods. (Brian Lozier)
     - When a constraint and a constraint_regexp_map matched the same field, 
