@@ -323,7 +323,7 @@ sub FV_eq_with {
 
         my $curr_val  = $dfv->get_current_constraint_value;
 
-        my $data = $dfv->get_input_data( as_hashref => 1 );
+        my $data = $dfv->get_filtered_data;
         # Sometimes the data comes through both ways...
         my $other_val = (ref $data->{$other_field}) ? $data->{$other_field}[0] : $data->{$other_field};
 
@@ -528,7 +528,7 @@ sub cc_number {
 
     return sub {
         my $dfv = shift;
-        my $data = $dfv->get_input_data;
+        my $data = $dfv->get_filtered_data;
 
         return match_cc_number( 
             $dfv->get_current_constraint_value,
@@ -768,7 +768,7 @@ Here's what the code might look like:
 		my $val = $dfv->get_current_constraint_value();
 
 		# get other data to refer to
-	    my $data = $dfv->get_input_data;
+	    my $data = $dfv->get_filtered_data;
 
 	    my $has_all_three = ($data->{personality} && $data->{smarts} && $data->{looks});
 		return ( ($val >= $min_cool) && ($val <= $max_cool) && $has_all_three );
@@ -832,6 +832,14 @@ B<Examples:>
 
  # tamed to be a hashref, if it wasn't already
  my $data = $self->get_input_data( as_hashref => 1 );
+
+=head3 get_filtered_data()
+
+ my $data = $self->get_filtered_data;
+
+Returns the filtered data as a hashref, regardless of whether
+it started out as a CGI.pm compatible object. Multiple values are 
+expressed as array references. 
 
 =head3 get_current_constraint_field()
 

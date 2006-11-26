@@ -1,4 +1,7 @@
     [ENHANCEMENTS]
+    - New method for constraint writing: get_filtered_data(). 
+      (Graham TerMarsch, Mark Stosberg, RT#22589)
+
     - Stronger profile checking, to insure that all constraint_method values
       are code references. Note: This explicitly simplifies things compared to
       the 'constraints' system. Bare strings and hashref-style constraint

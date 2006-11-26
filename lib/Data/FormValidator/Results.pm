@@ -169,6 +169,9 @@ sub _process {
 		}
 	}
  
+    # store the filtered data away for later use
+    $self->{__FILTERED_DATA} = \%valid;
+ 
     my %required    = map { $_ => 1 } _arrayify($profile->{required});
     my %optional    = map { $_ => 1 } _arrayify($profile->{optional});
 
@@ -722,6 +725,11 @@ sub get_input_data {
     else {
 	    return $self->{__INPUT_DATA};
     }
+}
+
+sub get_filtered_data {
+    my $self = shift;
+	return $self->{__FILTERED_DATA};
 }
 
 sub get_current_constraint_field {
