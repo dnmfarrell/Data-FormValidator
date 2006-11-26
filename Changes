@@ -3,6 +3,7 @@
       are code references. Note: This explicitly simplifies things compared to
       the 'constraints' system. Bare strings and hashref-style constraint
       declarations are not allowed with 'constraint_methods'. (Mark Stosberg)
+    - Numerous documentation and comment typo fixes (Evan Zacks)
 
     [BUG FIXES]
     - ':all' was documented as a group of constraints to import, but it didn't work.

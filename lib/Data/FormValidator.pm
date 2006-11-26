@@ -593,7 +593,7 @@ write you own constraints like /^regex$/. That way you match the whole string.
 a subroutine reference, to supply custom code
 
 This will check the input and return true or false depending on the input's validity.
-By default, the constraint function recieves a L<Data::FormValidator::Results>
+By default, the constraint function receives a L<Data::FormValidator::Results>
 object as its first argument, and the value to be validated as the second.  To
 validate a field based more inputs than just the field itself, see 
 L<VALIDATING INPUT BASED ON MULTIPLE FIELDS>.
@@ -654,7 +654,7 @@ the pattern match used by the constraint.  Note that some constraint routines
 may not provide untainting.
 
 See L<WRITING YOUR OWN CONSTRAINT ROUTINES> in the Data::FormValidator::Constraints
-documention for more information.
+documentation for more information.
 
 This is overridden by C<untaint_constraint_fields> and C<untaint_regexp_map>.
 
@@ -672,7 +672,7 @@ This overrides the untaint_all_constraints flag.
 
  untaint_regexp_map => [qr/some_field_\d/],
 
-Specifies that certain fields will be untained if they pass their constraints
+Specifies that certain fields will be untainted if they pass their constraints
 and match one of the regular expressions supplied. This can be set to a single
 regex, or an array reference of regexes. The untainted data will be returned
 in the valid hash.
@@ -697,7 +697,7 @@ set back to "blank" may fail to get updated.
 =head2 validator_packages 
 
  # load all the constraints and filters from these modules
- validator_packages => [qw(Data::FormValdidator::Constraints::Upload)],
+ validator_packages => [qw(Data::FormValidator::Constraints::Upload)],
 
 This key is used to define other packages which contain constraint routines or
 filters.  Set this key to a single package name, or an arrayref of several. All
@@ -726,7 +726,7 @@ That formatting is as followings:
     <span style="color:red;font-weight:bold"><span class="dfv_errors">* %s</span></span>
 
 The C<%s> will be replaced with the message. The effect is that the message
-will appear in bold red with an asterisk before it. This style can be overriden by simply
+will appear in bold red with an asterisk before it. This style can be overridden by simply
 defining "dfv_errors" appropriately in a style sheet, or by providing a new format string.
 
 Here's a more complex example that shows how to provide your own default message strings, as well
@@ -753,7 +753,7 @@ as providing custom messages per field, and handling multiple constraints:
      # Error messages, keyed by constraint name
      # Your constraints must be named to use this.
      constraints => {
-                     'date_and_time' => 'Not a vaild time format',
+                     'date_and_time' => 'Not a valid time format',
                      # ...
      },
  
@@ -832,7 +832,7 @@ have a value set to the reference of the subroutine or the name of a built-in
 validator.  Another required key is C<params>. The value of the C<params> key
 is a reference to an array of the other elements to use in the validation. If
 the element is a scalar, it is assumed to be a field name. The field is known
-to Data::FormValidator, the value will be filtered through any defined filteres
+to Data::FormValidator, the value will be filtered through any defined filters
 before it is passed in.  If the value is a reference, the reference is passed
 directly to the routine.  Don't forget to include the name of the field to
 check in that list, if you are using this syntax.
@@ -852,7 +852,7 @@ the constraint to be an array reference. Each of the values in this array can
 be any of the constraint types defined above.
 
 When using multiple constraints it is important to return the name of the
-constraint that failed so you can distinquish between them. To do that,
+constraint that failed so you can distinguish between them. To do that,
 either use a named constraint, or use the hash ref method of defining a
 constraint and include a C<name> key with a value set to the name of your
 constraint.  Here's an example:
@@ -1265,7 +1265,7 @@ B<Document Translations:>
 
 Japanese: L<http://perldoc.jp/docs/modules/>
 
-B<Distributions which include Data::formValidator> 
+B<Distributions which include Data::FormValidator> 
 
 FreeBSD includes a port named B<p5-Data-FormValidator>
 

@@ -67,7 +67,7 @@ These are the builtin filters which may be specified as a name in the
 I<filters>, I<field_filters>, and I<field_filter_regexp_map> parameters of the
 input profile. 
 
-Filters are applied as the first step of validation, possibily modifying a copy
+Filters are applied as the first step of validation, possibly modifying a copy
 of the validation before any constraints are checked. 
 
 =head1 RECOMMENDED USE
@@ -195,7 +195,7 @@ sub filter_digit {
 
 =head2 alphanum
 
-Remove non alphanumerical characters from the input.
+Remove non alphanumeric characters from the input.
 
 =cut
 

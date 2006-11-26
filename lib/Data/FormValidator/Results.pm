@@ -121,7 +121,7 @@ sub _process {
 		}
 	}
 
-	# Apply inconditional filters
+	# Apply unconditional filters
     foreach my $filter (_arrayify($profile->{filters})) {
 		if (defined $filter) {
 			# Qualify symbolic references
@@ -218,7 +218,7 @@ sub _process {
 			if (ref($deps) eq 'HASH') {
 				foreach my $key (keys %$deps) {
                     # Handle case of a key with a single value given as an arrayref
-                    # There is probably a better, more general soution to this problem.
+                    # There is probably a better, more general solution to this problem.
                     my $val_to_compare;
                     if ((ref $valid{$field} eq 'ARRAY') and (scalar @{ $valid{$field} } == 1)) {
                         $val_to_compare = $valid{$field}->[0];
@@ -420,7 +420,7 @@ array ref if the field had multiple values:
 
  $value = $r->valid('field');
 
-If called with one argument in array conect, it returns the values of C<field> 
+If called with one argument in array context, it returns the values of C<field> 
 as an array:
 
  @values = $r->valid('field');
@@ -761,7 +761,7 @@ sub name_this {
 
 # INPUT: prefix_string, hash reference
 # Copies the hash and prefixes all keys with prefix_string
-# OUTPUT: hash refence
+# OUTPUT: hash reference
 sub prefix_hash {
 	my ($pre,$href) = @_;
 	die "prefix_hash: need two arguments" unless (scalar @_ == 2);
@@ -1068,7 +1068,7 @@ sub _get_input_as_hash {
 #	params => [ \'zoo' ]
 #  }
 #
-# Still, it's possble, the two bits of logic could be refactored into one location if you cared
+# Still, it's possible, the two bits of logic could be refactored into one location if you cared
 # to do that. 
 
 sub _create_regexp_common_constraint  {

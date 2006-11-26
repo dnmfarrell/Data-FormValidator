@@ -148,7 +148,7 @@ passed in to validate your date against. It understands the following symbols:
 	p	AM|PM
 
 Other parts of the string become part of the regular expression, so you can
-do perlish things like this to create mor complex expressions:
+do perlish things like this to create more complex expressions:
 
 	'MM?/DD?/YYYY|YYYY-MM?-DD?'
 

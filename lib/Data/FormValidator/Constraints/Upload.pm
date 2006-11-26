@@ -289,7 +289,7 @@ sub _get_upload_fh
 	my $q	  = $self->get_input_data;
 	my $field = $self->get_current_constraint_field;
 
-	## CGI::Simple object processing (slighly different from others)
+	## CGI::Simple object processing (slightly different from others)
 	if ($q->isa('CGI::Simple')) {
 		## get filename 
 		my $fn = $q->param($field);
@@ -318,8 +318,8 @@ sub _get_upload_fh
 	}
 
 
-	## only CGI.pm just incase for wierd subclasses
-	## generic data object (or CGI), CGi.pm has incomplete fh's nice huh
+	## only CGI.pm just in case for weird subclasses
+	## generic data object (or CGI), CGI.pm has incomplete fh's nice huh
 	if ($q->isa('CGI')) {
 		use IO::File;
 		my $fh = $q->upload($field);
@@ -422,7 +422,7 @@ available, and a case-insensitive version of the file extension otherwise. By
 default, it tries to validate JPEG, GIF and PNG images. The params are:
 
  optional hash reference of parameters. A key named I<mime_types> points to
- array refererences of valid values.
+ array references of valid values.
 
    file_format( mime_types => [qw!image/jpeg image/gif image/png!] );
 

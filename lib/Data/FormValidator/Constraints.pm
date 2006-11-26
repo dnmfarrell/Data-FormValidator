@@ -869,7 +869,7 @@ This is useful for building a constraint on the fly based on its name.
 It's used internally as part of the interface to the L<Regexp::Commmon>
 regular expressions.
 
-=head3 untainted_constaint_value()
+=head3 untainted_constraint_value()
 
    return $dfv->untainted_constraint_value($match);
 
@@ -906,9 +906,9 @@ The C<meta()> method may also be useful to communicate meta data that
 may have been found. See L<Data::FormValidator::Results> for documentation
 of that method.
 
-=head1  BACKWARDS COMPATIBLITY
+=head1  BACKWARDS COMPATIBILITY
 
-Prior to Data::FormValidator 4.00, contraints were specified a bit differently.
+Prior to Data::FormValidator 4.00, constraints were specified a bit differently.
 This older style is still supported. 
 
 It was not necessary to explicitly load some constraints into your name space,
@@ -939,7 +939,7 @@ and the names were given as strings, like this:
 
 =item L<Data::FormValidator::Constraints::Upload> - validate the bytes, format and dimensions of file uploads
 
-=item L<Data::FormValidator::Constraints::DateTime> - A newer DateTime constraint module. May save you a step of tranforming the date into a more useful format after it's validated. 
+=item L<Data::FormValidator::Constraints::DateTime> - A newer DateTime constraint module. May save you a step of transforming the date into a more useful format after it's validated. 
 
 =item L<Data::FormValidator::Constraints::Dates> - the original DFV date constraint module. Try the newer one first!
 
