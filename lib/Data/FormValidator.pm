@@ -783,8 +783,8 @@ receive as arguments an additional hash reference of control parameters,
 corresponding to the key names in the usually used in the C<msgs> area of the
 profile. You can ignore this information if you'd like. 
 
-If you have an alternative error message handler you'd like to share, 
-stick in the C<Data::FormValidator::ErrMsgs> and upload it to CPAN. 
+If you have an alternative error message handler you'd like to share, stick in
+the C<Data::FormValidator::ErrMsgs> name space and upload it to CPAN. 
 
 =head2 debug
 
