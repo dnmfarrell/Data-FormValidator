@@ -275,9 +275,9 @@ validation profile will completely overwrite your default value.
 This means you can't define two keys for C<constraint_regexp_map> and expect
 they will always be there. This kind of feature may be added in the future.
 
-The exception here is definitions for your C<msgs> key. You will safely  
-be able to define some defaults for this key and not have them entirely clobbered 
-just because C<msgs> was defined in a validation profile.
+The exception here is definitions for your C<msgs> key. You will safely  be
+able to define some defaults for the top level keys within C<msgs> and not have
+them clobbered just because C<msgs> was defined in a validation profile.
 
 One way to use this feature is to create your own sub-class that always provides
 your defaults to C<new()>. 
