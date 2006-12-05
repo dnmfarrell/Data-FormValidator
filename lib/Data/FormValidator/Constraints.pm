@@ -23,7 +23,7 @@ package Data::FormValidator::Constraints;
 use strict;
 use vars qw/$AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS $VERSION/;
 
-$VERSION = 4.40;
+$VERSION = 4.50;
 
 require Exporter;
 @ISA = qw(Exporter);

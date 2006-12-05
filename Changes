@@ -1,22 +1,31 @@
+4.50 Mon Dec  4 21:28:09 EST 2006
+
     [ENHANCEMENTS]
     - New method for constraint writing: get_filtered_data(). 
       (Graham TerMarsch, Mark Stosberg, RT#22589)
 
     - Stronger profile checking, to insure that all constraint_method values
       are code references. Note: This explicitly simplifies things compared to
-      the 'constraints' system. Bare strings and hashref-style constraint
-      declarations are not allowed with 'constraint_methods'. (Mark Stosberg)
+      the 'constraints' system. Bare strings declarations are not allowed with
+      'constraint_methods'. (Mark Stosberg)
+
     - Numerous documentation and comment typo fixes (Evan Zacks)
 
+    - Clarified the docs for overriding msgs (RT#18050)
+
     [BUG FIXES]
-    - ':all' was documented as a group of constraints to import, but it didn't work.
-      The documentation was updated to recommend ':closures' instead. (PURDY, RT#21052)
+    - ':all' was documented as a group of constraints to import, but it didn't
+      work.  The documentation was updated to recommend ':closures' instead.
+      (PURDY, RT#21052)
+
     - FV_eq_with now works with CGI.pm-style objects as input. (Jason Crummack)
+
     - Fix documented example of using constraint methods. (Brian Lozier)
-    - When a constraint and a constraint_regexp_map matched the same field, 
-      only the ones from the map where being used in one case. This was a regression
-      since the 4.0 release. A new regression test was also added for this case.
-      (Matt Christian)
+
+    - When a constraint and a constraint_regexp_map matched the same field,
+      only the ones from the map where being used in one case. This was a
+      regression since the 4.0 release. A new regression test was also added
+      for this case.  (Matt Christian)
 
 4.49_01 Tue Oct  3 14:13:59 EDT 2006
 
