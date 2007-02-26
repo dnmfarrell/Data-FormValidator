@@ -1,3 +1,12 @@
+
+    - for the "file_format" file upload constraint, we now do a
+      case-insensitive comparison of the MIME type provided by the browser,
+      following the MIME standard. This bug was masked because we check the 
+      returned MIME type by File::MMagic first. Because it generally works 
+      and returns a lower-case result, it didn't matter. However, it some cases
+      File::MMagic misbehaves under mod_perl, causing the the issue to matter.
+      (Matt Christian, Mark Stosberg)
+
 4.50 Mon Dec  4 21:28:09 EST 2006
 
     [ENHANCEMENTS]
