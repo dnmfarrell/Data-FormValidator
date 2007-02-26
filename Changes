@@ -1,3 +1,9 @@
+    [BUG FIXES]
+    - For the "file_format" file upload constraint, File::MMagic sometimes
+      wrongly returns the generic "application/octet-stream" MIME type instead
+      of the correct MIME type. We now this return value as meaning "I don't
+      know" and try the MIME type sent by the browser if this happens.
+      (Mark Stosberg)
 
     - for the "file_format" file upload constraint, we now do a
       case-insensitive comparison of the MIME type provided by the browser,
