@@ -1,4 +1,7 @@
     [BUG FIXES]
+    - Quit assuming that because the first element of an array is undef, the
+      the whole thing is undef. (RT#24703, GTERMARS, Paul Blair)
+
     - For the "file_format" file upload constraint, File::MMagic sometimes
       wrongly returns the generic "application/octet-stream" MIME type instead
       of the correct MIME type. We now this return value as meaning "I don't
@@ -12,6 +15,11 @@
       and returns a lower-case result, it didn't matter. However, it some cases
       File::MMagic misbehaves under mod_perl, causing the the issue to matter.
       (Matt Christian, Mark Stosberg)
+
+    [INTERNALS]
+    - Start requiring Perl6::Junction, which we had previously copy/pasted a bit
+      of into DFV. (Unlike some of the other Perl6 namespace modules, this one 
+      does /not/ use a source filter, and is addictively simple and useful. 
 
 4.50 Mon Dec  4 21:28:09 EST 2006
 

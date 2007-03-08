@@ -14,7 +14,7 @@
 use strict;
 
 package Data::FormValidator::Results;
-
+use Perl6::Junction 'any';
 use Carp;
 use Symbol;
 use Data::FormValidator::Filters ':filters';
@@ -842,13 +842,14 @@ sub _arrayify {
    my $val = shift;
    defined $val or return ();
 
+   # if it's a reference, return an array unless it points to an empty array. -mls
    if ( ref $val eq 'ARRAY' ) {
-		# if it's a reference, return an array unless it points an empty array. -mls
-                return (defined $val->[0]) ? @$val : ();
+       $^W = 0; # turn off warnings about undef
+       return ( any(@$val) ne undef ) ? @$val : ();
    } 
+   # if it's a string, return an array unless the string is missing or empty. -mls
    else {
-		# if it's a string, return an array unless the string is missing or empty. -mls
-                return (length $val) ? ($val) : ();
+       return (length $val) ? ($val) : ();
    }
 }
 
