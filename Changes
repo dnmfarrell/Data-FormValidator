@@ -1,3 +1,4 @@
+4.51 Fri Jul 13 23:31:43 EDT 2007
     [BUG FIXES]
     - Quit assuming that because the first element of an array is undef, the
       the whole thing is undef. (RT#24703, GTERMARS, Paul Blair)
