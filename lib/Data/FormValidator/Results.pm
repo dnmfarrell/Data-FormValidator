@@ -1041,10 +1041,11 @@ sub _constraint_check_match {
 sub _get_input_as_hash {
 	my ($self,$data) = @_;
 	$self->{__INPUT_DATA} = $data;
-	require UNIVERSAL;
 
-    # This checks whether we have an object that supports param
-    if (UNIVERSAL::can($data,'param') ) {
+	require Scalar::Util;
+
+	# This checks whether we have an object that supports param
+	if ( Scalar::Util::blessed($data) && $data->can('param') ) {
 		my %return;
 		foreach my $k ($data->param()){
 			# we expect param to return an array if there are multiple values

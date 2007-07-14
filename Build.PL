@@ -42,6 +42,7 @@ $class->new(
 		'Regexp::Common'  => 0,
         'overload'        => 0,
         'Perl6::Junction' => 1.10, 
+        'Scalar::Util'    => 0,
 	},
 )->create_build_script;
 

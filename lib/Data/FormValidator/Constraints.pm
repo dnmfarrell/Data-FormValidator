@@ -58,9 +58,9 @@ BEGIN {
             sub $func  {
                 return sub {
                     my \$dfv = shift;
-                    use UNIVERSAL qw( can ) ;
-                    can(\$dfv, "name_this") 
-                    || die "first arg to $func was not an object. Must be called as a constraint_method.";
+		    use Scalar::Util ();
+        	    die "first arg to $func was not an object. Must be called as a constraint_method."
+		    	unless ( Scalar::Util::blessed(\$dfv) && \$dfv->can('name_this') );
 
                     \$dfv->name_this('$func');
                     no strict 'refs';

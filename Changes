@@ -17,6 +17,9 @@
       (Matt Christian, Mark Stosberg)
 
     [INTERNALS]
+    - Start requiring and using Scalar::Util, which prevents UNIVERSAL::can() form generating warnings.
+      (RT#25873, Dave O'Neill)
+
     - Start requiring Perl6::Junction, which we had previously copy/pasted a bit
       of into DFV. (Unlike some of the other Perl6 namespace modules, this one 
       does /not/ use a source filter, and is addictively simple and useful. 
