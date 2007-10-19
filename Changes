@@ -1,3 +1,6 @@
+    [INTERNALS]
+    - Fix PERL5LIB issue with untaint.t, Thanks to Matt Trout and others [RT#30126]
+
 4.51 Fri Jul 13 23:31:43 EDT 2007
     [BUG FIXES]
     - Quit assuming that because the first element of an array is undef, the
