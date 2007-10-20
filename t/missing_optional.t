@@ -1,5 +1,5 @@
 # Tests for missing_optional_valid
-use Test::More qw/no_plan/;
+use Test::More 'no_plan';
 use strict;
 
 $^W = 1;
@@ -76,5 +76,22 @@ SKIP: {
     is(join(',',sort $res->valid()),'a,b', "optional fields have to at least exist to be valid" );
 }
 
-__END__
+{
+    my $data = {
+        optional_invalid => 'invalid'
+    };
 
+    my $profile = {
+        optional => [qw/optional_invalid/],
+        constraints => {
+            optional_invalid => qr/^valid$/
+        },
+        missing_optional_valid => 1
+    };
+
+    my $results = Data::FormValidator->check($data, $profile);
+    my $valid = $results->valid();
+    my $invalid = $results->invalid();
+    ok( exists $invalid->{'optional_invalid'}, 'optional_invalid is invalid');
+    ok( !exists $valid->{'optional_invalid'}, 'optional_invalid is not valid');
+}

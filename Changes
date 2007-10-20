@@ -1,3 +1,6 @@
+    [BUG FIXES]
+    - Invalid fields should still be invalid, even when missing_optional_valid is true.
+      Patch thanks to Robert Juliano. [RT#28860]
 
     [INTERNALS]
     - Improve documentation link, thanks to Robert Stockdale [RT#29510]      

@@ -24,7 +24,7 @@ use overload
   'bool' => \&_bool_overload_based_on_success,
   fallback => 1;
 
-$VERSION = 4.51;
+$VERSION = 4.52;
 
 =pod
 
@@ -364,17 +364,17 @@ sub _process {
 	my $force_method_p = 1;
 	$self->_check_constraints($private_constraint_methods,\%valid,$untaint_all,\%untaint_hash, $force_method_p);
 
-    # all invalid fields are removed from valid hash
-	foreach my $field (keys %{ $self->{invalid} }) {
-		delete $valid{$field};
-	}
-
     # add back in missing optional fields from the data hash if we need to
 	foreach my $field ( keys %data ) {
 		if ($profile->{missing_optional_valid} and $optional{$field} and (not exists $valid{$field})) {
 			$valid{$field} = undef;
 		}
 	}
+
+    # all invalid fields are removed from valid hash
+	foreach my $field (keys %{ $self->{invalid} }) {
+		delete $valid{$field};
+    }
 
 	my ($missing,$invalid);
 
