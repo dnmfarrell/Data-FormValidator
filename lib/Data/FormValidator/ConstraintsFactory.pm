@@ -21,6 +21,13 @@ package Data::FormValidator::ConstraintsFactory;
 
 Data::FormValidator::ConstraintsFactory - Module to create constraints for HTML::FormValidator.
 
+=head1 DESCRIPTION
+
+This module contains functions to help generate complex constraints. 
+
+If you are writing new code, take a look at L<Data::FormValidator::Constraints::MethodsFactory>
+instead. It's a modern alternative to what's here, offering improved names and syntax. 
+
 =head1 SYNOPSIS
 
     use Data::FormValidator::ConstraintsFactory qw( :set :bool );
@@ -34,11 +41,6 @@ Data::FormValidator::ConstraintsFactory - Module to create constraints for HTML:
 	bid	 => make_range_constraint( 1, 1, 10 ),
     }
 
-=head1 DESCRIPTION
-
-This module contains several functions which returns closures that can
-be used for constraints.
-
 =cut
 
 use vars qw( $VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS );
@@ -46,7 +48,7 @@ use vars qw( $VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS );
 BEGIN {
     require Exporter;
 
-    $VERSION = 1.4;
+    $VERSION = 1.5; 
 
     @ISA = qw( Exporter );
 
