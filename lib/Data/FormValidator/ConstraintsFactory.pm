@@ -48,7 +48,7 @@ use vars qw( $VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS );
 BEGIN {
     require Exporter;
 
-    $VERSION = 1.5; 
+    $VERSION = 1.6; 
 
     @ISA = qw( Exporter );
 
@@ -103,7 +103,7 @@ sub make_or_constraint {
     # Closure
     return sub {
 	my $res;
-	foreach my $c ( @c ) {
+	for my $c ( @c ) {
 	    $res = $c->( @_ );
 	    return $res if $res;
 	}
@@ -125,7 +125,7 @@ sub make_and_constraint {
     # Closure
     return sub {
 	my $res;
-	foreach my $c ( @c ) {
+	for my $c ( @c ) {
 	    $res = $c->( @_ );
 	    return $res if ! $res;
 
@@ -157,7 +157,7 @@ sub make_set_constraint {
     # Closure
     return sub {
 	my $v = $_[0];
-	foreach my $t ( @values ) {
+	for my $t ( @values ) {
 	    return $res if $t eq $v;
 	}
 	return ! $res;
@@ -180,7 +180,7 @@ sub make_num_set_constraint {
     # Closure
     return sub {
 	my $v = $_[0];
-	foreach my $t ( @values ) {
+	for my $t ( @values ) {
 	    return $res if $t == $v;
 	}
 	return ! $res;
@@ -225,7 +225,7 @@ sub make_match_set_constraint {
     # Closure
     return sub {
 	my $v = $_[0];
-	foreach my $t ( @values ) {
+	for my $t ( @values ) {
 	    return $res if $cmp->($v, $t );
 	}
 	return ! $res;

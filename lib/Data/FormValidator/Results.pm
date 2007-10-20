@@ -24,7 +24,7 @@ use overload
   'bool' => \&_bool_overload_based_on_success,
   fallback => 1;
 
-$VERSION = 4.52;
+$VERSION = 4.53;
 
 =pod
 
@@ -38,27 +38,27 @@ Data::FormValidator::Results - results of form input validation.
 
     # Print the name of missing fields
     if ( $results->has_missing ) {
-	foreach my $f ( $results->missing ) {
+	for my $f ( $results->missing ) {
 	    print $f, " is missing\n";
 	}
     }
 
     # Print the name of invalid fields
     if ( $results->has_invalid ) {
-	foreach my $f ( $results->invalid ) {
+	for my $f ( $results->invalid ) {
 	    print $f, " is invalid: ", $results->invalid( $f ), "\n";
 	}
     }
 
     # Print unknown fields
     if ( $results->has_unknown ) {
-	foreach my $f ( $results->unknown ) {
+	for my $f ( $results->unknown ) {
 	    print $f, " is unknown\n";
 	}
     }
 
     # Print valid fields
-    foreach my $f ( $results->valid() ) {
+    for my $f ( $results->valid() ) {
         print $f, " =  ", $results->valid( $f ), "\n";
     }
 
@@ -97,7 +97,7 @@ sub _process {
 	my %imported_validators;
 
     # import valid_* subs from requested packages
-	foreach my $package (_arrayify($profile->{validator_packages})) {
+	for my $package (_arrayify($profile->{validator_packages})) {
 		if ( !exists $imported_validators{$package} ) {
 			local $SIG{__DIE__}  = \&confess;
 			eval "require $package";
@@ -110,7 +110,7 @@ sub _process {
 			my $package_ref = qualify_to_ref("${package}::");
 			my @subs = grep(/^(valid_|match_|filter_)/,
 			                keys(%{*{$package_ref}}));
-			foreach my $sub (@subs) {
+			for my $sub (@subs) {
 				# is it a sub? (i.e. make sure it's not a scalar, hash, etc.)
 				my $subref = *{qualify_to_ref("${package}::$sub")}{CODE};
 				if (defined $subref) {
@@ -122,12 +122,12 @@ sub _process {
 	}
 
 	# Apply unconditional filters
-    foreach my $filter (_arrayify($profile->{filters})) {
+    for my $filter (_arrayify($profile->{filters})) {
 		if (defined $filter) {
 			# Qualify symbolic references
 			$filter = (ref $filter eq 'CODE' ? $filter : *{qualify_to_ref("filter_$filter")}{CODE}) ||
 				die "No filter found named: '$filter'";
-			foreach my $field ( keys %valid ) {
+			for my $field ( keys %valid ) {
 				# apply filter, modifying %valid by reference, skipping undefined values
 				_filter_apply(\%valid,$field,$filter);
 			}
@@ -136,7 +136,7 @@ sub _process {
 
     # Apply specific filters
     while ( my ($field,$filters) = each %{$profile->{field_filters} }) {
-		foreach my $filter ( _arrayify($filters)) {
+		for my $filter ( _arrayify($filters)) {
 			if (defined $filter) {
 				# Qualify symbolic references
 				$filter = (ref $filter eq 'CODE' ? $filter : *{qualify_to_ref("filter_$filter")}{CODE}) ||
@@ -152,7 +152,7 @@ sub _process {
 	while ( my ($re,$filters) = each %{$profile->{field_filter_regexp_map} }) {
 		my $sub = _create_sub_from_RE($re);
 
-		foreach my $filter ( _arrayify($filters)) {
+		for my $filter ( _arrayify($filters)) {
 			if (defined $filter) {
 				# Qualify symbolic references
 				$filter = (ref $filter eq 'CODE' ? $filter : *{qualify_to_ref("filter_$filter")}{CODE}) ||
@@ -179,7 +179,7 @@ sub _process {
     my $required_re = _create_sub_from_RE($profile->{required_regexp});
     my $optional_re = _create_sub_from_RE($profile->{optional_regexp});
 
-    foreach my $k (keys %valid) {
+    for my $k (keys %valid) {
        if ($required_re && $required_re->($k)) {
 		  $required{$k} =  1;
        }
@@ -192,14 +192,14 @@ sub _process {
 	# handle "require_some"
 	my %require_some;
  	while ( my ( $field, $deps) = each %{$profile->{require_some}} ) {
-        foreach my $dep (_arrayify($deps)){
+        for my $dep (_arrayify($deps)){
              $require_some{$dep} = 1;
         }
     }
 
 	
 	# Remove all empty fields
-	foreach my $field (keys %valid) {
+	for my $field (keys %valid) {
 		if (ref $valid{$field}) {
 			if ( ref $valid{$field} eq 'ARRAY' ) {
 				for (my $i = 0; $i < scalar @{ $valid{$field} }; $i++) {
@@ -219,7 +219,7 @@ sub _process {
     while ( my ( $field, $deps) = each %{$profile->{dependencies}} ) {
         if (defined $valid{$field}) {
 			if (ref($deps) eq 'HASH') {
-				foreach my $key (keys %$deps) {
+				for my $key (keys %$deps) {
                     # Handle case of a key with a single value given as an arrayref
                     # There is probably a better, more general solution to this problem.
                     my $val_to_compare;
@@ -231,14 +231,14 @@ sub _process {
                     }
 
 					if($val_to_compare eq $key){
-						foreach my $dep (_arrayify($deps->{$key})){
+						for my $dep (_arrayify($deps->{$key})){
 							$required{$dep} = 1;
 						}
 					}
 				}
 			}
             else {
-                foreach my $dep (_arrayify($deps)){
+                for my $dep (_arrayify($deps)){
                     $required{$dep} = 1;
                 }
             }
@@ -247,9 +247,9 @@ sub _process {
 
     # check dependency groups
     # the presence of any member makes them all required
-    foreach my $group (values %{ $profile->{dependency_groups} }) {
+    for my $group (values %{ $profile->{dependency_groups} }) {
        my $require_all = 0;
-       foreach my $field (_arrayify($group)) {
+       for my $field (_arrayify($group)) {
 	  		$require_all = 1 if $valid{$field};
        }
        if ($require_all) {
@@ -261,7 +261,7 @@ sub _process {
     @unknown =
       grep { not (exists $optional{$_} or exists $required{$_} or exists $require_some{$_} ) } keys %valid;
     # and remove them from the list
-	foreach my $field ( @unknown ) {
+	for my $field ( @unknown ) {
 		delete $valid{$field};
 	}
 
@@ -291,7 +291,7 @@ sub _process {
 	}
 
     # Check for required fields
-    foreach my $field ( keys %required ) {
+    for my $field ( keys %required ) {
         push @missings, $field unless exists $valid{$field};
     }
 
@@ -301,7 +301,7 @@ sub _process {
 		my @deps = _arrayify($deps);
 		# num fields to require is first element in array if looks like a digit, 1 otherwise. 
 		my $num_fields_to_require = ($deps[0] =~ m/^\d+$/) ? $deps[0] : 1;
-		foreach my $dep (@deps){
+		for my $dep (@deps){
 			$enough_required_fields++ if exists $valid{$dep};
 		}
 		push @missings, $field unless ($enough_required_fields >= $num_fields_to_require);
@@ -326,7 +326,7 @@ sub _process {
         # first deal with untaint_constraint_fields
         if (defined($profile->{untaint_constraint_fields})) {
             if (ref $profile->{untaint_constraint_fields} eq "ARRAY") {
-                foreach my $field (@{$profile->{untaint_constraint_fields}}) {
+                for my $field (@{$profile->{untaint_constraint_fields}}) {
                     $untaint_hash{$field} = 1;
                 }
             }
@@ -345,9 +345,9 @@ sub _process {
                 push(@untaint_regexes, $profile->{untaint_regexp_map});
             }
 
-            foreach my $regex (@untaint_regexes) {
+            for my $regex (@untaint_regexes) {
                 # look at both constraints and constraint_methods
-                foreach my $field (keys %$private_constraints, keys %$private_constraint_methods) {
+                for my $field (keys %$private_constraints, keys %$private_constraint_methods) {
                     next if($untaint_hash{$field}); 
                     $untaint_hash{$field} = 1 if( $field =~ $regex );
                 }
@@ -365,14 +365,14 @@ sub _process {
 	$self->_check_constraints($private_constraint_methods,\%valid,$untaint_all,\%untaint_hash, $force_method_p);
 
     # add back in missing optional fields from the data hash if we need to
-	foreach my $field ( keys %data ) {
+	for my $field ( keys %data ) {
 		if ($profile->{missing_optional_valid} and $optional{$field} and (not exists $valid{$field})) {
 			$valid{$field} = undef;
 		}
 	}
 
     # all invalid fields are removed from valid hash
-	foreach my $field (keys %{ $self->{invalid} }) {
+	for my $field (keys %{ $self->{invalid} }) {
 		delete $valid{$field};
     }
 
@@ -979,7 +979,7 @@ sub _constraint_input_build {
 
 	my @params;
 	if (defined $c->{params}) {
-		foreach my $fname (_arrayify($c->{params})) {
+		for my $fname (_arrayify($c->{params})) {
 			# If the value is passed by reference, we treat it literally
 			push @params, (ref $fname) ? $fname : $data->{$fname}
 		}
@@ -1047,7 +1047,7 @@ sub _get_input_as_hash {
 	# This checks whether we have an object that supports param
 	if ( Scalar::Util::blessed($data) && $data->can('param') ) {
 		my %return;
-		foreach my $k ($data->param()){
+		for my $k ($data->param()){
 			# we expect param to return an array if there are multiple values
 			my @v = $data->param($k);
 			$return{$k} = scalar(@v)>1 ? \@v : $v[0];
@@ -1113,7 +1113,7 @@ sub _add_constraints_from_map {
 	my $map_name = $name.'_regexp_map';
 
 	my %result = ();
-	foreach my $re (keys %{ $profile->{$map_name} }) {
+	for my $re (keys %{ $profile->{$map_name} }) {
 		my $sub = _create_sub_from_RE($re);
 
 		# find all the keys that match this RE and add a constraint for them
@@ -1179,7 +1179,7 @@ sub _check_constraints {
 		my @invalid_list;
         # used to insure we only bother recording each failed constraint once
 		my %constraints_seen;
-		foreach my $constraint_spec (_arrayify($constraint_list)) {
+		for my $constraint_spec (_arrayify($constraint_list)) {
 
 			# set current constraint field for use by get_current_constraint_field
 			$self->{__CURRENT_CONSTRAINT_FIELD} = $field;
@@ -1194,7 +1194,7 @@ sub _check_constraints {
 			my $is_value_list = 1 if (ref $valid->{$field} eq 'ARRAY');
             my %param_data = ( $self->_get_input_as_hash($self->get_input_data) , %$valid );
 			if ($is_value_list) {
-				foreach (my $i = 0; $i < scalar @{ $valid->{$field}} ; $i++) {
+				for (my $i = 0; $i < scalar @{ $valid->{$field}} ; $i++) {
                     if( !exists $constraints_seen{\$c} ) {
 
                         my @params = $self->_constraint_input_build($c,$valid->{$field}->[$i],\%param_data);
