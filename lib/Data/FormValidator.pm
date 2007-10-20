@@ -654,7 +654,7 @@ The untainted data will be returned in the valid hash.  Untainting is based on
 the pattern match used by the constraint.  Note that some constraint routines
 may not provide untainting.
 
-See L<WRITING YOUR OWN CONSTRAINT ROUTINES> in the Data::FormValidator::Constraints
+See L<Writing your own constraint routines|Data::FormValidator::Constraints/"WRITING YOUR OWN CONSTRAINT ROUTINES"> in the Data::FormValidator::Constraints
 documentation for more information.
 
 This is overridden by C<untaint_constraint_fields> and C<untaint_regexp_map>.
