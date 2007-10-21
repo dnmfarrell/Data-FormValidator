@@ -1,6 +1,6 @@
 #########################
 
-use Test::More;
+use Test::More 'no_plan';
 use strict;
 
 BEGIN { 
@@ -8,9 +8,6 @@ BEGIN {
     use_ok('Data::FormValidator::Constraints::Upload') 
 };
 
-my $all_suite_tests = 0; ## use_ok tests seem to not be counted
-my $single_suite_tests = 25;
-my $suite_count = 1;
 my $cgi_simple_test = 0;
 
 eval {
@@ -22,11 +19,8 @@ if ($@) {
 } 
 else {
 	diag "Adding CGI::Simple tests";		
-	$suite_count++;
 	$cgi_simple_test = 1;
 } 
-
-plan tests => ($single_suite_tests * $suite_count) + $all_suite_tests;
 
 #########################
 
@@ -116,16 +110,14 @@ my $default = {
 	};
 
 ## same set of tests with each one (does this work?)
-foreach my $q ($cgi_pm_q, $cgi_simple_q) {
+for my $q ($cgi_pm_q, $cgi_simple_q) {
     next unless $q;
 	diag "Running tests with ", ref $q;
 
 	my $dfv = Data::FormValidator->new({ default => $default });
-	my ($results);
-	eval {
-	$results = $dfv->check($q, 'default');
-	};
-	ok(not $@) or diag $@;
+	my $results;
+	eval { $results = $dfv->check($q, 'default'); };
+    is($@,'','survived eval');
 
 	my $valid   = $results->valid;
 	my $invalid = $results->invalid; # as hash ref
@@ -139,8 +131,10 @@ foreach my $q ($cgi_pm_q, $cgi_simple_q) {
 	# should fail on empty/missing source file data
 	ok((grep {m/does_not_exist_gif/} @invalids), 'expect non-existent failure');
 
-	# Make sure 100x100 passes because it is the right type and size
-	ok(exists $valid->{'100x100_gif'}, "valid");
+	ok(
+        (exists $valid->{'100x100_gif'}, "valid")
+        , 'Make sure 100x100 passes because it is the right type and size'
+    );
 
 	my $meta = $results->meta('100x100_gif');
 	is(ref $meta, 'HASH', 'meta() returns hash ref');
@@ -148,10 +142,10 @@ foreach my $q ($cgi_pm_q, $cgi_simple_q) {
 	ok($meta->{extension}, 'setting extension meta data');
 	ok($meta->{mime_type}, 'setting mime_type meta data');
 
-	# 300x300 should fail because it is too big
-	ok((grep {m/300x300/} @invalids), 'max_bytes');
+	ok((grep {m/300x300/} @invalids)
+        , '300x300 should fail because it exceeds max_bytes');
 
-	ok($results->meta('100x100_gif')->{bytes}>0, 'setting bytes meta data');
+	ok(($results->meta('100x100_gif')->{bytes} > 0), 'setting bytes meta data') ;
 
 
 	# Revalidate to usefully re-use the same fields
@@ -285,9 +279,8 @@ foreach my $q ($cgi_pm_q, $cgi_simple_q) {
 		eval {
 			$results = $dfv->check($q, 'profile_6');
 		};
+        is($@,'','survived eval');
 
-		ok(not $@) or diag $@;
-	
 		$valid    = $results->valid;
 		$invalid  = $results->invalid; # as hash ref
 		@invalids = $results->invalid;
@@ -298,6 +291,6 @@ foreach my $q ($cgi_pm_q, $cgi_simple_q) {
 
 	}
 
-} ## end of foreach loop
+} ## end of for loop
 
 ## end of tests
