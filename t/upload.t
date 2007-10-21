@@ -145,7 +145,7 @@ for my $q ($cgi_pm_q, $cgi_simple_q) {
 	ok((grep {m/300x300/} @invalids)
         , '300x300 should fail because it exceeds max_bytes');
 
-	ok(($results->meta('100x100_gif')->{bytes} > 0), 'setting bytes meta data') ;
+	ok(($results->meta('100x100_gif')->{bytes} > 0), (ref $q).': setting bytes meta data') ;
 
 
 	# Revalidate to usefully re-use the same fields
