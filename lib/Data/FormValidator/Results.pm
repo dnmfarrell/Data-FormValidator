@@ -1049,7 +1049,21 @@ sub _get_input_as_hash {
 		my %return;
 		for my $k ($data->param()){
 			# we expect param to return an array if there are multiple values
-			my @v = $data->param($k);
+			my @v;
+
+			# CGI::Simple requires us to call 'upload()' to get upload data,
+			# while CGI/Apache::Request return it on calling 'param()'.
+			#
+			# This seems quirky, but there isn't a way for us to easily check if
+			# "this field contains a file upload" or not.
+			if (UNIVERSAL::isa($data,'CGI::Simple')) {
+				@v = $data->upload($k) || $data->param($k);
+			}
+			else {
+				@v = $data->param($k);
+			}
+
+			# we expect param to return an array if there are multiple values
 			$return{$k} = scalar(@v)>1 ? \@v : $v[0];
 		}
 		return %return;

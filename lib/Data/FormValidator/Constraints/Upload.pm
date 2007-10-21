@@ -78,11 +78,7 @@ sub valid_file_format {
 	# 	included 'params => []' in your constraint definition, even if there
 	# 	are no additional arguments";
 	# }
-
-	my $q = $self->get_input_data;
-
-	$q->can('param') ||
-		die 'file_format: data object missing param() method';
+	my $q = $self->get_filtered_data;
 
 	my $field = $self->get_current_constraint_field;
 	my $fh = _get_upload_fh($self);
@@ -125,7 +121,7 @@ sub valid_file_format {
    my @mt_exts = $t ? $t->extensions : ();
 
 	## setup filename to retrieve extension
-	my $fn = $q->param($field);
+	my $fn = $self->get_input_data->param($field);
    	my ($uploaded_ext) = ($fn =~ m/\.([\w\d]*)?$/);
    my $ext;
 	
@@ -178,7 +174,7 @@ sub valid_image_max_dimensions {
 	($max_width > 0) || die 'image_max_dimensions: maximum width must be > 0';
 	($max_height > 0) || die 'image_max_dimensions: maximum height must be > 0';
 
-	my $q = $self->get_input_data;
+	my $q = $self->get_filtered_data;
 	my $field = $self->get_current_constraint_field;
 	my ($width,$height) = _get_img_size($self);
 
@@ -211,9 +207,7 @@ sub valid_file_max_bytes {
 		$max_bytes = 1024*1024; # default to 1 Meg
 	}
 
-	my $q = $self->get_input_data;
-	$q->can('param') ||
-		die 'file_max_bytes: object missing param() method';
+	my $q = $self->get_filtered_data;
 
 	my $field = $self->get_current_constraint_field;
 
@@ -247,7 +241,7 @@ sub valid_image_min_dimensions {
 	($min_width > 0)  || die 'image_min_dimensions: minimum width must be > 0';
 	($min_height > 0) || die 'image_min_dimensions: minimum height must be > 0';
 
-	my $q = $self->get_input_data;
+	my $q = $self->get_filtered_data;
 	my $field = $self->get_current_constraint_field;
 	my ($width, $height) = _get_img_size($self);
 
@@ -267,15 +261,12 @@ sub valid_image_min_dimensions {
 sub _get_img_size
 {
 	my $self = shift;
-	my $q    = $self->get_input_data;
+	my $q    = $self->get_filtered_data;
 
 	## setup caller to make can errors more useful
 	my $caller = (caller(1))[3];
 	my $pkg  = __PACKAGE__ . "::";
 	$caller =~ s/$pkg//g;
-
-	$q->can('param')  || die "$caller: data object missing param() method";
-	$q->can('upload') || die "$caller: data object missing upload() method";
 
 	my $field = $self->get_current_constraint_field;
 
@@ -283,7 +274,10 @@ sub _get_img_size
 	my $fh = _get_upload_fh($self);
 
 	## check error
-	if (!$fh) { warn "Unable to load filehandle" && return undef; }
+	if (not $fh) { 
+        warn "Unable to load filehandle";
+        return undef; 
+    }
 
 	require Image::Size;
 	import  Image::Size;
@@ -304,58 +298,19 @@ sub _get_img_size
 sub _get_upload_fh
 {
 	my $self  = shift;
-	my $q	  = $self->get_input_data;
+	my $q	  = $self->get_filtered_data;
 	my $field = $self->get_current_constraint_field;
 
-	## CGI::Simple object processing (slightly different from others)
-	if ($q->isa('CGI::Simple')) {
-		## get filename 
-		my $fn = $q->param($field);
-		if (!$fn) {
-			warn sprintf("Failed to locate filename '%s'", $q->cgi_error);
-			return undef;
-		}
-
-		## return filename
-		return $q->upload($fn);
-	}
-
-	## NOTE: Both Apache::Upload and CGI filehandles are not seekable
-	## this causes issues with File::MMagic...
-
-	## Apache::Request object processing 
-	if ($q->isa('Apache::Request')) {
-		use IO::File;
-		my $upload = $q->upload($field); ## return Apache::Upload
-	
-		## error checking 
-		warn "Failed to locate upload object" && return undef unless $upload; 
-
-		## return filehandle
-		return IO::File->new_from_fd(fileno($upload->fh), "r");
-	}
-
-
-	## only CGI.pm just in case for weird subclasses
-	## generic data object (or CGI), CGI.pm has incomplete fh's nice huh
-	if ($q->isa('CGI')) {
-		use IO::File;
-		my $fh = $q->upload($field);
-
-		warn "Failed to load fh for $field" && return undef unless $fh;
-
-		#my $tmpfile = $q->tmpFileName($q->param($field)) || return undef;
-		#return FileHandle->new($tmpfile);
-
-		## convert into seekable handle
-		return IO::File->new_from_fd(fileno($fh), "r");
-	}
-
-	## not going to figure it out
-	return undef;
+	# convert the FH for the filtered data into a -seekable- handle;
+	# depending on whether we're using CGI::Simple, CGI, or Apache::Request
+	# we might not have something -seekable-.
+	use IO::File;
+	return IO::File->new_from_fd(fileno($q->{$field}), 'r');
 }
 
 ## returns mime type if included as part of the send
+##
+## NOTE: retrieves from original uploaded, -UNFILTERED- data
 sub _get_upload_mime_type
 {
 	my $self  = shift;
@@ -453,6 +408,11 @@ The MIME type of the file will first be tried to figured out by using the
 we'll use a MIME type from the browser if one has been provided. Otherwise, we
 give up. The extension we return is based on the MIME type we found, rather
 than trusting the one that was uploaded.
+
+B<NOTE:> if we have to fall back to using the MIME type provided by the
+browser, we access it from the original I<input> data and not the
+I<filtered> data.  This should only cause issue when you have used a filter
+to alter the type of file that was uploaded (e.g. image conversion).
 
 =item file_max_bytes
 
