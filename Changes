@@ -1,4 +1,9 @@
 
+4.55 Sun Oct 21 11:41:41 EDT 2007
+    [BUG FIXES]
+    - Constraints in Upload.pm now apply to filtered data, not raw data. 
+     (Graham TerMarsch, Mark Stosberg, RT#24702)
+
 4.54 Sun Oct 21 09:27:07 EDT 2007
     [INTERNALS]
     - It looks like 4.53 got uploaded wrong, appearing as the code for 4.50.    
