@@ -1056,7 +1056,7 @@ sub _get_input_as_hash {
 			#
 			# This seems quirky, but there isn't a way for us to easily check if
 			# "this field contains a file upload" or not.
-			if (UNIVERSAL::isa($data,'CGI::Simple')) {
+			if ($data->isa('CGI::Simple')) {
 				@v = $data->upload($k) || $data->param($k);
 			}
 			else {
