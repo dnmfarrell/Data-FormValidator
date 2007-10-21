@@ -1,6 +1,6 @@
 #########################
 
-use Test::More tests => 18;
+use Test::More 'no_plan';
 use strict;
 BEGIN { 
     use_ok('CGI');
