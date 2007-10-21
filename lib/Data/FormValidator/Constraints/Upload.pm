@@ -305,7 +305,17 @@ sub _get_upload_fh
 	# depending on whether we're using CGI::Simple, CGI, or Apache::Request
 	# we might not have something -seekable-.
 	use IO::File;
-	return IO::File->new_from_fd(fileno($q->{$field}), 'r');
+
+    # If we we already have an IO::File object, return it, otherwise create one.
+    require Scalar::Util;
+
+	if ( Scalar::Util::blessed($q->{$field}) && $q->{$field}->isa('IO::File') ) {
+        return $q->{$field};
+    }
+    else {
+        return IO::File->new_from_fd(fileno($q->{$field}), 'r');
+    }
+
 }
 
 ## returns mime type if included as part of the send
