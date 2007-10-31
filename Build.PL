@@ -34,6 +34,10 @@ $class->new(
 	module_name => 'Data::FormValidator',
 	license => 'perl',
 	requires => {
+         # In 5.6, t/upload* was failing.
+         # rjbs says "It relies on CGI relying on 5.008 glob stringification behavior"
+         # A patch to make it compatible with 5.6 again would be welcome. 
+         perl             => '5.008',
 		'Image::Size' 	  => 0,
 		'Test::More'  	  => 0,
 		'Date::Calc'	  => 5.0,

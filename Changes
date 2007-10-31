@@ -1,4 +1,9 @@
 
+4.56 Wed Oct 31 12:34:32 EDT 2007
+    [INTERNALS]
+    - declare that we rely on 5.8, because some 5.6 tests were failing.
+      A patch for 5.6 compatibility would be welcome. Thanks to rjbs for the prod.  
+
 4.55 Sun Oct 21 11:41:41 EDT 2007
     [BUG FIXES]
     - Constraints in Upload.pm now apply to filtered data, not raw data. 
