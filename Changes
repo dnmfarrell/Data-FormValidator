@@ -1,4 +1,7 @@
 
+    [INTERNALS]
+    - Fix doc link to "Old School Constraints", thanks to rjbs.    
+
 4.56 Wed Oct 31 12:34:32 EDT 2007
     [INTERNALS]
     - declare that we rely on 5.8, because some 5.6 tests were failing.
