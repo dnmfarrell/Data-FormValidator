@@ -33,7 +33,7 @@ use Data::FormValidator::Constraints qw(:validators :matchers);
 
 use vars qw( $VERSION $AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS );
 
-$VERSION = '4.56';
+$VERSION = '4.57';
 
 require Exporter;
 @ISA = qw(Exporter);

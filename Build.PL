@@ -29,7 +29,9 @@ my $class = Module::Build->subclass(
 
 
 $class->new(
-    create_makefile_pl  => 'traditional', 
+    # Makefile.PL is maintained manually now because the 5.8 requirement wasn't getting
+    # translated automatically. 
+    # create_makefile_pl  => 'traditional', 
     dist_author         => 'Mark Stosberg <mark@summersault.com>',
 	module_name => 'Data::FormValidator',
 	license => 'perl',

@@ -1,5 +1,12 @@
+4.57 Thu Nov  1 22:47:13 EDT 2007
+    [BUG FIXES]
+    - The min max and length_between constraints now allow multi-line input, 
+      Thanks to Carl Vincent. RT##30221. If we had only used the Regex style
+      prescribed by the Perl Best Practices book in the first place, this
+      wouldn't have been a problem!
 
     [INTERNALS]
+    - Makefile.PL to updated to explicitly require 5.008;
     - Fix doc link to "Old School Constraints", thanks to rjbs.    
 
 4.56 Wed Oct 31 12:34:32 EDT 2007

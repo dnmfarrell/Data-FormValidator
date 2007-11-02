@@ -275,7 +275,7 @@ sub FV_length_between {
     return sub {
         my ($dfv,$value) = @_;
         $dfv->name_this('length_between');
-        my ($match) = ($value =~ m/^(.{$min,$max})$/);
+        my ($match) = ($value =~ m/\A(.{$min,$max})\z/xms);
         return $dfv->untainted_constraint_value($match);
     }
 }
@@ -286,7 +286,7 @@ sub FV_max_length {
     return sub {
         my ($dfv,$value) = @_;
         $dfv->name_this('max_length');
-        my ($match) = ($value =~ m/^(.{0,$max}$)/);
+        my ($match) = ($value =~ m/\A(.{0,$max})\z/xms);
         return $dfv->untainted_constraint_value($match);
     }
 }
@@ -297,7 +297,7 @@ sub FV_min_length {
     return sub {
         my ($dfv,$value) = @_;
         $dfv->name_this('min_length');
-        my ($match) = ($value =~ m/^(.{$min,})$/);
+        my ($match) = ($value =~ m/\A(.{$min,})\z/xms);
         return $dfv->untainted_constraint_value($match);
     }
 }
