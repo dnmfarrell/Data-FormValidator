@@ -736,7 +736,7 @@ Let's look at an example.
   # Near your profile	
   # Of course, you don't have to export/import if your constraints are in the same
   # package as the profile.  
-  use My::Constraints qw(coolness);
+  use My::Constraints 'coolness';
 
   # In your profile
   constraint_methods => {
@@ -769,7 +769,7 @@ Here's what the code might look like:
 		# get other data to refer to
 	    my $data = $dfv->get_filtered_data;
 
-	    my $has_all_three = ($data->{personality} && $data->{smarts} && $data->{looks});
+	    my $has_all_three = ($data->{$personality} && $data->{$smarts} && $data->{$looks});
 		return ( ($val >= $min_cool) && ($val <= $max_cool) && $has_all_three );
 	}
   }

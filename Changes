@@ -1,3 +1,6 @@
+    [INTERNALS]
+    - Typo in Constraints documentation corrected by K B Shiv Kumar (RT#32358)
+
 4.57 Thu Nov  1 22:47:13 EDT 2007
     [BUG FIXES]
     - The min max and length_between constraints now allow multi-line input, 
