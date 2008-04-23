@@ -1,3 +1,7 @@
+    [BUG FIXES]
+    - length constraints for min, max and 'between' now work for lengths
+       of 32k and longer. (Carl Vincent). 
+
     [INTERNALS]
     - Typo in Constraints documentation corrected by K B Shiv Kumar (RT#32358)
 
