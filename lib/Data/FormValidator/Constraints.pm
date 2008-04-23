@@ -261,6 +261,8 @@ corresponding to the function name you choose.
 
 The checks are all inclusive, so a max length of '100' will allow the length 100. 
 
+Length is measured in perl characters as opposed to bytes or anything else.
+
 This constraint I<will> untaint your data if you have untainting turned on. However,
 a length check alone may not be enough to insure the safety of the data you are receiving.
 Using additional constraints to check the data is encouraged. 
@@ -275,8 +277,10 @@ sub FV_length_between {
     return sub {
         my ($dfv,$value) = @_;
         $dfv->name_this('length_between');
-        my ($match) = ($value =~ m/\A(.{$min,$max})\z/xms);
-        return $dfv->untainted_constraint_value($match);
+        return undef if ( ( length($value) > $max ) || ( length($value) < $min) );
+        # Use a regexp to untaint
+        $value=~/(.*)/;
+        return $dfv->untainted_constraint_value($1);
     }
 }
 
@@ -286,8 +290,10 @@ sub FV_max_length {
     return sub {
         my ($dfv,$value) = @_;
         $dfv->name_this('max_length');
-        my ($match) = ($value =~ m/\A(.{0,$max})\z/xms);
-        return $dfv->untainted_constraint_value($match);
+        return undef if ( length($value) > $max );
+        # Use a regexp to untaint
+        $value=~/(.*)/;
+        return $dfv->untainted_constraint_value($1);
     }
 }
 
@@ -297,8 +303,10 @@ sub FV_min_length {
     return sub {
         my ($dfv,$value) = @_;
         $dfv->name_this('min_length');
-        my ($match) = ($value =~ m/\A(.{$min,})\z/xms);
-        return $dfv->untainted_constraint_value($match);
+        return undef if ( length($value) < $min );
+        # Use a regexp to untaint
+        $value=~/(.*)/;
+        return $dfv->untainted_constraint_value($1);
     }
 }
 
