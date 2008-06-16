@@ -25,6 +25,7 @@
 _darcs
 _build
 patches
+lib/Perl6
 rejects
 ^Build$
 
