@@ -49,7 +49,7 @@ $class->new(
         'overload'        => 0,
         'Perl6::Junction' => 1.10, 
         'Scalar::Util'    => 0,
-        'Email::Valid'    => 1,
+        'Email::Valid'    => 0,
 	},
 )->create_build_script;
 
