@@ -356,10 +356,16 @@ that is valid in the RFC, or runs out and checks some MX records.
 # Copyright 1996-1999 by Michael J. Heins <mike@heins.net>
 
 sub match_email {
-    my $email = shift;
+    my $in_email = shift;
 
-    if ($email =~ /^(([a-z0-9_\.\+\-\=\?\^\#]){1,64}\@(([a-z0-9\-]){1,251}\.){1,252}[a-z0-9]{2,4})$/i) {
-	    return $1;
+    require Email::Valid;
+    my $valid_email; 
+
+    # The extra check that the result matches the input prevents
+    # an address like this from being considered valid: Joe Smith <joe@smith.com>
+    if (    ($valid_email = Email::Valid->address($in_email) )
+        and ($valid_email eq $in_email)) { 
+        return $valid_email;
     }
     else {
         return undef;

@@ -96,6 +96,8 @@ ok(valid_email($address_6), "'$address_6' is a valid e-mail");
 my $address_7 = 'Mark_Stosberg@summersault.com';
 ok(valid_email($address_7), "'$address_7' is a valid e-mail");
 
+my $addr_8 = "Mark_O'Doul\@summersault.com";
+ok(valid_email($addr_8), "'$addr_8' is a valid e-mail");
 
 
 

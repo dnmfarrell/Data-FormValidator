@@ -5,6 +5,11 @@
     [BUG FIXES]
     - length constraints for min, max and 'between' now work for lengths
        of 32k and longer. (Carl Vincent). 
+    - We now use Email::Valid to validate e-mail addresses instead of
+      our own regrex. Email::Valid passed all our our existing regression
+      tests for e-mail addresses that should pass and fail. Email::Valid
+      also correctly recognizes emails with single quote characters in them.
+      These are valid, but our regex didn't recognize them.  (Mark Stosberg)
 
     [INTERNALS]
     - Typo in Constraints documentation corrected by K B Shiv Kumar (RT#32358)
