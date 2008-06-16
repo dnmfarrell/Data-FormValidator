@@ -1,3 +1,5 @@
+4.60 Mon Jun 16 14:10:14 EDT 2008
+
     [NEW FEATURES]
     - Dependencies can now be specified using a code ref.
       Thanks to Bradley C Bailey, via RT#24935.
