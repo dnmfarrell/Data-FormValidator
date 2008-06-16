@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-use Test::More qw/no_plan/;
+use Test::More 'no_plan';
 BEGIN { 
 	use_ok('Data::FormValidator::Constraints::Dates') 
 };
@@ -59,4 +59,33 @@ ok ((not $@), 'eval') or
 ok ($valids->{date_and_time_field_good}, 'expecting date_and_time success');
 ok ((grep /date_and_time_field_bad/, @$invalids), 'expecting date_and_time failure');
 
+{
+    my $r = Data::FormValidator->check({
+        # Testing leap years
+        date_and_time_field_good    => '02/29/2008',
+        date_and_time_field_bad_pat => '02/29/2008',
+        leap_seventy_six            => '02/29/1976',
+    },	
+    {
+        required => [qw/date_and_time_field_good date_and_time_field_bad_pat/],
+        constraint_methods => {
+            'date_and_time_field_good'    => date_and_time('MM/DD/YY(?:YY)?'),
+            # This pattern actually tests with a 3 digit year, not a four digit year, and fails
+            # on the date 02/29/2008, because 02/29/200 doesn't exist. 
+            'date_and_time_field_bad_pat' => date_and_time('MM/DD/YYY?Y?'),
+            'leap_seventy_six'            => date_and_time('MM/DD/YY(?:YY)?'),
+        },
+   });
+   my $valid = $r->valid;
+   ok ($valid->{date_and_time_field_good}, '02/29/2008 should pass MM/DD/YY(?:YY)?');
 
+   TODO: {
+       local $TODO = "leap year bug?";
+       ok ($valid->{leap_seventy_six},         '02/29/1976 should pass MM/DD/YY(?:YY)?');
+    };
+
+   # This one fails not because the date is bad, but because the pattern is not sensible
+   # It would be better to detect that the pattern was bad and fail that way, of course.
+   ok ( $r->invalid('date_and_time_field_bad_pat'), "02/29/2008 should fail MM/DD/YYY?Y?" );
+
+}

@@ -8,6 +8,12 @@
 
     [INTERNALS]
     - Typo in Constraints documentation corrected by K B Shiv Kumar (RT#32358)
+    - Add some tests and docs for "date_and_time" constraint, from
+      Data::FormValidator:::Constraints::Dates.  It appears  there may still
+      exist a leap-year bug with the date parser. See the TODO test in
+      t/dates_closure.t for details. An alternative is to use
+      Data::FormValidator::Constraints::DateTime 
+      (Mark Stosberg, Matt Christian)
 
 4.57 Thu Nov  1 22:47:13 EDT 2007
     [BUG FIXES]
