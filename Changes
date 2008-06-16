@@ -1,3 +1,7 @@
+    [NEW FEATURES]
+    - Dependencies can now be specified using a code ref.
+      Thanks to Bradley C Bailey, via RT#24935.
+
     [BUG FIXES]
     - length constraints for min, max and 'between' now work for lengths
        of 32k and longer. (Carl Vincent). 

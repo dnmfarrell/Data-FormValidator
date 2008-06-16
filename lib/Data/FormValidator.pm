@@ -443,6 +443,15 @@ to be optional, you could use the regular expression, /^user_/
     "pay_type" => {
         check => [ qw( check_no ) ],
      }
+
+    # if cc_type is VISA or MASTERCARD require CVV
+    "cc_type" => sub {
+        my $dfv  = shift;
+        my $type = shift;
+        
+        return [ 'cc_cvv' ] if ($type eq "VISA" || $type eq "MASTERCARD");
+        return [ ];
+    },
  },
 
 This is for the case where an optional field has other requirements.  The
@@ -452,7 +461,12 @@ If the dependencies are specified with a hash reference then the additional
 constraint is added that the optional field must equal a key for the
 dependencies to be added.
 
-Any fields in the dependencies list that is missing when the target is present
+If the dependencies are specified as a code reference then the code will be
+executed to determine the dependent fields.  It is passed two parameters,
+the object and the value of the field, and it should return an array reference
+containing the list of dependent fields.
+
+Any fields in the dependencies list that are missing when the target is present
 will be reported as missing.
 
 =head2 dependency_groups
