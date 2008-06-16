@@ -361,8 +361,8 @@ sub match_email {
     if ($email =~ /^(([a-z0-9_\.\+\-\=\?\^\#]){1,64}\@(([a-z0-9\-]){1,251}\.){1,252}[a-z0-9]{2,4})$/i) {
 	    return $1;
     }
-    else { 
-        return undef; 
+    else {
+        return undef;
     }
 }
 
