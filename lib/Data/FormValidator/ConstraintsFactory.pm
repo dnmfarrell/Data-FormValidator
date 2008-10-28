@@ -37,7 +37,7 @@ instead. It's a modern alternative to what's here, offering improved names and s
 		    make_num_set_constraint( -1, ( 1 .. 10 ) ),
 		    make_set_constraint( 1, ( 20 .. 30 ) ),
 		  ),
-	province => make_word_set_constraint( "AB QC ON TN NU" ),
+	province => make_word_set_constraint( 1, "AB QC ON TN NU" ),
 	bid	 => make_range_constraint( 1, 1, 10 ),
     }
 

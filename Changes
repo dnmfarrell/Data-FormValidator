@@ -1,3 +1,7 @@
+
+    [DOCUMENTATION]
+    - fix typo in ConstraintsFactory docs (Geraint A. Edwards)
+
 4.61 Mon Jun 16 14:37:31 EDT 2008
 
     [INTERNALS]
