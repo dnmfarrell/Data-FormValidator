@@ -901,7 +901,7 @@ sub load_profiles {
     return if $self->{profiles} and $self->{profiles_mtime} <= $mtime;
 
     $self->{profiles} = do $file;
-    die "Input profiles didn't return a hash ref\n"
+    die "Input profiles didn't return a hash ref: $@\n"
       unless ref $self->{profiles} eq "HASH";
 
     $self->{profiles_mtime} = $mtime;
