@@ -1,6 +1,7 @@
 
     [DOCUMENTATION]
     - fix typo in ConstraintsFactory docs (Geraint A. Edwards)
+    - clarified docs for get_filtered_data (Lisa Hagemann)
 
     [INTERNALS]
     - Better diagnostics when load_profiles fails (Thoralf Klein)
