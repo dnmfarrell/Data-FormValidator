@@ -5,6 +5,8 @@
 
     [INTERNALS]
     - Better diagnostics when load_profiles fails (Thoralf Klein)
+    - Improved portability of t/untaint.t (Alexandr Ciornii)
+    - Make some tests conditional on Date::Calc being installed (Frank Wiles)
 
 4.61 Mon Jun 16 14:37:31 EDT 2008
 

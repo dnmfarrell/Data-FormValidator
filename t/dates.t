@@ -1,6 +1,17 @@
 #!/usr/bin/perl -w
-use Test::More qw/no_plan/;
-BEGIN { use_ok('Data::FormValidator::Constraints::Dates') };
+use Test::More;
+
+eval { require Date::Calc; };
+
+if( $@ ) {
+    plan skip_all => 'Date::Calc required for date testing';
+}
+else {
+    plan 'no_plan';
+}
+
+require Data::FormValidator::Constraints::Dates;
+
 use strict;
 
 my $format = Data::FormValidator::Constraints::Dates::_prepare_date_format('MM/DD/YYYY hh?:mm:ss pp');

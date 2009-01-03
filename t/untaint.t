@@ -3,9 +3,11 @@ use Carp;
 $SIG{__WARN__} = \&carp;
 $SIG{__DIE__} = \&confess;
 
+use Config;
+
 my @args = ('-I./lib',
     ( (defined($ENV{PERL5LIB}) && length($ENV{PERL5LIB}))
-        ?(map { "-I$_" } split(/:/, $ENV{PERL5LIB}))
+        ?(map { "-I$_" } split(/$Config{path_sep}/, $ENV{PERL5LIB}))
         : ()
     ),
     '-T',
