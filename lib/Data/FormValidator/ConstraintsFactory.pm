@@ -48,7 +48,7 @@ use vars qw( $VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS );
 BEGIN {
     require Exporter;
 
-    $VERSION = 1.6; 
+    $VERSION = 1.7; 
 
     @ISA = qw( Exporter );
 

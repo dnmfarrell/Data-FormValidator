@@ -28,7 +28,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 	image_min_dimensions
 );
 
-$VERSION = 4.60;
+$VERSION = 4.62;
 
 sub file_format {
 	my %params = @_;
