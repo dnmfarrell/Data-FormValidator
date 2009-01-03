@@ -551,10 +551,11 @@ See L<Data::FormValidator::Filters> for details on the built-in filters.
      qr/_name$/    => ['ucfirst'],
  },
 
-This is a hash reference where the keys are the regular expressions to
-use and the values are references to arrays of filters which will be
-applied to specific input fields. Used to apply filters to fields that
-match a regular expression. 
+'field_filter_regexp_map' is used to apply filters to fields that match a
+regular expression.  This is a hash reference where the keys are the regular
+expressions to use and the values are references to arrays of filters which
+will be applied to specific input fields. Just as with 'field_filters', you
+can you use a built-in filter or use a coderef to supply your own.
 
 =head2 constraint_methods
 

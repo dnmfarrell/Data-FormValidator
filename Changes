@@ -1,7 +1,10 @@
 
+4.62 Sat Jan  3 12:10:14 EST 2009
+
     [DOCUMENTATION]
-    - fix typo in ConstraintsFactory docs (Geraint A. Edwards)
-    - clarified docs for get_filtered_data (Lisa Hagemann)
+    - Fix typo in ConstraintsFactory docs (Geraint A. Edwards)
+    - Clarified docs for get_filtered_data (Lisa Hagemann)
+    - Clarify that 'field_filter_regexp_map' can take coderefs as values (Ron Savage)
 
     [INTERNALS]
     - Better diagnostics when load_profiles fails (Thoralf Klein)
