@@ -23,7 +23,7 @@ package Data::FormValidator::Constraints;
 use strict;
 use vars qw/$AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS $VERSION/;
 
-$VERSION = 4.62;
+$VERSION = 4.63;
 
 require Exporter;
 @ISA = qw(Exporter);
@@ -755,9 +755,7 @@ Let's look at an example.
   # In your profile
   constraint_methods => {
     email 			 => email(),
-	prospective_date => coolness(
-		min => 40,
-		max => 60,
+	prospective_date => coolness( 40, 60,
 		{fields => [qw/personality smarts good_looks/]}
 	),
   }
@@ -778,6 +776,7 @@ Here's what the code might look like:
 		# Name it to refer to in the 'msgs' system.
 		$dfv->name_this('coolness');
 
+        # value of 'prospective_date' parameter
 		my $val = $dfv->get_current_constraint_value();
 
 		# get other data to refer to
