@@ -511,7 +511,7 @@ useful to set defaults for them.
 
 Note that it doesn't make sense to use a default for a field handled by
 C<optional_regexp> or C<required_regexp>.  When the field is not submitted,
-there is no way know that it should be optional or required, and thus there's
+there is no way to know that it should be optional or required, and thus there's
 no way to know that a default should be set for it. 
 
 =head2 filters
@@ -611,7 +611,7 @@ a subroutine reference, to supply custom code
 This will check the input and return true or false depending on the input's validity.
 By default, the constraint function receives a L<Data::FormValidator::Results>
 object as its first argument, and the value to be validated as the second.  To
-validate a field based more inputs than just the field itself, see 
+validate a field based on more inputs than just the field itself, see 
 L<VALIDATING INPUT BASED ON MULTIPLE FIELDS>.
 
 B<Examples>:
@@ -669,8 +669,7 @@ The untainted data will be returned in the valid hash.  Untainting is based on
 the pattern match used by the constraint.  Note that some constraint routines
 may not provide untainting.
 
-See L<Writing your own constraint routines|Data::FormValidator::Constraints/"WRITING YOUR OWN CONSTRAINT ROUTINES"> in the Data::FormValidator::Constraints
-documentation for more information.
+See L<Writing your own constraint routines|Data::FormValidator::Constraints/"WRITING YOUR OWN CONSTRAINT ROUTINES"> for more information.
 
 This is overridden by C<untaint_constraint_fields> and C<untaint_regexp_map>.
 
@@ -722,7 +721,7 @@ of its constraint and filter routines  beginning with 'match_', 'valid_' and
 them in a constraint with just their name, just like built-in routines.  You
 can even override the provided validators.
 
-See L<WRITING YOUR OWN CONSTRAINT ROUTINES> in the Data::FormValidator::Constraints
+See L<Writing your own constraint routines|Data::FormValidator::Constraints/"WRITING YOUR OWN CONSTRAINT ROUTINES">
 documentation for more information
 
 =head2 msgs
@@ -796,7 +795,7 @@ provide your own by specifying a code reference:
 
 This will be called as a L<Data::FormValidator::Results> method.  It may
 receive as arguments an additional hash reference of control parameters,
-corresponding to the key names in the usually used in the C<msgs> area of the
+corresponding to the key names usually used in the C<msgs> area of the
 profile. You can ignore this information if you'd like. 
 
 If you have an alternative error message handler you'd like to share, stick in
