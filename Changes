@@ -1,3 +1,9 @@
+    [NEW FEATURES]
+    - New FV_replace() filter to simplify basic find-and-replace filters:
+        field_filters => {
+            first_name   => FV_replace(qr/Mark/,'Don'),
+        },
+
     [DOCUMENTATION]
     - Typo fixes (Lyle)
 

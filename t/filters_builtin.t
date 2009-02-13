@@ -1,4 +1,4 @@
-use Test::More qw/no_plan/;
+use Test::More 'no_plan';
 use Data::FormValidator::Filters (qw/:filters/);
 use strict;
 
@@ -8,6 +8,13 @@ use strict;
     is_deeply( $comma_splitter->('a'), [qw/a/], "FV_split with one value");
     is_deeply( $comma_splitter->(),undef, "FV_split with no values");
 }
+
+{
+    my $replacer = FV_replace(qr/^a/,'b');
+    is( $replacer->('aa'), 'ba', 'FV_replace positive test'); 
+    is( $replacer->('XX'), 'XX', 'FV_replace negative test'); 
+}
+
 
 
 is( filter_dollars('There is $0.11e money in here somewhere'),

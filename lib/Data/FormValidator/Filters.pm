@@ -36,6 +36,7 @@ require Exporter;
 	filter_uc
 	filter_ucfirst
     FV_split
+    FV_replace
 );
 
 %EXPORT_TAGS = (
@@ -134,6 +135,32 @@ sub FV_split {
         return undef unless defined $value;
         my @a = split $splitter, $value; 
         return \@a; 
+    };
+}
+
+=head2 FV_replace
+
+  use Data::FormValidator::Filters qw(FV_replace);
+
+  field_filters => {
+     first_name   => FV_replace(qr/Mark/,'Don'),
+  },
+
+FV_replace is a shorthand for writing simple find-and-replace filters.
+The above filter would be translated to this:
+
+ sub { my $v = shift; $v =~ s/Mark/Don/; $v }
+
+For more complex filters, just write your own. 
+
+=cut
+
+sub FV_replace {
+    my ($find,$replace) = @_;
+    return sub { 
+        my $v = shift;
+        $v =~ s/$find/$replace/;
+        return $v;
     };
 }
 
