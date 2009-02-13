@@ -13,6 +13,9 @@ use strict;
     my $replacer = FV_replace(qr/^a/,'b');
     is( $replacer->('aa'), 'ba', 'FV_replace positive test'); 
     is( $replacer->('XX'), 'XX', 'FV_replace negative test'); 
+
+    my $replacer = FV_replace(qr/^a/i,'b');
+    is( $replacer->('AA'), 'bA', 'FV_replace positive test'); 
 }
 
 
