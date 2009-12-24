@@ -51,5 +51,9 @@ $class->new(
         'Scalar::Util'    => 0,
         'Email::Valid'    => 0,
 	},
+    build_requires        => {
+        # For testing
+        'CGI'             => 3.48,
+    },
 )->create_build_script;
 
