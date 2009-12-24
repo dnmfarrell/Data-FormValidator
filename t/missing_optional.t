@@ -48,7 +48,7 @@ eval {
 SKIP: {
  skip 'CGI.pm not found', 3 if $@;
 
- 	my $q = new CGI($input_hashref);
+ 	my $q = CGI->new($input_hashref);
 	my ($valids, $missings, $invalids, $unknowns);
 	eval{
 	  ($valids, $missings, $invalids, $unknowns) = $validator->validate($q, 'default');

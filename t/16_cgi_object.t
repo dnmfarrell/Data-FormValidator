@@ -11,7 +11,7 @@ use Test::More tests => 2;
 my $q;
 eval {
 	use CGI;
-	$q = new CGI  ({ my_zipcode_field => 'big brown' });
+	$q = CGI->new({ my_zipcode_field => 'big brown' });
 };
 ok(not $@);
 

@@ -7,6 +7,9 @@
     [DOCUMENTATION]
     - Typo fixes (Lyle)
 
+    [INTERNALS]
+    - Best Practice: eliminated some indirect object notation in the tests (Mark Stosberg)
+
 4.63 Sat Jan  3 12:46:15 EST 2009
     [DOCUMENTATION]
     - Improve docs for writing your own constraints (girlwithglasses) 

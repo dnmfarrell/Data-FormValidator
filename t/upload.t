@@ -63,7 +63,7 @@ open(IN,'<t/upload_post_text.txt') || die 'missing test file';
 binmode(IN);
 
 *STDIN = *IN;
-$cgi_pm_q = new CGI;
+$cgi_pm_q = CGI->new;
 close(IN);
 
 ## setup CGI::Simple testing

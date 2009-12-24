@@ -42,7 +42,7 @@ open(IN,'<t/upload_post_text.txt') || die 'missing test file';
 binmode(IN);
 
 *STDIN = *IN;
-my $q = new CGI;
+my $q = CGI->new;
 
 use Data::FormValidator;
 use Data::FormValidator::Constraints::Upload qw(
