@@ -7,7 +7,7 @@ use Data::FormValidator;
 use Data::FormValidator::Constraints qw(:closures);
 
 my $input_profile = {
-    required => [ qw( number_field nan ) ],
+    required => [ qw( number_field nan nan_typo ) ],
 	optional => [ qw( nan_name_this ) ],
     constraint_methods => {
         number_field => sub {
