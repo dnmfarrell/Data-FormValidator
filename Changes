@@ -4,6 +4,10 @@
             first_name   => FV_replace(qr/Mark/,'Don'),
         },
 
+    [BUG FIXES]
+    - Untainted multiline fields are no longer truncated after the first newline. 
+      (RT#44004, Thanks to Matthew Lawrence)
+
     [DOCUMENTATION]
     - Typo fixes (Lyle)
 

@@ -41,7 +41,7 @@ ok(defined $result);
 # Test multi-line input: someone might be using this for a textarea or somesuch
 
 my $multiline_result = Data::FormValidator->check(
-    {
+    my $expect = {
         alpha   => "apple\naeroplane\n",      # 16 char
         beta    => "bus\nbuffalo\n",          # 12 char
         charlie => "cat\ncoconut\ncoffee\n",  # 19 char
@@ -52,6 +52,7 @@ my $multiline_result = Data::FormValidator->check(
     },
     {
         required => [qw/alpha beta charlie delta echo foxtrot golf/],
+        untaint_all_constraints => 1,
         constraint_methods => {
             alpha   => FV_max_length(16),           # max length
             beta    => FV_max_length(11),           # too long
@@ -71,6 +72,11 @@ ok( $multiline_result->invalid('delta'),   'multiline FV_min_length too short'  
 ok( $multiline_result->valid('echo'),      'multiline FV_length_between in bounds');
 ok( $multiline_result->invalid('foxtrot'), 'multiline FV_length_between too short');
 ok( $multiline_result->invalid('golf'),    'multiline FV_length_between too long' );
+
+# check expected values for valid untainted fields
+for my $field (qw( alpha charlie echo )) {
+    is( $multiline_result->valid($field), $expect->{$field}, "identity $field");
+}
 
 # Test "long" results. Early implementations checked length with
 # regular expressions which limit length options to 32kb.

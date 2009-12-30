@@ -279,7 +279,7 @@ sub FV_length_between {
         $dfv->name_this('length_between');
         return undef if ( ( length($value) > $max ) || ( length($value) < $min) );
         # Use a regexp to untaint
-        $value=~/(.*)/;
+        $value=~/(.*)/s;
         return $dfv->untainted_constraint_value($1);
     }
 }
@@ -292,7 +292,7 @@ sub FV_max_length {
         $dfv->name_this('max_length');
         return undef if ( length($value) > $max );
         # Use a regexp to untaint
-        $value=~/(.*)/;
+        $value=~/(.*)/s;
         return $dfv->untainted_constraint_value($1);
     }
 }
@@ -305,7 +305,7 @@ sub FV_min_length {
         $dfv->name_this('min_length');
         return undef if ( length($value) < $min );
         # Use a regexp to untaint
-        $value=~/(.*)/;
+        $value=~/(.*)/s;
         return $dfv->untainted_constraint_value($1);
     }
 }
