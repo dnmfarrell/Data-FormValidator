@@ -14,6 +14,8 @@
     [INTERNALS]
     - Best Practice: eliminated some indirect object notation in the tests (Mark Stosberg)
     - Now require a new CGI.pm for the build stage (RT#49912, thanks to dsteinbrunner)
+    - White space improvements (RT#30205, Thanks to Peter Liscovius)
+    - Fixed a warning in the test suite (RT#42251, Thanks to Frank Wiegand)
 
 4.63 Sat Jan  3 12:46:15 EST 2009
     [DOCUMENTATION]
