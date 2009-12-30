@@ -3,18 +3,18 @@
 #
 #    This file is part of Data::FormValidator.
 #
-#    Author: Francis J. Lacoste 
+#    Author: Francis J. Lacoste
 #    Maintainer: Mark Stosberg <mark@summersault.com>
 #
 #    Copyright (C) 1999,2000 iNsu Innovations Inc.
 #    Copyright (C) 2001 Francis J. Lacoste
-#    Parts Copyright 1996-1999 by Michael J. Heins 
-#    Parts Copyright 1996-1999 by Bruce Albrecht  
+#    Parts Copyright 1996-1999 by Michael J. Heins
+#    Parts Copyright 1996-1999 by Bruce Albrecht
 #
 #    Parts of this module are based on work by
 #    Bruce Albrecht, contributed to MiniVend.
 #
-#    Parts also based on work by Michael J. Heins 
+#    Parts also based on work by Michael J. Heins
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms same terms as perl itself.
@@ -46,21 +46,21 @@ BEGIN {
         zip_or_postcode/);
 
     # This be optimized with some of the voodoo that CGI.pm
-    # uses to AUTOLOAD dynamic functions. 
+    # uses to AUTOLOAD dynamic functions.
     for my $func (@closures) {
         # cc_number is defined statically
         unless ($func eq 'cc_number') {
             # Notice we have to escape some characters
-            # in the subroutine, which is really a string here. 
+            # in the subroutine, which is really a string here.
 
             local $SIG{__DIE__} = \&confess;
             my $code = qq!
             sub $func  {
                 return sub {
                     my \$dfv = shift;
-		    use Scalar::Util ();
-        	    die "first arg to $func was not an object. Must be called as a constraint_method."
-		    	unless ( Scalar::Util::blessed(\$dfv) && \$dfv->can('name_this') );
+                    use Scalar::Util ();
+                    die "first arg to $func was not an object. Must be called as a constraint_method."
+                    unless ( Scalar::Util::blessed(\$dfv) && \$dfv->can('name_this') );
 
                     \$dfv->name_this('$func');
                     no strict 'refs';
@@ -114,9 +114,9 @@ BEGIN {
     );
 
     %EXPORT_TAGS = (
-        # regexp common is correctly empty here, because we handle the case on the fly with the import function below. 
+        # regexp common is correctly empty here, because we handle the case on the fly with the import function below.
         regexp_common => [],
-        closures => [ @closures, @FVs ], 
+        closures => [ @closures, @FVs ],
         validators => [qw/
             valid_american_phone
             valid_cc_exp
@@ -146,14 +146,14 @@ BEGIN {
             match_state_or_province
             match_zip
             match_zip_or_postcode
-        /],		
+        /],
     );
 
     sub import {
         # This is Regexp::Common support.
         # Here we are handling cases that look like this:
         #
-        # my_field => FV_foo_bar(-zoo=>'queue'), 
+        # my_field => FV_foo_bar(-zoo=>'queue'),
         if (grep { m/^:regexp_common$/ } @_) {
             require Regexp::Common;
             import  Regexp::Common 'RE_ALL';
@@ -198,17 +198,17 @@ Data::FormValidator::Constraints - Basic sets of constraints on input profile.
 In an Data::FormValidator profile:
 
     constraint_methods => {
-	    email	=> email(),
-	    fax		=> american_phone(),
-	    phone	=> american_phone(),
-	    state	=> state(),
-	},
+        email   => email(),
+        fax     => american_phone(),
+        phone   => american_phone(),
+        state   => state(),
+    },
 
 
 =head1 DESCRIPTION
 
 These are the builtin constraints that can be specified by name in the input
-profiles. 
+profiles.
 
 Be sure to check out the SEE ALSO section for even more pre-packaged
 constraints you can use.
@@ -218,22 +218,22 @@ constraints you can use.
 sub AUTOLOAD {
     my $name = $AUTOLOAD;
 
-	no strict qw/refs/;
+    no strict qw/refs/;
 
-	$name =~ m/^(.*::)(valid_|RE_)(.*)/;
+    $name =~ m/^(.*::)(valid_|RE_)(.*)/;
 
-	my ($pkg,$prefix,$sub) = ($1,$2,$3);
+    my ($pkg,$prefix,$sub) = ($1,$2,$3);
 
-	#warn "hello!  my ($pkg,$prefix,$sub) = ($1,$2,$3);";
+    #warn "hello!  my ($pkg,$prefix,$sub) = ($1,$2,$3);";
 
     # Since all the valid_* routines are essentially identical we're
     # going to generate them dynamically from match_ routines with the same names.
-	if ((defined $prefix) and ($prefix eq 'valid_')) {
-		return defined &{$pkg.'match_' . $sub}(@_);
+    if ((defined $prefix) and ($prefix eq 'valid_')) {
+        return defined &{$pkg.'match_' . $sub}(@_);
     }
 }
 
-=head2 FV_length_between(1,23) 
+=head2 FV_length_between(1,23)
 
 =head2 FV_max_length(23)
 
@@ -252,20 +252,20 @@ sub AUTOLOAD {
 
   }
 
-Specify a length constraint for a field. 
+Specify a length constraint for a field.
 
 These constraints have a different naming convention because they are higher-order
 functions. They take input and return a code reference to a standard constraint
 method. A constraint name of C<length_between>, C<min_length>, or C<max_length> will be set,
-corresponding to the function name you choose. 
+corresponding to the function name you choose.
 
-The checks are all inclusive, so a max length of '100' will allow the length 100. 
+The checks are all inclusive, so a max length of '100' will allow the length 100.
 
 Length is measured in perl characters as opposed to bytes or anything else.
 
 This constraint I<will> untaint your data if you have untainting turned on. However,
 a length check alone may not be enough to insure the safety of the data you are receiving.
-Using additional constraints to check the data is encouraged. 
+Using additional constraints to check the data is encouraged.
 
 =cut
 
@@ -310,11 +310,11 @@ sub FV_min_length {
     }
 }
 
-=head2 FV_eq_with 
+=head2 FV_eq_with
 
   use Data::FormValidator::Constraints qw( FV_eq_with );
 
-  constraint_methods => {  
+  constraint_methods => {
     password  => FV_eq_with('password_confirm'),
   }
 
@@ -344,7 +344,7 @@ sub FV_eq_with {
 =head2 email
 
 Checks if the email LOOKS LIKE an email address. This should be sufficient
-99% of the time. 
+99% of the time.
 
 Look elsewhere if you want something super fancy that matches every possible variation
 that is valid in the RFC, or runs out and checks some MX records.
@@ -359,12 +359,12 @@ sub match_email {
     my $in_email = shift;
 
     require Email::Valid;
-    my $valid_email; 
+    my $valid_email;
 
     # The extra check that the result matches the input prevents
     # an address like this from being considered valid: Joe Smith <joe@smith.com>
     if (    ($valid_email = Email::Valid->address($in_email) )
-        and ($valid_email eq $in_email)) { 
+        and ($valid_email eq $in_email)) {
         return $valid_email;
     }
     else {
@@ -391,17 +391,17 @@ province.
 
 sub match_state_or_province {
     my $match;
-    if ($match = match_state(@_)) { 
-		return $match; 
-	}
+    if ($match = match_state(@_)) {
+        return $match;
+    }
     else {
-		return match_province(@_);
-	}
+        return match_province(@_);
+    }
 }
 
 =head2 state
 
-This one checks if the input is a valid two letter abbreviation of an 
+This one checks if the input is a valid two letter abbreviation of an
 American state.
 
 =cut
@@ -409,7 +409,7 @@ American state.
 sub match_state {
     my $val = shift;
     if ($state =~ /\b($val)\b/i) {
-	return $1;
+    return $1;
     }
     else { return undef; }
 }
@@ -424,7 +424,7 @@ abbreviation.
 sub match_province {
     my $val = shift;
     if ($province =~ /\b($val)\b/i) {
-	return $1;
+    return $1;
     }
     else { return undef; }
 }
@@ -438,12 +438,12 @@ Canadian postal code.
 
 sub match_zip_or_postcode {
     my $match;
-    if ($match = match_zip(@_)) { 
-		return $match; 
-	}
+    if ($match = match_zip(@_)) {
+        return $match;
+    }
     else {
-		return match_postcode(@_)
-	};
+        return match_postcode(@_)
+    };
 }
 =pod
 
@@ -457,7 +457,7 @@ sub match_postcode {
     my $val = shift;
     #$val =~ s/[_\W]+//g;
     if ($val =~ /^([ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy][_\W]*\d[_\W]*[A-Za-z][_\W]*[- ]?[_\W]*\d[_\W]*[A-Za-z][_\W]*\d[_\W]*)$/) {
-	return $1;
+    return $1;
     }
     else { return undef; }
 }
@@ -472,7 +472,7 @@ This input validator checks if the input is a valid american zipcode :
 sub match_zip {
     my $val = shift;
     if ($val =~ /^(\s*\d{5}(?:[-]\d{4})?\s*)$/) {
-	return $1;
+    return $1;
     }
     else { return undef; }
 }
@@ -488,7 +488,7 @@ sub match_phone {
     my $val = shift;
 
     if ($val =~ /^((?:\D*\d\D*){6,})$/) {
-	return $1;
+    return $1;
     }
     else { return undef; }
 }
@@ -504,7 +504,7 @@ sub match_american_phone {
     my $val = shift;
 
     if ($val =~ /^((?:\D*\d\D*){7,})$/) {
-	return $1;
+    return $1;
     }
     else { return undef; }
 }
@@ -528,12 +528,12 @@ CHECK IF THERE IS AN ACCOUNT ASSOCIATED WITH THE NUMBER.
 
 =cut
 
-# This one is taken from the contributed program to 
+# This one is taken from the contributed program to
 # MiniVend by Bruce Albrecht
 
 # XXX raise exception on bad/missing params?
 sub cc_number {
-    my $attrs = shift; 
+    my $attrs = shift;
     return undef unless $attrs && ref($attrs) eq 'HASH'
       && exists $attrs->{fields} && ref($attrs->{fields}) eq 'ARRAY';
 
@@ -544,7 +544,7 @@ sub cc_number {
         my $dfv = shift;
         my $data = $dfv->get_filtered_data;
 
-        return match_cc_number( 
+        return match_cc_number(
             $dfv->get_current_constraint_value,
             $data->{$cc_type_field}
         );
@@ -565,9 +565,9 @@ sub match_cc_number {
 
     return undef if ($card_type =~ /^v/i && substr($the_card, 0, 1) ne "4") ||
       ($card_type =~ /^m/i && substr($the_card, 0, 1) ne "5") ||
-	($card_type =~ /^d/i && substr($the_card, 0, 4) ne "6011") ||
-	  ($card_type =~ /^a/i && substr($the_card, 0, 2) ne "34" &&
-	   substr($the_card, 0, 2) ne "37");
+      ($card_type =~ /^d/i && substr($the_card, 0, 4) ne "6011") ||
+      ($card_type =~ /^a/i && substr($the_card, 0, 2) ne "34" &&
+       substr($the_card, 0, 2) ne "37");
 
     # check for valid number of digits.
     $the_card =~ s/\s//g;    # strip out spaces
@@ -594,11 +594,11 @@ sub match_cc_number {
 
     # return whether checksum matched.
     if ($the_sum == substr($the_card, -1)) {
-	if ($orig_card =~ /^([\d\s]*)$/) { return $1; }
-	else { return undef; }
+    if ($orig_card =~ /^([\d\s]*)$/) { return $1; }
+    else { return undef; }
     }
     else {
-	return undef;
+    return undef;
     }
 }
 
@@ -645,9 +645,9 @@ sub match_cc_type {
 =head2 ip_address
 
 This checks if the input is formatted like a dotted decimal IP address (v4).
-For other kinds of IP address method, See L<Regexp::Common::net> which provides 
+For other kinds of IP address method, See L<Regexp::Common::net> which provides
 several more options. L<REGEXP::COMMON SUPPORT> explains how we easily integrate
-with Regexp::Common. 
+with Regexp::Common.
 
 =cut
 
@@ -656,10 +656,10 @@ with Regexp::Common.
 sub match_ip_address {
    my $val = shift;
    if ($val =~ m/^((\d+)\.(\d+)\.(\d+)\.(\d+))$/) {
-       if 
-	   (($2 >= 0 && $2 <= 255) && ($3 >= 0 && $3 <= 255) && ($4 >= 0 && $4 <= 255) && ($5 >= 0 && $5 <= 255)) {
-	       return $1;
-	   }
+       if
+       (($2 >= 0 && $2 <= 255) && ($3 >= 0 && $3 <= 255) && ($4 >= 0 && $4 <= 255) && ($5 >= 0 && $5 <= 255)) {
+           return $1;
+       }
        else { return undef; }
    }
    else { return undef; }
@@ -679,16 +679,16 @@ This works whether you want to untaint the data or not. For example:
  use Data::FormValidator::Constraints qw(:regexp_common);
 
  constraint_methods => {
-	my_ip_address => FV_net_IPv4(),
+    my_ip_address => FV_net_IPv4(),
 
-	# An example with parameters
-	other_ip      => FV_net_IPv4(-sep=>' '),
+    # An example with parameters
+    other_ip      => FV_net_IPv4(-sep=>' '),
  }
 
-Notice that the routines are named with the prefix "FV_" instead of "RE_" now. 
+Notice that the routines are named with the prefix "FV_" instead of "RE_" now.
 This is simply a visual cue that these are slightly modified versions. We've made
-a wrapper for each Regexp::Common routine so that it can be used as a named constraint 
-like this. 
+a wrapper for each Regexp::Common routine so that it can be used as a named constraint
+like this.
 
 Be sure to check out the L<Regexp::Common> syntax for how its syntax works. It
 will make more sense to add future regular expressions to Regexp::Common rather
@@ -699,7 +699,7 @@ than to Data::FormValidator.
 You may also call these functions directly through the procedural interface by
 either importing them directly or importing the whole I<:validators> group.
 This is useful if you want to use the built-in validators out of the usual
-profile specification interface. 
+profile specification interface.
 
 
 For example, if you want to access the I<email> validator
@@ -714,7 +714,7 @@ directly, you could either do:
     }
 
 Notice that when you call validators directly, you'll need to prefix the
-validator name with "valid_" 
+validator name with "valid_"
 
 Each validator also has a version that returns the untainted value if
 the validation succeeded. You may call these functions directly
@@ -730,7 +730,7 @@ value with the I<email> validator directly you may:
     }
 
 Notice that when you call validators directly and want them to return an
-untainted value, you'll need to prefix the validator name with "match_" 
+untainted value, you'll need to prefix the validator name with "match_"
 
 =pod
 
@@ -743,57 +743,57 @@ This is the current recommended way to write constraints. See also L<Old School 
 The most flexible way to create constraints to use closures-- a normal seeming
 outer subroutine which returns a customized DFV method subroutine as a result.
 It's easy to do. These "constraint methods" can be named whatever you like, and
-imported normally into the name space where the profile is located. 
+imported normally into the name space where the profile is located.
 
-Let's look at an example. 
+Let's look at an example.
 
-  # Near your profile	
+  # Near your profile
   # Of course, you don't have to export/import if your constraints are in the same
-  # package as the profile.  
+  # package as the profile.
   use My::Constraints 'coolness';
 
   # In your profile
   constraint_methods => {
-    email 			 => email(),
-	prospective_date => coolness( 40, 60,
-		{fields => [qw/personality smarts good_looks/]}
-	),
+    email            => email(),
+    prospective_date => coolness( 40, 60,
+        {fields => [qw/personality smarts good_looks/]}
+    ),
   }
 
-Let's look at how this complex C<coolness> constraint method works. The 
+Let's look at how this complex C<coolness> constraint method works. The
 interface asks for users to define minimum and maximum coolness values, as
-well as declaring three data field names that we should peek into to look 
-their values. 
+well as declaring three data field names that we should peek into to look
+their values.
 
 Here's what the code might look like:
 
   sub coolness {
- 	my ($min_cool,$max_cool, $attrs) = @_; 
-	my ($personality,$smarts,$looks) = @{ $attrs->{fields} } if $attrs->{fields};
-	return sub {
-		my $dfv = shift;
+    my ($min_cool,$max_cool, $attrs) = @_;
+    my ($personality,$smarts,$looks) = @{ $attrs->{fields} } if $attrs->{fields};
+    return sub {
+        my $dfv = shift;
 
-		# Name it to refer to in the 'msgs' system.
-		$dfv->name_this('coolness');
+        # Name it to refer to in the 'msgs' system.
+        $dfv->name_this('coolness');
 
         # value of 'prospective_date' parameter
-		my $val = $dfv->get_current_constraint_value();
+        my $val = $dfv->get_current_constraint_value();
 
-		# get other data to refer to
-	    my $data = $dfv->get_filtered_data;
+        # get other data to refer to
+        my $data = $dfv->get_filtered_data;
 
-	    my $has_all_three = ($data->{$personality} && $data->{$smarts} && $data->{$looks});
-		return ( ($val >= $min_cool) && ($val <= $max_cool) && $has_all_three );
-	}
+        my $has_all_three = ($data->{$personality} && $data->{$smarts} && $data->{$looks});
+        return ( ($val >= $min_cool) && ($val <= $max_cool) && $has_all_three );
+    }
   }
 
 =head2 Old School Constraints
 
 Here is documentation on how old school constraints are created. These are
-supported, but the the new school style documented above is recommended. 
+supported, but the the new school style documented above is recommended.
 
-See also the C<validator_packages> option in the input profile, for loading 
-sets of old school constraints from other packages. 
+See also the C<validator_packages> option in the input profile, for loading
+sets of old school constraints from other packages.
 
 Old school constraint routines are named two ways. Some are named with the
 prefix C<match_> while others start with C<valid_>. The difference is that the
@@ -804,17 +804,17 @@ validation succeeds and false otherwise.
 It is preferable to write C<match_> routines that untaint data for the extra
 security benefits. Plus, Data::FormValidator will AUTOLOAD a C<valid_> version
 if anyone tries to use it, so you only need to write one routine to cover both
-cases. 
+cases.
 
 Usually constraint routines only need one input, the value being specified.
-However, sometimes more than one value is needed. 
+However, sometimes more than one value is needed.
 
 B<Example>:
 
-		image_field  => {  
-			constraint_method  => 'max_image_dimensions',
-			params => [\100,\200],
-		},
+        image_field  => {
+            constraint_method  => 'max_image_dimensions',
+            params => [\100,\200],
+        },
 
 Using that syntax, the first parameter that will be passed to the routine is
 the Data::FormValidator object. The remaining parameters will come from the
@@ -835,8 +835,8 @@ available to you to use inside of your routine.
 
 =head3 get_input_data()
 
-Returns the raw input data. This may be a CGI object if that's what 
-was used in the constraint routine. 
+Returns the raw input data. This may be a CGI object if that's what
+was used in the constraint routine.
 
 B<Examples:>
 
@@ -851,8 +851,8 @@ B<Examples:>
  my $data = $self->get_filtered_data;
 
 Returns the valid filtered data as a hashref, regardless of whether
-it started out as a CGI.pm compatible object. Multiple values are 
-expressed as array references. 
+it started out as a CGI.pm compatible object. Multiple values are
+expressed as array references.
 
 =head3 get_current_constraint_field()
 
@@ -896,7 +896,7 @@ regular expressions.
 
 If you have written a constraint which untaints, use this method to return the
 untainted result. It will prepare the right result whether the user has requested
-untainting or not. 
+untainting or not.
 
 =head3 name_this()
 
@@ -907,13 +907,13 @@ Sets the name of the current constraint being applied.
 B<Example>:
 
  sub my_constraint {
-	my @outer_params = @_;
-	return sub {
-		my $dfv = shift;
-		$dfv->set_current_constraint_name('my_constraint');
-		my @params = @outer_params;
-		# do something constraining here...
-	}
+    my @outer_params = @_;
+    return sub {
+        my $dfv = shift;
+        $dfv->set_current_constraint_name('my_constraint');
+        my @params = @outer_params;
+        # do something constraining here...
+    }
  }
 
 By returning a closure which uses this method,  you can build an advanced named
@@ -930,26 +930,26 @@ of that method.
 =head1  BACKWARDS COMPATIBILITY
 
 Prior to Data::FormValidator 4.00, constraints were specified a bit differently.
-This older style is still supported. 
+This older style is still supported.
 
 It was not necessary to explicitly load some constraints into your name space,
 and the names were given as strings, like this:
 
     constraints  => {
-	    email	      => 'email',
-	    fax		      => 'american_phone',
-	    phone	      => 'american_phone',
-	    state	      => 'state',
-		my_ip_address => 'RE_net_IPv4',
-		other_ip => {
-			constraint => 'RE_net_IPv4',
-			params => [ \'-sep'=> \' ' ],
-		},
-		my_cc_no      => {
-			constraint => 'cc_number',
-			params => [qw/cc_no cc_type/],
-		}
-	},
+        email         => 'email',
+        fax           => 'american_phone',
+        phone         => 'american_phone',
+        state         => 'state',
+        my_ip_address => 'RE_net_IPv4',
+        other_ip => {
+            constraint => 'RE_net_IPv4',
+            params => [ \'-sep'=> \' ' ],
+        },
+        my_cc_no      => {
+            constraint => 'cc_number',
+            params => [qw/cc_no cc_type/],
+        }
+    },
 
 
 =head1 SEE ALSO
@@ -960,14 +960,14 @@ and the names were given as strings, like this:
 
 =item L<Data::FormValidator::Constraints::Upload> - validate the bytes, format and dimensions of file uploads
 
-=item L<Data::FormValidator::Constraints::DateTime> - A newer DateTime constraint module. May save you a step of transforming the date into a more useful format after it's validated. 
+=item L<Data::FormValidator::Constraints::DateTime> - A newer DateTime constraint module. May save you a step of transforming the date into a more useful format after it's validated.
 
 =item L<Data::FormValidator::Constraints::Dates> - the original DFV date constraint module. Try the newer one first!
 
 =item L<Data::FormValidator::Constraints::Japanese> - Japan-specific constraints
 
 =item L<Data::FormValidator::Constraints::MethodsFactory> - a useful collection of tools generate more complex constraints. Recommended!
-    
+
 
 =back
 
@@ -994,9 +994,9 @@ Bruce Albrecht to the MiniVend program.
 
 =head1 AUTHORS
 
-    Francis J. Lacoste 
-    Michael J. Heins 
-    Bruce Albrecht  
+    Francis J. Lacoste
+    Michael J. Heins
+    Bruce Albrecht
     Mark Stosberg
 
 =head1 COPYRIGHT
@@ -1004,9 +1004,9 @@ Bruce Albrecht to the MiniVend program.
 Copyright (c) 1999 iNsu Innovations Inc.
 All rights reserved.
 
-Parts Copyright 1996-1999 by Michael J. Heins 
-Parts Copyright 1996-1999 by Bruce Albrecht  
-Parts Copyright 2005	  by Mark Stosberg
+Parts Copyright 1996-1999 by Michael J. Heins
+Parts Copyright 1996-1999 by Bruce Albrecht
+Parts Copyright 2005-2009 by Mark Stosberg
 
 This program is free software; you can redistribute it and/or modify
 it under the terms as perl itself.

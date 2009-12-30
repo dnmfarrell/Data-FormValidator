@@ -23,22 +23,22 @@ Data::FormValidator::ConstraintsFactory - Module to create constraints for HTML:
 
 =head1 DESCRIPTION
 
-This module contains functions to help generate complex constraints. 
+This module contains functions to help generate complex constraints.
 
 If you are writing new code, take a look at L<Data::FormValidator::Constraints::MethodsFactory>
-instead. It's a modern alternative to what's here, offering improved names and syntax. 
+instead. It's a modern alternative to what's here, offering improved names and syntax.
 
 =head1 SYNOPSIS
 
     use Data::FormValidator::ConstraintsFactory qw( :set :bool );
 
     constraints => {
-	param1 => make_or_constraint( 
-		    make_num_set_constraint( -1, ( 1 .. 10 ) ),
-		    make_set_constraint( 1, ( 20 .. 30 ) ),
-		  ),
-	province => make_word_set_constraint( 1, "AB QC ON TN NU" ),
-	bid	 => make_range_constraint( 1, 1, 10 ),
+    param1 => make_or_constraint(
+            make_num_set_constraint( -1, ( 1 .. 10 ) ),
+            make_set_constraint( 1, ( 20 .. 30 ) ),
+          ),
+    province => make_word_set_constraint( 1, "AB QC ON TN NU" ),
+    bid  => make_range_constraint( 1, 1, 10 ),
     }
 
 =cut
@@ -48,22 +48,22 @@ use vars qw( $VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS );
 BEGIN {
     require Exporter;
 
-    $VERSION = 1.7; 
+    $VERSION = 1.7;
 
     @ISA = qw( Exporter );
 
     @EXPORT = ();
     @EXPORT_OK = (qw/make_length_constraint/);
 
-    %EXPORT_TAGS = 
+    %EXPORT_TAGS =
       (
        bool => [ qw( make_not_constraint make_or_constraint
-		     make_and_constraint ) ],
+             make_and_constraint ) ],
        set  => [ qw( make_set_constraint make_num_set_constraint
-		     make_word_set_constraint make_cmp_set_constraint ) ],
+             make_word_set_constraint make_cmp_set_constraint ) ],
        num  => [ qw( make_clamp_constraint make_lt_constraint
-		     make_le_constraint make_gt_constraint
-		     make_ge_constraint ) ],
+             make_le_constraint make_gt_constraint
+             make_ge_constraint ) ],
       );
 
     Exporter::export_ok_tags( 'bool' );
@@ -102,12 +102,12 @@ sub make_or_constraint {
     my @c = @_;
     # Closure
     return sub {
-	my $res;
-	for my $c ( @c ) {
-	    $res = $c->( @_ );
-	    return $res if $res;
-	}
-	return $res;
+    my $res;
+    for my $c ( @c ) {
+        $res = $c->( @_ );
+        return $res if $res;
+    }
+    return $res;
     };
 }
 
@@ -124,14 +124,14 @@ sub make_and_constraint {
 
     # Closure
     return sub {
-	my $res;
-	for my $c ( @c ) {
-	    $res = $c->( @_ );
-	    return $res if ! $res;
+    my $res;
+    for my $c ( @c ) {
+        $res = $c->( @_ );
+        return $res if ! $res;
 
-	    $res ||= $res;
-	}
-	return $res;
+        $res ||= $res;
+    }
+    return $res;
     };
 }
 
@@ -156,11 +156,11 @@ sub make_set_constraint {
 
     # Closure
     return sub {
-	my $v = $_[0];
-	for my $t ( @values ) {
-	    return $res if $t eq $v;
-	}
-	return ! $res;
+    my $v = $_[0];
+    for my $t ( @values ) {
+        return $res if $t eq $v;
+    }
+    return ! $res;
     }
 }
 
@@ -179,11 +179,11 @@ sub make_num_set_constraint {
 
     # Closure
     return sub {
-	my $v = $_[0];
-	for my $t ( @values ) {
-	    return $res if $t == $v;
-	}
-	return ! $res;
+    my $v = $_[0];
+    for my $t ( @values ) {
+        return $res if $t == $v;
+    }
+    return ! $res;
     }
 }
 
@@ -199,12 +199,12 @@ sub make_word_set_constraint {
 
     # Closure
     return sub {
-	my $v = $_[0];
-	if ( $set =~ /\b$v\b/i ) {
-	    return $res;
-	} else {
-	    return ! $res;
-	}
+    my $v = $_[0];
+    if ( $set =~ /\b$v\b/i ) {
+        return $res;
+    } else {
+        return ! $res;
+    }
     }
 }
 
@@ -224,11 +224,11 @@ sub make_match_set_constraint {
 
     # Closure
     return sub {
-	my $v = $_[0];
-	for my $t ( @values ) {
-	    return $res if $cmp->($v, $t );
-	}
-	return ! $res;
+    my $v = $_[0];
+    for my $t ( @values ) {
+        return $res if $cmp->($v, $t );
+    }
+    return ! $res;
     }
 }
 
@@ -249,8 +249,8 @@ sub make_clamp_constraint {
     my ( $res, $low, $high ) = @_;
 
     return sub {
-	my $v = $_[0];
-	$v < $low || $v > $high ? ! $res : $res;
+    my $v = $_[0];
+    $v < $low || $v > $high ? ! $res : $res;
     }
 }
 
@@ -265,7 +265,7 @@ sub make_lt_constraint {
     my ( $res, $bound ) = @_;
 
     return sub {
-	$_[0] < $bound ? $res : ! $res;
+    $_[0] < $bound ? $res : ! $res;
     }
 }
 
@@ -280,7 +280,7 @@ sub make_le_constraint {
     my ( $res, $bound ) = @_;
 
     return sub {
-	$_[0] <= $bound ? $res : ! $res;
+    $_[0] <= $bound ? $res : ! $res;
     }
 }
 
@@ -295,7 +295,7 @@ sub make_gt_constraint {
     my ( $res, $bound ) = @_;
 
     return sub {
-	$_[0] >= $bound ? $res : ! $res;
+    $_[0] >= $bound ? $res : ! $res;
     }
 }
 
@@ -310,7 +310,7 @@ sub make_ge_constraint {
     my ( $res, $bound ) = @_;
 
     return sub {
-	$_[0] >= $bound ? $res : ! $res;
+    $_[0] >= $bound ? $res : ! $res;
     }
 }
 
@@ -337,7 +337,7 @@ __END__
 
 =head1 SEE ALSO
 
-Data::FormValidator(3) 
+Data::FormValidator(3)
 
 =head1 AUTHOR
 
