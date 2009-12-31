@@ -5,7 +5,7 @@
         },
 
     [BUG FIXES]
-    - Untainted multiline fields are no longer truncated after the first newline. 
+    - Untainted multi-line fields are no longer truncated after the first newline.
       (RT#44004, Thanks to Matthew Lawrence)
     - Fix bug when the constraint_method contains a capturing parens and 0 is a valid value.
       (RT#45177, Thanks to Junior Medina and Mark Stosberg)
@@ -15,7 +15,7 @@
 
     [INTERNALS]
     - Best Practice: Redundant <span> tag was removed from default error message formatting 
-      (RT#42926 , Thanks to girlwithglasses)
+      (RT#42926), Thanks to girlwithglasses)
     - Best Practice: eliminated some indirect object notation in the tests (Mark Stosberg)
     - Now require a new CGI.pm for the build stage (RT#49912, thanks to dsteinbrunner)
     - White space improvements (RT#30205, Thanks to Peter Liscovius)
