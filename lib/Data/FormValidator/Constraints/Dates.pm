@@ -28,7 +28,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
     match_date_and_time
 );
 
-$VERSION = '4.62';
+$VERSION = '4.65';
 
 sub date_and_time {
     my $fmt = shift;
