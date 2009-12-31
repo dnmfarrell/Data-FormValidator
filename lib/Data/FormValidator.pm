@@ -738,7 +738,7 @@ will be used.
 The default formatting applied is designed for display in an XHTML web page.
 That formatting is as followings:
 
-    <span style="color:red;font-weight:bold"><span class="dfv_errors">* %s</span></span>
+    <span style="color:red;font-weight:bold" class="dfv_errors">* %s</span>
 
 The C<%s> will be replaced with the message. The effect is that the message
 will appear in bold red with an asterisk before it. This style can be overridden by simply

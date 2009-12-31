@@ -12,6 +12,8 @@
     - Typo fixes (Lyle)
 
     [INTERNALS]
+    - Best Practice: Redundant <span> tag was removed from default error message formatting 
+      (RT#42926 , Thanks to girlwithglasses)
     - Best Practice: eliminated some indirect object notation in the tests (Mark Stosberg)
     - Now require a new CGI.pm for the build stage (RT#49912, thanks to dsteinbrunner)
     - White space improvements (RT#30205, Thanks to Peter Liscovius)

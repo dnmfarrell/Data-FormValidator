@@ -626,7 +626,7 @@ sub _generate_msgs {
         invalid => 'Invalid',
         invalid_separator => ' ',
 
-        format  => '<span style="color:red;font-weight:bold"><span class="dfv_errors">* %s</span></span>',
+        format  => '<span style="color:red;font-weight:bold" class="dfv_errors">* %s</span>',
         %{ $self->{msgs} },
         %{ $self->{profile}{msgs} },
     );
@@ -837,7 +837,7 @@ sub _create_sub_from_RE {
 sub _error_msg_fmt  {
     my ($fmt,$msg) = @_;
     $fmt ||=
-            '<span style="color:red;font-weight:bold"><span class="dfv_errors">* %s</span></span>';
+            '<span style="color:red;font-weight:bold" class="dfv_errors">* %s</span>';
     ($fmt =~ m/%s/) || die 'format must contain %s';
     return sprintf $fmt, $msg;
 }
