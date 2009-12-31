@@ -363,7 +363,7 @@ Data::FormValidator::Constraints::Upload - Validate File Uploads
 
     # Be sure to use a CGI.pm or CGI::Simple object as the form
     # input when using this constraint
-    my $q = new CGI;
+    my $q = CGI->new;
 
     use Data::FormValidator::Constraints::Upload qw(
             file_format
