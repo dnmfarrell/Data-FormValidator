@@ -7,6 +7,8 @@
     [BUG FIXES]
     - Untainted multiline fields are no longer truncated after the first newline. 
       (RT#44004, Thanks to Matthew Lawrence)
+    - Fix bug when the constraint_method contains a capturing parens and 0 is a valid value.
+      (RT#45177, Thanks to Junior Medina and Mark Stosberg)
 
     [DOCUMENTATION]
     - Typo fixes (Lyle)

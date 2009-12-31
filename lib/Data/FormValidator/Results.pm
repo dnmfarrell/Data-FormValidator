@@ -806,7 +806,7 @@ sub _create_sub_from_RE {
         $sub = sub {
             # With methods, the value is the second argument
             my $val = $force_method_p ? $_[1] : $_[0];
-            my ($match) = ($val =~ $re);
+            my ($match) = scalar ($val =~ $re);
             if ($untaint_this && defined $match) {
                 # pass the value through a RE that matches anything to untaint it.
                 my ($untainted) = ($&  =~ m/(.*)/s);
