@@ -1,9 +1,7 @@
-use Test::More tests => 4;
+use Test::More 'no_plan';
 
-BEGIN: {
-    use_ok('Data::FormValidator');
-    use_ok('Data::FormValidator::ConstraintsFactory',qw(&make_length_constraint));
-}
+use Data::FormValidator;
+use Data::FormValidator::ConstraintsFactory 'make_length_constraint';
 
 {
     my $results = Data::FormValidator->check(
