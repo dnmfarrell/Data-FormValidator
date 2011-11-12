@@ -19,12 +19,11 @@ use Carp;
 use Symbol;
 use Data::FormValidator::Filters ':filters';
 use Data::FormValidator::Constraints qw(:validators :matchers);
-use vars qw/$AUTOLOAD $VERSION/;
 use overload
   'bool' => \&_bool_overload_based_on_success,
   fallback => 1;
 
-$VERSION = 4.65;
+our $VERSION = 4.65;
 
 =pod
 
