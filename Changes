@@ -1,4 +1,23 @@
-4.77 11/11/11
+
+4.70 11/11/11
+
+    [NEW FEATURES]
+    - Built-in constraints in Constraints.pm can now be renamed:  
+
+        constraint_methods => {
+            first_names =>  {
+                constraint_method => FV_max_length(3),
+                name => 'custom_length',
+            }
+        },
+
+     (Thanks to heinst@arqs.com.br for the suggestion, RT#49477)
+
+    [INTERNALS]
+    - modernize Constraints.pm and Results.pm a bit.
+    - Module::Build added to configure_requires in Build.PL
+
+4.67 11/11/11
 
     [INTERNALS]
     - modernize FormValidator.pm internals a bit

@@ -20,13 +20,11 @@
 #    it under the terms same terms as perl itself.
 #
 package Data::FormValidator::Constraints;
+use base 'Exporter';
 use strict;
-use vars qw/$AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS $VERSION/;
+our $AUTOLOAD;
 
-$VERSION = 4.65;
-
-require Exporter;
-@ISA = qw(Exporter);
+our $VERSION = 4.70;
 
 BEGIN {
     use Carp;
@@ -62,7 +60,7 @@ BEGIN {
                     die "first arg to $func was not an object. Must be called as a constraint_method."
                     unless ( Scalar::Util::blessed(\$dfv) && \$dfv->can('name_this') );
 
-                    \$dfv->name_this('$func');
+                    \$dfv->name_this('$func') unless \$dfv->get_current_constraint_name();
                     no strict 'refs';
                     return &{"match_$func"}(\@_);
                 }
@@ -81,7 +79,7 @@ BEGIN {
         FV_eq_with
     /);
 
-    @EXPORT_OK = (
+    our @EXPORT_OK = (
         @closures,
         @FVs,
         qw(
@@ -113,7 +111,7 @@ BEGIN {
         match_zip_or_postcode)
     );
 
-    %EXPORT_TAGS = (
+    our %EXPORT_TAGS = (
         # regexp common is correctly empty here, because we handle the case on the fly with the import function below.
         regexp_common => [],
         closures => [ @closures, @FVs ],
@@ -166,7 +164,7 @@ BEGIN {
                     my @params =  @_;
                     return sub {
                         my $dfv = shift;
-                        $dfv->name_this($new_name);
+                        $dfv->name_this($new_name) unless $dfv->get_current_constraint_name();
 
                         no strict "refs";
                         my $re = &$sub(-keep=>1,@params);
@@ -199,10 +197,18 @@ In an Data::FormValidator profile:
 
     constraint_methods => {
         email   => email(),
-        fax     => american_phone(),
         phone   => american_phone(),
-        state   => state(),
+        first_names =>  {
+           constraint_method => FV_max_length(3),
+           name => 'my_custom_name',
+       },
     },
+    msgs => {
+       constraints => {
+            my_custom_name => 'My message',
+       },
+    },
+
 
 
 =head1 DESCRIPTION
@@ -276,7 +282,7 @@ sub FV_length_between {
     }
     return sub {
         my ($dfv,$value) = @_;
-        $dfv->name_this('length_between');
+        $dfv->name_this('length_between') unless $dfv->get_current_constraint_name();
         return undef if ( ( length($value) > $max ) || ( length($value) < $min) );
         # Use a regexp to untaint
         $value=~/(.*)/s;
@@ -289,7 +295,7 @@ sub FV_max_length {
     croak "max is required" unless defined $max;
     return sub {
         my ($dfv,$value) = @_;
-        $dfv->name_this('max_length');
+        $dfv->name_this('max_length') unless $dfv->get_current_constraint_name();
         return undef if ( length($value) > $max );
         # Use a regexp to untaint
         $value=~/(.*)/s;
@@ -302,7 +308,7 @@ sub FV_min_length {
     croak "min is required" unless defined $min;
     return sub {
         my ($dfv,$value) = @_;
-        $dfv->name_this('min_length');
+        $dfv->name_this('min_length') unless $dfv->get_current_constraint_name();
         return undef if ( length($value) < $min );
         # Use a regexp to untaint
         $value=~/(.*)/s;
@@ -325,9 +331,9 @@ A constraint name of C<eq_with> will be set.
 
 sub FV_eq_with {
     my ($other_field) = @_;
-    return sub {
-        my $dfv = shift;
-        $dfv->name_this('eq_with');
+        return sub {
+            my $dfv = shift;
+        $dfv->name_this('eq_with') unless $dfv->get_current_constraint_name();
 
         my $curr_val  = $dfv->get_current_constraint_value;
 
@@ -669,6 +675,19 @@ sub match_ip_address {
 1;
 
 __END__
+
+=head1 RENAMING BUILT-IN CONSTAINTS
+
+If you'd like, you can rename any of the built-in constraints. Just define the constraint_method and name
+in a hashref, like this:
+
+        constraint_methods => {
+            first_names =>  {
+                constraint_method => FV_max_length(3),
+                name => 'custom_length',
+            }
+        },
+
 
 =head1 REGEXP::COMMON SUPPORT
 

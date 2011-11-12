@@ -35,6 +35,7 @@ $class->new(
     dist_author         => 'Mark Stosberg <mark@summersault.com>',
 	module_name => 'Data::FormValidator',
 	license => 'perl',
+    configure_requires => { 'Module::Build' => 0.38 },
 	requires => {
          # In 5.6, t/upload* was failing.
          # rjbs says "It relies on CGI relying on 5.008 glob stringification behavior"
