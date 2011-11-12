@@ -22,8 +22,9 @@
 
 
 package Data::FormValidator;
+use base 'Exporter';
 
-use 5.005; # for "qr" support, which isn't strictly required.
+use 5.008;
 
 use Perl6::Junction qw(any none);
 use Data::FormValidator::Results;
@@ -31,14 +32,9 @@ use Data::FormValidator::Results;
 use Data::FormValidator::Filters ':filters';
 use Data::FormValidator::Constraints qw(:validators :matchers);
 
-use vars qw( $VERSION $AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS );
+our $VERSION = '4.67';
 
-$VERSION = '4.66';
-
-require Exporter;
-@ISA = qw(Exporter);
-
-%EXPORT_TAGS = (
+our %EXPORT_TAGS = (
     filters => [qw/
         filter_alphanum
         filter_decimal
@@ -89,7 +85,7 @@ require Exporter;
         match_zip_or_postcode
     /],
 );
-@EXPORT_OK = (@{ $EXPORT_TAGS{filters} }, @{ $EXPORT_TAGS{validators} }, @{ $EXPORT_TAGS{matchers} });
+our @EXPORT_OK = (@{ $EXPORT_TAGS{filters} }, @{ $EXPORT_TAGS{validators} }, @{ $EXPORT_TAGS{matchers} });
 
 
 use strict;

@@ -1,3 +1,8 @@
+4.77 11/11/11
+
+    [INTERNALS]
+    - modernize FormValidator.pm internals a bit
+    - Update META.yml to exclude an internal package from getting indexed.
 
 4.66 Wed Feb 24 09:30:17 EST 2010
 
