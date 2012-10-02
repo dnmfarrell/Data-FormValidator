@@ -899,9 +899,10 @@ sub _constraint_hash_build {
     die "_constraint_hash_build received wrong number of arguments" unless (scalar @_ == 4);
 
     my  $c = {
-            name        => $constraint_spec,
-            constraint  => $constraint_spec,
-        };
+        name        => undef,
+        constraint  => $constraint_spec,
+    };
+    $c->{name} = $constraint_spec if not ref $constraint_spec;
 
    # constraints can be passed in directly via hash
     if (ref $c->{constraint} eq 'HASH') {
@@ -922,7 +923,9 @@ sub _constraint_hash_build {
     }
     else {
         # provide a default name for the constraint if we don't have one already
-        $c->{name} ||= $c->{constraint};
+        if (not $c->{name} and not ref $c->{constraint}) {
+            $c->{name} ||= $c->{constraint};
+        }
 
         #If untaint is turned on call match_* sub directly.
         if ($untaint_this) {
