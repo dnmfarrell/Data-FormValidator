@@ -31,3 +31,4 @@ rejects
 
 
 ^MYMETA.yml$
+^MYMETA\.json$
