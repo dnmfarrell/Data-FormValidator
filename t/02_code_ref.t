@@ -40,14 +40,12 @@ my $input_hashref = {email => 'invalidemail',
 
 my ($valids, $missings, $invalids, $unknowns);
 
-eval{
-  ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default');
-};
-ok(not $@);
+eval{ ($valids, $missings, $invalids, $unknowns) = $validator->validate($input_hashref, 'default') };
+is $@, '', 'survives';
 
-ok(exists $valids->{'phone'});
+ok(exists $valids->{'phone'}, "phone is valid");
 
-is($invalids->[0], 'email');
+is($invalids->[0], 'email', 'email is invalid');
 
 my %missings;
 @missings{@$missings} = ();
