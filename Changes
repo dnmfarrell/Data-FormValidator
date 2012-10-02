@@ -1,4 +1,12 @@
 
+4.71 Oct 2nd, 2012
+
+    [BUG FIXES]
+    - Custom messages for built-in constraints work again. It appears that this
+      was broken in 4.70, which triggered a sleeper bug.
+
+      (Thanks to Lee Carmichael, Mark Stosberg, RT##73235)
+
 4.70 11/11/11
 
     [NEW FEATURES]

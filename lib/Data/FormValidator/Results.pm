@@ -23,7 +23,7 @@ use overload
   'bool' => \&_bool_overload_based_on_success,
   fallback => 1;
 
-our $VERSION = 4.70;
+our $VERSION = 4.71;
 
 =pod
 
