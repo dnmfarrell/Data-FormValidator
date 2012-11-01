@@ -1,4 +1,27 @@
 
+4.80 Nov 1st, 2012
+
+    [NEW FEATURES]
+    - New built-in constraint_methods to test the number of values submitted for a
+      particular field:
+
+        FV_num_values(1),
+        FV_num_values_between(1,2),  # inclusive
+
+      One way that garbage can get through a Data::FormValidator profile is
+      when two values are submitted when only one is intended. In this
+      case, this application could end up with a values like this:
+
+          ARRAY(0x841214c)
+
+     Using these new constraints, you can precisely control how many values
+     are allowed for each field.
+
+    [INTERNAL]
+    - Source control hosting has been moved to http://hub.darcs.net
+      You can now browse, pull and fork the darcs repo through this website.
+
+
 4.71 Oct 2nd, 2012
 
     [BUG FIXES]

@@ -32,7 +32,7 @@ use Data::FormValidator::Results;
 use Data::FormValidator::Filters ':filters';
 use Data::FormValidator::Constraints qw(:validators :matchers);
 
-our $VERSION = '4.71';
+our $VERSION = '4.80';
 
 our %EXPORT_TAGS = (
     filters => [qw/
@@ -1253,8 +1253,9 @@ L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-FormValidator>
 =head1 CONTRIBUTING
 
 This project is managed using the darcs source control system (
-http://www.darcs.net/ ). My darcs archive is here:
-http://mark.stosberg.com/darcs_hive/dfv/
+http://www.darcs.net/ ). You can browse, pull and fork the repo here:
+
+http://hub.darcs.net/markstos/Data--FormValidator
 
 B<Support Mailing List>
 
