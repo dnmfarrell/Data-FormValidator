@@ -77,6 +77,8 @@ BEGIN {
         FV_min_length
         FV_max_length
         FV_eq_with
+        FV_num_values
+        FV_num_values_between
     /);
 
     our @EXPORT_OK = (
@@ -346,6 +348,77 @@ sub FV_eq_with {
 
 }
 
+=head2 FV_num_values
+
+    use Data::FormValidator::Constraints qw ( FV_num_values );
+
+    constraint_methods => {
+        attachments => FV_num_values(4),
+    }
+
+Checks the number of values in the array named by this param.
+Note that this is useful for making sure that only one value was passed for a
+given param (by supplying a size argument of 1).
+A constraint name of C<num_values> will be set.
+
+=cut
+
+sub FV_num_values {
+    my $size = shift || croak 'size argument is required';
+    return sub {
+        my $dfv = shift;
+        $dfv->name_this('num_values');
+        my $param = $dfv->get_current_constraint_field();
+        my $value = $dfv->get_filtered_data()->{$param};
+
+        # If there's an arrayref of values provided, test the number of them found
+        # against the number of them of required
+        if (defined $value and ref $value eq 'ARRAY') {
+            my $num_values_found = scalar @$value;
+            return ($num_values_found == $size);
+        }
+        # If a size of 1 was requested, there was not an arrayref of values,
+        # there must be exactly one value.
+        elsif ($size == 1) {
+            return 1;
+        }
+        # Any other case is failure.
+        else {
+            return 0;
+        }
+    }
+}
+
+=head2 FV_num_values_between
+
+    use Data::FormValidator::Constraints qw ( FV_num_values_between );
+
+    constraint_methods => {
+        attachments => FV_num_values_between(1,4),
+    }
+
+Checks that the number of values in the array named by this param is between
+the supplied bounds (inclusively).
+A constraint name of C<num_values_between> will be set.
+
+=cut
+
+sub FV_num_values_between {
+    my ($min, $max) = @_;
+    croak 'min and max arguments are required' unless $min && $max;
+    return sub {
+        my $dfv = shift;
+        $dfv->name_this('num_values_between');
+        my $param = $dfv->get_current_constraint_field();
+        my $value = $dfv->get_filtered_data()->{$param};
+
+        my $num_values = scalar @$value;
+
+        return ($num_values >= $min) && ($num_values <= $max) if ref $value eq 'ARRAY';
+        return 1 if $min == 0 && $max >= 2; # scalar, size could be 1
+        return 0;                           # scalar, size can't be 1
+    }
+}
 
 =head2 email
 
