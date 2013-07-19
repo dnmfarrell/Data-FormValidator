@@ -1,34 +1,20 @@
 package Data::FormValidator::Constraints::Dates;
-
+use Exporter 'import';
 use 5.005;
 use strict;
 
-require Exporter;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-@ISA = qw(Exporter);
+our %EXPORT_TAGS = ( 'all' => [ qw() ] );
 
-
-# Items to export into callers namespace by default. Note: do not export
-# names by default without a very good reason. Use EXPORT_OK instead.
-# Do not simply export all your public functions/methods/constants.
-
-# This allows declaration   use Foo ':all';
-# If you do not need this, moving things directly into @EXPORT or @EXPORT_OK
-# will save memory.
-%EXPORT_TAGS = ( 'all' => [ qw(
-
-) ] );
-
-@EXPORT_OK = (
+our @EXPORT_OK = (
     'date_and_time',
     @{ $EXPORT_TAGS{'all'} }
 );
 
-@EXPORT = qw(
+our @EXPORT = qw(
     match_date_and_time
 );
 
-$VERSION = '4.65';
+our $VERSION = '4.81';
 
 sub date_and_time {
     my $fmt = shift;

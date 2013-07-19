@@ -22,8 +22,7 @@
 
 
 package Data::FormValidator;
-use base 'Exporter';
-
+use Exporter 'import';
 use 5.008;
 
 use Perl6::Junction qw(any none);

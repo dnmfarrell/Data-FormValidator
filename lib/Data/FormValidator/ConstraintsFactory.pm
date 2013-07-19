@@ -14,6 +14,7 @@
 use strict;
 
 package Data::FormValidator::ConstraintsFactory;
+use Exporter 'import';
 
 =pod
 
@@ -43,19 +44,12 @@ instead. It's a modern alternative to what's here, offering improved names and s
 
 =cut
 
-use vars qw( $VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS );
-
 BEGIN {
-    require Exporter;
+    our $VERSION = 4.81;
+    our @EXPORT = ();
+    our @EXPORT_OK = (qw/make_length_constraint/);
 
-    $VERSION = 1.7;
-
-    @ISA = qw( Exporter );
-
-    @EXPORT = ();
-    @EXPORT_OK = (qw/make_length_constraint/);
-
-    %EXPORT_TAGS =
+    our %EXPORT_TAGS =
       (
        bool => [ qw( make_not_constraint make_or_constraint
              make_and_constraint ) ],

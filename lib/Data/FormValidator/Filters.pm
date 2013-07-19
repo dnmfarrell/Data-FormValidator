@@ -10,14 +10,12 @@
 #    it under the terms same terms as perl itself.
 
 package Data::FormValidator::Filters;
+use Exporter 'import';
 use strict;
-use vars qw/$AUTOLOAD @ISA @EXPORT_OK %EXPORT_TAGS $VERSION/;
 
-$VERSION = 4.65;
+our $VERSION = 4.81;
 
-require Exporter;
-@ISA = qw(Exporter);
-@EXPORT_OK = qw(
+our @EXPORT_OK = qw(
     filter_alphanum
     filter_decimal
     filter_digit
@@ -39,7 +37,7 @@ require Exporter;
     FV_replace
 );
 
-%EXPORT_TAGS = (
+our %EXPORT_TAGS = (
     filters => \@EXPORT_OK,
 );
 
