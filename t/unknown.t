@@ -24,5 +24,5 @@ my @mv = $results->unknown('mv');
 is_deeply(\@mv,$FORM{mv}, 'unknown() returns multi-valued results');
 
 my @stick = $results->unknown('stick');
-is_deeply(\@stick,[ $FORM{stick} ], 'unknown() returns single value in array context');
+is_deeply(\@stick,[ $FORM{stick} ], 'unknown() returns single value in list context');
 

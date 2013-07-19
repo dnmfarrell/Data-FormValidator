@@ -26,7 +26,7 @@ is($results->valid('stick'),$FORM{stick}, 'valid() returns single value in scala
 my @mv = $results->valid('mv');
 is_deeply(\@mv,$FORM{mv}, 'valid() returns multi-valued results');
 my @stick = $results->valid('stick');
-is_deeply(\@stick,[ $FORM{stick} ], 'valid() returns single value in array context');
+is_deeply(\@stick,[ $FORM{stick} ], 'valid() returns single value in list context');
 ok($results->valid('fromsub') eq "got value from a subroutine", 'usg CODE references as default values');
 
 {

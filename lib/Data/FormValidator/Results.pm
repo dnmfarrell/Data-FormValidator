@@ -23,7 +23,7 @@ use overload
   'bool' => \&_bool_overload_based_on_success,
   fallback => 1;
 
-our $VERSION = 4.71;
+our $VERSION = 4.81;
 
 =pod
 
@@ -415,7 +415,7 @@ sub success {
 
 =head1  valid( [[field] [, value]] );
 
-In an array context with no arguments, it returns the list of fields which
+In list context with no arguments, it returns the list of fields which
 contain valid values:
 
  @all_valid_field_names = $r->valid;
@@ -431,7 +431,7 @@ array ref if the field had multiple values:
 
  $value = $r->valid('field');
 
-If called with one argument in array context, it returns the values of C<field>
+If called with one argument in list context, it returns the values of C<field>
 as an array:
 
  @values = $r->valid('field');
@@ -475,7 +475,7 @@ sub has_missing {
 
 =head1 missing( [field] )
 
-In an array context it returns the list of fields which are missing.
+In list context it returns the list of fields which are missing.
 In a scalar context, it returns an array reference to the list of missing fields.
 
 If called with an argument, it returns true if that C<field> is missing,
@@ -507,7 +507,7 @@ sub has_invalid {
 
 =head1 invalid( [field] )
 
-In an array context, it returns the list of fields which contains invalid value.
+In list context, it returns the list of fields which contains invalid value.
 
 In a scalar context, it returns an hash reference which contains the invalid
 fields as keys, and references to arrays of failed constraints as values.
@@ -542,7 +542,7 @@ sub has_unknown {
 
 =head1 unknown( [field] )
 
-In an array context, it returns the list of fields which are unknown.
+In list context, it returns the list of fields which are unknown.
 In a scalar context, it returns an hash reference which contains the unknown
 fields and their values.
 

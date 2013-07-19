@@ -1,4 +1,10 @@
 
+4.81 Jul 19th, 2013
+
+    [DOCUMENTATION]
+    - There is no such thing as "array context". The documentation now refers to "list context"
+      instead.
+
 4.80 Nov 1st, 2012
 
     [NEW FEATURES]
@@ -543,7 +549,7 @@
     - Fixed documentation typo related to writing your own constraints (Stewart Russell)
 
     [ENHANCEMENTS]
-    - valid() can now return multiple values in array context.
+    - valid() can now return multiple values in list context.
     - Mention Data::FormValidator::Util::HTML
     - Added new t/constraints_builtin.t as a beginning of more through testing
       of the built-in constraints.  
