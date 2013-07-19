@@ -882,7 +882,7 @@ Here's what the code might look like:
 =head2 Old School Constraints
 
 Here is documentation on how old school constraints are created. These are
-supported, but the the new school style documented above is recommended.
+supported, but the new school style documented above is recommended.
 
 See also the C<validator_packages> option in the input profile, for loading
 sets of old school constraints from other packages.

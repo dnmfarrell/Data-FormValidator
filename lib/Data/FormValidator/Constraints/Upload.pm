@@ -471,7 +471,7 @@ The meta data added is C<width> and C<height>.
 
 An older more awkward interface to the constraints in this module is still supported.
 To use it, you have to load the package with 'validator_packages', and call each
-constraint in a hashref style, passing the the parameters by reference. It looks
+constraint in a hashref style, passing the parameters by reference. It looks
 like this:
 
     validator_packages => [qw(Data::FormValidator::Constraints::Upload)],

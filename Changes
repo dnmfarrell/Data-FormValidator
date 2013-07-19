@@ -5,6 +5,11 @@
     - There is no such thing as "array context". The documentation now refers to "list context"
       instead.
 
+    - Fix "the the" typos. (Thanks to dsteinbrunner, RT#77901)
+
+    [INTERNALS]
+    - Somewhat modernizer Exporter usage.
+
 4.80 Nov 1st, 2012
 
     [NEW FEATURES]
@@ -34,7 +39,7 @@
     - Custom messages for built-in constraints work again. It appears that this
       was broken in 4.70, which triggered a sleeper bug.
 
-      (Thanks to Lee Carmichael, Mark Stosberg, RT##73235)
+      (Thanks to Lee Carmichael, Mark Stosberg, RT#73235)
 
 4.70 11/11/11
 
@@ -195,7 +200,7 @@
       following the MIME standard. This bug was masked because we check the 
       returned MIME type by File::MMagic first. Because it generally works 
       and returns a lower-case result, it didn't matter. However, it some cases
-      File::MMagic misbehaves under mod_perl, causing the the issue to matter.
+      File::MMagic misbehaves under mod_perl, causing the issue to matter.
       (Matt Christian, Mark Stosberg)
 
     [INTERNALS]
@@ -389,7 +394,7 @@
     - success() method added to Results object. This is an easy way to check
       that there were no missing or invalid fields. (Michael Peters). 
 
-    - 'separator' was misspelled consistently in the the docs, code and tests.
+    - 'separator' was misspelled consistently in the docs, code and tests.
       The proper spelling as well as the legacy typo spelling are now
       supported, although the typo'ed version is no longer documented, except
       for here. :) Thanks to Terrence Brannon for spotting this.
