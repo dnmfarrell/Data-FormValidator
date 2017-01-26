@@ -1070,7 +1070,8 @@ sub _get_input_as_hash {
                 @v = $data->upload($k) || $data->param($k);
             }
             else {
-                @v = $data->param($k);
+                # insecure
+                @v = $data->multi_param($k);
             }
 
             # we expect param to return an array if there are multiple values
