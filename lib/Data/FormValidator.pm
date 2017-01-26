@@ -866,13 +866,13 @@ either use a named constraint, or use the hash ref method of defining a
 constraint and include a C<name> key with a value set to the name of your
 constraint.  Here's an example:
 
- my_zipcode_field => [
-     'zip',
-     {
-       constraint =>  '/^406/',
-       name        =>  'starts_with_406',
-     }
- ],
+  my_zipcode_field => [
+      'zip',
+      {
+        constraint_method =>  '/^406/',
+        name              =>  'starts_with_406',
+      }
+  ],
 
 You can use an array reference with a single constraint in it if you just want
 to have the name of your failed constraint returned in the above fashion.
