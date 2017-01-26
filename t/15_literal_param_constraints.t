@@ -1,12 +1,8 @@
 #!/usr/bin/env perl
-
 use strict;
+use warnings;
 use lib ('.','../t');
-
-$^W = 1;
-
 use Test::More tests => 1;
-
 use Data::FormValidator;
 
 my $input_profile = {
@@ -39,5 +35,3 @@ eval{
 
 # Test to make sure that the constraint receives a literal value of an element passed by reference
 is($valids->{my_zipcode_field}, 'big brown cow');
-
-

@@ -1,8 +1,7 @@
-#!/usr/bin/env perl
-#!/usr/bin/perl
 
+use strict;
+use warnings;
 use Test::More qw/no_plan/;
-
 use Data::FormValidator;
 
 my $result = Data::FormValidator->check({ field => 'value' }, {

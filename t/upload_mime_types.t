@@ -1,9 +1,10 @@
 #!/usr/bin/env perl
-# Exercise the _is_allowed_type() helper function
-
-use Test::More tests => 5;
 use strict;
+use warnings;
+use Test::More tests => 5;
 use_ok('Data::FormValidator::Constraints::Upload');
+
+# Exercise the _is_allowed_type() helper function
 
 # Test the negative case
 isnt(
@@ -28,4 +29,3 @@ is(
     Data::FormValidator::Constraints::Upload::_is_allowed_type('image/pjpeg'),
     1, "'image/pjpeg' is considered an allowed mime type"
 );
-

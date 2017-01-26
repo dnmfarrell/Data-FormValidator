@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
-#########################
-
-use Test::More;
 use strict;
+use warnings;
+use Test::More;
+
 BEGIN {
   eval { require CGI };
   plan skip_all => 'CGI.pm not found' if $@;

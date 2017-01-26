@@ -1,5 +1,8 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl
+use strict;
+use warnings;
+use Test::More tests => 7;
+use Data::FormValidator;
 
 # This test is to confirm that values are preserved
 # for input data when used with multiple constraints
@@ -10,9 +13,6 @@
 # relies on the order on which perl returns the keys
 # from each %{ $profile->{constraints} }
 
-use Test::More tests => 7;
-use Data::FormValidator;
-use strict;
 
 my %data = (
   'depart_date'         => '2004',
@@ -89,4 +89,3 @@ ok($results->valid('depart_date'),
     is($err, '', 'no warnings emitted');
 
 }
-

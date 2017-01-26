@@ -1,4 +1,6 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More (qw/no_plan/);
 use Data::FormValidator;
 
@@ -41,4 +43,3 @@ is_deeply($c1,$c2, "constraints aren't duped when profile with constraint_regexp
     is_deeply($c1,$c2, "field_filters aren't duped when profile with field_filter_regexp_map is reused");
 
 }
-

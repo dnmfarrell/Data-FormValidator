@@ -1,6 +1,9 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl
-# 
+use strict;
+use warnings;
+use Test::More tests => 4;
+use_ok('Data::FormValidator');
+
 # in response to bug report 2006/10/25 by Brian E. Lozier <brian@massassi.net>
 # test script by Evan A. Zacks <zackse@cpan.org>
 #
@@ -10,13 +13,6 @@
 # function.  
 #
 # So now we throw an error if a non-code-ref is used with a constraint method.
-
-use strict;
-
-use Test::More tests => 4;
-
-use_ok('Data::FormValidator');
-
 my $err_re = qr/not a code ref/;
 
 {

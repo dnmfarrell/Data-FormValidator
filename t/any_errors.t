@@ -1,10 +1,9 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl
-
 use strict;
+use warnings;
 use Test::More 'no_plan';
-
 use Data::FormValidator;
+
 my $dfv_standard_any_errors = Data::FormValidator->new({});
 my $dfv_custom_any_errors   = Data::FormValidator->new({},{msgs => { any_errors => 'some_errors' }});
 

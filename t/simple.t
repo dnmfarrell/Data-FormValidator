@@ -1,11 +1,7 @@
 #!/usr/bin/env perl
-
 use strict;
-
-$^W = 1;
-
+use warnings;
 use Test::More tests => 3;
-
 use Data::FormValidator;
 
 my $input_profile = {
@@ -34,5 +30,3 @@ is($@,'', 'survived eval');
 ok(exists $valids->{'phone'}, "phone is valid" );
 
 is($invalids->[0], 'email')
-
-

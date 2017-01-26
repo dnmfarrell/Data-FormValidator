@@ -1,15 +1,10 @@
 #!/usr/bin/env perl
 use strict;
-#Check that the valid_* routines are nominally working.
-
-$^W = 1;
-
+use warnings;
 use Test::More qw/no_plan/;
-
 use Data::FormValidator qw(:validators :matchers);
 
-
-
+#Check that the valid_* routines are nominally working.
 my $invalid = "fake value";
 
 #For CC Exp test
@@ -99,10 +94,3 @@ ok(valid_email($address_7), "'$address_7' is a valid e-mail");
 
 my $addr_8 = "Mark_O'Doul\@summersault.com";
 ok(valid_email($addr_8), "'$addr_8' is a valid e-mail");
-
-
-
-
-
-
-

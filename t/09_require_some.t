@@ -1,11 +1,7 @@
 #!/usr/bin/env perl
-
 use strict;
-
-$^W = 1;
-
+use warnings;
 use Test::More tests => 4;
-
 use Data::FormValidator;
 
 my $input_profile = {
@@ -35,5 +31,3 @@ ok($valids->{green});
 ok($valids->{one});
 
 ok(grep {/2_of_3_fail/} @$missings); 
-
-

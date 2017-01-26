@@ -1,14 +1,13 @@
 #!/usr/bin/env perl
 use strict;
+use warnings;
+use Test::More tests => 25;
+use Data::FormValidator;
+use Data::FormValidator::Constraints qw(:closures);
+
 # check credit card number validation (the cc_number constraint).
 # note: this constraint is checked directly in 11_procedural_match.t and
 # procedural_valid.t, but here we will test it indirectly through a profile
-
-$^W = 1;
-
-use Data::FormValidator;
-use Data::FormValidator::Constraints qw(:closures);
-use Test::More tests => 25;
 
 my $dfv_profile_old = {
   required    => [qw(credit_card_type credit_card_number)],

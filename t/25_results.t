@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More tests => 7;
-
-use Data::FormValidator; 
+use Data::FormValidator;
 
 my %FORM = (
 	stick  => 'big',
@@ -35,4 +36,3 @@ ok($results->valid('fromsub') eq "got value from a subroutine", 'usg CODE refere
     is( $results->valid('opt_2'), 2, "defaults_regexp works (case 1)");
 
 }
-

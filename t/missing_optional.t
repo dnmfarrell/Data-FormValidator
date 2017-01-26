@@ -1,12 +1,10 @@
 #!/usr/bin/env perl
-# Tests for missing_optional_valid
-use Test::More 'no_plan';
 use strict;
-
-$^W = 1;
-
+use warnings;
+use Test::More 'no_plan';
 use Data::FormValidator;
 
+# Tests for missing_optional_valid
 my $input_profile = {
 		       required => [ qw( email_1  email_ok) ],
 		       optional => ['filled','not_filled'],

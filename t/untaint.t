@@ -1,11 +1,12 @@
 #!/usr/bin/env perl
-# A gift from Andy Lester, this trick shows me where eval's die. 
+use strict;
+use warnings;
 use Carp;
+use Config;
 $SIG{__WARN__} = \&carp;
 $SIG{__DIE__} = \&confess;
 
-use Config;
-
+# A gift from Andy Lester, this trick shows me where eval's die.
 my @args = ('-I./lib',
     ( (defined($ENV{PERL5LIB}) && length($ENV{PERL5LIB}))
         ?(map { "-I$_" } split(/$Config{path_sep}/, $ENV{PERL5LIB}))
@@ -16,5 +17,5 @@ my @args = ('-I./lib',
     qw(Jim Beam jim@foo.bar james@bar.foo 132.10.10.2 Monroe Rufus 12345 oops 0)
 );
 
-# We use $^X to make it easier to test with different versions of Perl. 
+# We use $^X to make it easier to test with different versions of Perl.
 system($^X, @args);

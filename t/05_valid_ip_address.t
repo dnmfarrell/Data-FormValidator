@@ -1,15 +1,12 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
+use Test::More tests => 2;
+use Data::FormValidator;
+
 # performs a basic check to make sure valid_ip_address routine
 # succeeds and fails when it should.
 # by Mark Stosberg <mark@stosberg.com>
-
-use strict;
-
-$^W = 1;
-
-use Test::More tests => 2;
-
-use Data::FormValidator;
 
 my $input_profile = {
 		       required => [ qw( good_ip bad_ip ) ],
@@ -35,4 +32,3 @@ eval{
 ok(exists $valids->{'good_ip'});
 
 is($invalids->[0], 'bad_ip');
-

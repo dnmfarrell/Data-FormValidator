@@ -1,9 +1,7 @@
 #!/usr/bin/env perl
-use Test::More tests => 5;
 use strict;
-
-$^W = 1;
-
+use warnings;
+use Test::More tests => 5;
 use Data::FormValidator;
 
 my $input_profile = {

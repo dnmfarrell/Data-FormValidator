@@ -1,11 +1,7 @@
 #!/usr/bin/env perl
-
 use strict;
-
-$^W = 1;
-
+use warnings;
 use Test::More tests => 8;
-
 use Data::FormValidator;
 
 my $input_profile = {
@@ -50,7 +46,5 @@ is($invalids->[0], 'email', 'email is invalid');
 
 my %missings;
 @missings{@$missings} = ();
-#print "@$missings\n";
 ok(exists $missings{$_}) for (qw(species no_legs petals stem));
 is(@$missings, 4);
-

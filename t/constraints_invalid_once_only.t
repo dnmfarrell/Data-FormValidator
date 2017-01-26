@@ -1,11 +1,10 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl
-
-# this test checks that a failing constraint is only marked as invalid once
-
+use strict;
+use warnings;
 use Test::More tests => 1;
 use Data::FormValidator;
-use strict;
+
+# this test checks that a failing constraint is only marked as invalid once
 
 sub check_passwords {
 	my ( $dfv, $val ) = @_;

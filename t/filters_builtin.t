@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More 'no_plan';
 use Data::FormValidator::Filters (qw/:filters/);
-use strict;
 
 { 
     my $comma_splitter = FV_split(',');

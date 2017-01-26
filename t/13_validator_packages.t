@@ -1,12 +1,8 @@
 #!/usr/bin/env perl
-
 use strict;
+use warnings;
 use lib ('.','../t','t/');
-
-$^W = 1;
-
 use Test::More tests => 8;
-
 use Data::FormValidator;
 
 my $input_profile = {
@@ -83,5 +79,3 @@ eval {
     });
 };
 ok(not $@);
-
-

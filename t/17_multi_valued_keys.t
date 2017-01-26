@@ -1,22 +1,17 @@
 #!/usr/bin/env perl
-# This script tests validating keys with multiple data
 use strict;
+use warnings;
 use lib ('.','../t');
-
-$^W = 1;
-
 use Test::More tests => 8;
+use Data::FormValidator;
 
+# This script tests validating keys with multiple data
 my $input_hash = { 
 	single_value => ' Just One ',
 	multi_values => [' One ', ' Big ', ' Happy ', ' Family '],
 	re_multi_test => [qw/at the circus/],
 	constraint_multi_test => [qw/12345 22234 oops/],
 };
-
-
-use Data::FormValidator;
-
 my $input_profile = {
 	required => [qw/single_value multi_values re_multi_test constraint_multi_test/],
 	filters => [qw/trim/],

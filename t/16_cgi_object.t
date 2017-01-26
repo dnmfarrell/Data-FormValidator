@@ -1,13 +1,12 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
+use lib ('.','../t');
+use Test::More;
+use Data::FormValidator;
+
 # This script tests whether a CGI.pm object can be used to provide the input data
 # Mark Stosberg 02/16/03 
-
-use strict;
-use lib ('.','../t');
-
-$^W = 1;
-
-use Test::More;
 
 eval { require CGI };
 plan skip_all => 'CGI.pm not found' if $@;
@@ -18,7 +17,6 @@ eval {
 };
 ok(not $@);
 
-use Data::FormValidator;
 
 my $input_profile = {
 	required => ['my_zipcode_field'],

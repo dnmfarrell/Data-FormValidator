@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl -w
+use strict;
+use warnings;
 use Test::More;
 
 eval { require Date::Calc; };

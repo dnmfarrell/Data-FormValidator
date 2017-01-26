@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package ValidatorPackagesTest2;
 
 sub valid_multi_validator_success_expected {

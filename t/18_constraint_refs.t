@@ -1,17 +1,12 @@
 #!/usr/bin/env perl
 #!/usr/bin/perl -w
-
-# This tests for some constraint related bugs found by Chris Spiegel
-
-use lib ('.','../t');
-
-$^W = 1;
-
-use Test::More tests => 4;
-
 use strict;
+use warnings;
+use lib ('.','../t');
+use Test::More tests => 4;
 use Data::FormValidator;
 
+# This tests for some constraint related bugs found by Chris Spiegel
 my $input_profile =
 {
   required => [ qw( email subroutine ) ],
@@ -56,6 +51,3 @@ is($@,'','survived eval');
 
 is($invalids->[0]->[0], 'email');
 is($invalids->[0]->[1], 'Your email address is invalid.');
-
-
-

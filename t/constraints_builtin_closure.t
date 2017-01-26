@@ -1,9 +1,7 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl
-
-use Test::More;
 use strict;
-
+use warnings;
+use Test::More;
 use Data::FormValidator;
 use Data::FormValidator::Constraints qw(:closures);
 

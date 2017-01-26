@@ -1,14 +1,10 @@
 #!/usr/bin/env perl
 use strict;
-#Check that the match_* routines are nominally working.
-
-$^W = 1;
-
+use warnings;
 use Test::More tests => 26;
-
-
 use Data::FormValidator qw(:validators :matchers);
 
+#Check that the match_* routines are nominally working.
 my $invalid = "fake value";
 
 #For CC Exp test

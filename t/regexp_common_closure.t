@@ -1,9 +1,10 @@
 #!/usr/bin/env perl
-# Integration with Regexp::Common;
-
+use strict;
+use warnings;
 use Test::More tests => 13;
+use Data::FormValidator;
 
-use Data::FormValidator; 
+# Integration with Regexp::Common;
 
 my %FORM = (
 	bad_ip      => '127 0 0 1',
@@ -75,4 +76,3 @@ $results = Data::FormValidator->check(\%FORM, {
 	});
 my $invalid = scalar $results->invalid || {};
 ok($invalid->{embedded_ip}, 'testing that the RE must match from end-to-end');
-
