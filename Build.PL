@@ -45,9 +45,7 @@ $class->new(
         'Date::Calc'      => 5.0,
         'File::MMagic'    => 1.17,
         'MIME::Types'     => 1.005,
-        'Regexp::Common'  => 0,
-        'overload'        => 0,
-        'Perl6::Junction' => 1.10,
+        'Regexp::Common'  => 0.03, # when ::whitespace was added
         'Scalar::Util'    => 0,
         'Email::Valid'    => 0,
     },
@@ -57,7 +55,7 @@ $class->new(
     },
     meta_merge     => {
         resources =>
-            { repository => 'http://mark.stosberg.com/darcs_hive/dfv/', },
+            { repository => 'https://github.com/dnmfarrell/Data-FormValidator', },
         no_index => {
             'package' => ['Data::FormValidator::Constraints::RegexpCommon'],
         },
