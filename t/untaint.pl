@@ -6,6 +6,7 @@ use Data::FormValidator::Constraints qw/
     :closures
     FV_max_length
 /;
+use Scalar::Util 'tainted';
 
 # A gift from Andy Lester, this trick shows me where eval's die.
 use Carp;
@@ -13,12 +14,6 @@ $SIG{__WARN__} = \&carp;
 $SIG{__DIE__} = \&confess;
 
 $ENV{PATH} = "/bin/";
-
-sub is_tainted {
-    my $val = shift;
-    # What does kill do here? -mls
-    return !eval { $val++, kill 0; 1; };
-}
 
 my $data1 = { 
     firstname  => $ARGV[0], #Jim
@@ -146,7 +141,7 @@ eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data1
 
 is($@,'','avoided eval error');
 ok($valid->{firstname}, 'found firstname'); 
-ok(! is_tainted($valid->{firstname}), 'firstname is untainted');
+ok(! tainted($valid->{firstname}), 'firstname is untainted');
 is($valid->{firstname},$data1->{firstname}, 'firstname has expected value');
 
 
@@ -157,15 +152,15 @@ eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data2
 
 is($@,'','avoided eval error');
 ok($valid->{lastname});
-ok(!is_tainted($valid->{lastname}));
+ok(!tainted($valid->{lastname}));
 is($valid->{lastname},$data2->{lastname});
 
 ok($valid->{email1});
-ok(!is_tainted($valid->{email1}));
+ok(!tainted($valid->{email1}));
 is($valid->{email1},$data2->{email1});
 
 ok($valid->{email2});
-ok(is_tainted($valid->{email2}), 'email2 is tainted');
+ok(tainted($valid->{email2}), 'email2 is tainted');
 is($valid->{email2},$data2->{email2});
 
 # Rules2 with closures 
@@ -176,7 +171,7 @@ is($valid->{email2},$data2->{email2});
     $valid = $result->valid();
 
     ok($valid->{email1}, "found email1 in \%valid") || warn Dumper ($data2,$result);
-    ok(!is_tainted($valid->{email1}), "email one is not tainted");
+    ok(!tainted($valid->{email1}), "email one is not tainted");
     is($valid->{email1},$data2->{email1}, "email1 identity");
 }
 
@@ -187,7 +182,7 @@ eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data3
 ok(!$@);
 
 ok($valid->{ip_address});
-ok(!is_tainted($valid->{ip_address}));
+ok(!tainted($valid->{ip_address}));
 is($valid->{ip_address},$data3->{ip_address});
 
 #in this case we're expecting no match
@@ -195,17 +190,17 @@ ok(!(exists $valid->{cats_name}), 'cats_name is not valid');
 is($invalid->[0], 'cats_name', 'cats_name fails constraint');
 
 ok($valid->{dogs_name});
-ok(!is_tainted($valid->{dogs_name}));
+ok(!tainted($valid->{dogs_name}));
 is($valid->{dogs_name},$data3->{dogs_name});
 
 # Rules # 4
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data4, "rules4"); };   
 ok(!$@, 'avoided eval error');
 
-ok(!is_tainted($valid->{zip_field1}->[0]),
+ok(!tainted($valid->{zip_field1}->[0]),
         'zip_field1 should be untainted');
 
-ok(is_tainted($valid->{zip_field2}->[0]),
+ok(tainted($valid->{zip_field2}->[0]),
     'zip_field2 should be tainted');
 
 
@@ -231,30 +226,30 @@ is($results->valid('qr_re_parens')   ,0,'qr RE with    parens in untainted');
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data5, "rules5"); };
 ok(!$@, 'avoided eval error');
 ok($valid->{zip_field1}, "zip_field1 should be valid");
-ok(!is_tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
+ok(!tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
 ok($valid->{zip_field2}, "zip_field2 should be valid");
-ok(!is_tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
+ok(!tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
 
 # Rules #6
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data6, "rules6"); };
 ok(!$@, 'avoided eval error');
 ok($valid->{zip_field1}, "zip_field1 should be valid");
-ok(!is_tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
+ok(!tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
 ok($valid->{zip_field2}, "zip_field2 should be valid");
-ok(!is_tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
+ok(!tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
 ok($valid->{email1}, "email1 should be valid");
-ok(!is_tainted($valid->{email1}), 'email1 should be untainted');
+ok(!tainted($valid->{email1}), 'email1 should be untainted');
 ok($valid->{email2}, "email2 should be valid");
-ok(!is_tainted($valid->{email2}), 'email2 should be untainted');
+ok(!tainted($valid->{email2}), 'email2 should be untainted');
 
 # Rules #7
 eval {  ( $valid, $missing, $invalid, $unknown ) = $validator->validate(  $data7, "rules7"); };
 ok(!$@, 'avoided eval error');
 ok($valid->{zip_field1}, "zip_field1 should be valid");
-ok(!is_tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
+ok(!tainted($valid->{zip_field1}->[0]), 'zip_field1 should be untainted');
 ok($valid->{zip_field2}, "zip_field2 should be valid");
-ok(!is_tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
+ok(!tainted($valid->{zip_field2}->[0]), 'zip_field2 should be untainted');
 ok($valid->{email1}, "email1 should be valid");
-ok(!is_tainted($valid->{email1}), 'email1 should be untainted');
+ok(!tainted($valid->{email1}), 'email1 should be untainted');
 ok($valid->{email2}, "email2 should be valid");
-ok(!is_tainted($valid->{email2}), 'email2 should be untainted');
+ok(!tainted($valid->{email2}), 'email2 should be untainted');
