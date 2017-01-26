@@ -5,46 +5,46 @@ use Test::More qw/no_plan/;
 use Data::FormValidator;
 
 {
-	local $@ = undef;
-	eval {
-	  my $results = Data::FormValidator->check({}, 
-		{
-			msgs => {
-				my_field => 'foo',
-			},
-		}
-	);
-	};
-	like($@, qr/Invalid/, 'checking syntax of unknown msgs fields works');
+  local $@ = undef;
+  eval {
+    my $results = Data::FormValidator->check(
+      {},
+      {
+        msgs => {
+          my_field => 'foo',
+        },
+      } );
+  };
+  like( $@, qr/Invalid/, 'checking syntax of unknown msgs fields works' );
 }
 
 my $results;
 eval {
-$results = Data::FormValidator->check({}, 
+  $results = Data::FormValidator->check(
+    {},
     {
-        constraints => {
-            key => {
-                oops => 1,
-            },
-
+      constraints => {
+        key => {
+          oops => 1,
         },
-    }
-);
+
+      },
+    } );
 };
 
-like($@, qr/Invalid/, 'checking syntax of constraint hashrefs works');
-
+like( $@, qr/Invalid/, 'checking syntax of constraint hashrefs works' );
 
 eval {
-$results = Data::FormValidator->check({}, 
+  $results = Data::FormValidator->check(
+    {},
     {
-        constraint_regexp_map => {
-            qr/key/ => {
-                oops => 1,
-            },
-
+      constraint_regexp_map => {
+        qr/key/ => {
+          oops => 1,
         },
-    }
-);
+
+      },
+    } );
 };
-like($@, qr/Invalid/, 'checking syntax of constraint_regexp_map hashrefs works');
+like( $@, qr/Invalid/,
+  'checking syntax of constraint_regexp_map hashrefs works' );

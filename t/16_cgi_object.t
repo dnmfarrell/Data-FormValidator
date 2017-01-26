@@ -1,33 +1,29 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use lib ('.','../t');
+use lib ( '.', '../t' );
 use Test::More;
 use Data::FormValidator;
 
 # This script tests whether a CGI.pm object can be used to provide the input data
-# Mark Stosberg 02/16/03 
+# Mark Stosberg 02/16/03
 
 eval { require CGI };
 plan skip_all => 'CGI.pm not found' if $@;
 
 my $q;
+eval { $q = CGI->new( { my_zipcode_field => 'big brown' } ); };
+ok( not $@ );
+
+my $input_profile = { required => ['my_zipcode_field'], };
+
+my $validator = new Data::FormValidator( { default => $input_profile } );
+
+my ( $valids, $missings, $invalids, $unknowns );
 eval {
-	$q = CGI->new({ my_zipcode_field => 'big brown' });
-};
-ok(not $@);
-
-
-my $input_profile = {
-	required => ['my_zipcode_field'],
+  ( $valids, $missings, $invalids, $unknowns ) =
+    $validator->validate( $q, 'default' );
 };
 
-my $validator = new Data::FormValidator({default => $input_profile});
-
-my ($valids, $missings, $invalids, $unknowns);
-eval{
-  ($valids, $missings, $invalids, $unknowns) = $validator->validate($q, 'default');
-};
-
-is($valids->{my_zipcode_field}, 'big brown');
+is( $valids->{my_zipcode_field}, 'big brown' );
 done_testing;
