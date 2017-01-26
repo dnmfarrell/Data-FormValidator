@@ -50,10 +50,6 @@ $class->new(
         'Scalar::Util'    => 0,
         'Email::Valid'    => 0,
     },
-    build_requires        => {
-        # For testing
-        'CGI'             => 3.48,
-    },
     meta_merge     => {
         resources =>
             { repository => 'https://github.com/dnmfarrell/Data-FormValidator', },

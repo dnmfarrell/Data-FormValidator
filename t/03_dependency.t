@@ -2,7 +2,7 @@ use strict;
 
 $^W = 1;
 
-use Test::More tests => 23;
+use Test::More;
 use Data::FormValidator;
 
 # test profile
@@ -90,18 +90,19 @@ is($result->missing('cc_exp'),  undef, "missing('cc_exp') returned false");
 is($result->missing('cc_name'), undef, "missing('cc_name') returned false");
 
 
-
-## Now, some tests using a CGI.pm object as input
-use CGI;
-my $q = CGI->new('pay_type=0');
-my $results;
 eval {
-    $results = $validator->check($q, 'default');
+	require CGI;
 };
-ok($results->missing('cc_num'), 'using CGI.pm object for input');
-is($result->missing('cc_exp'),  undef, "missing('cc_exp') returned false");
-is($result->missing('cc_name'), undef, "missing('cc_name') returned false");
+SKIP: {
+  skip 'CGI.pm not found', 3 if $@;
 
-
-
-
+  my $q = CGI->new('pay_type=0');
+  my $results;
+  eval {
+      $results = $validator->check($q, 'default');
+  };
+  ok($results->missing('cc_num'), 'using CGI.pm object for input');
+  is($result->missing('cc_exp'),  undef, "missing('cc_exp') returned false");
+  is($result->missing('cc_name'), undef, "missing('cc_name') returned false");
+};
+done_testing;

@@ -1,7 +1,9 @@
 use strict;
 use Test::More;
 use Data::FormValidator;
-plan(tests => 5);
+
+eval { require CGI };
+plan skip_all => 'CGI.pm not found' if $@;
 
 # Test that constrants can refer to fields that are not mentioned
 # in 'required' or 'optional'
@@ -34,7 +36,6 @@ ok( $results->valid('foo'), 'foo valid');
 
 {
     # with CGI object as input. 
-    use CGI;
     my $q = CGI->new($input);
     my $results;
     eval { $results = Data::FormValidator->check($q, $profile); };
@@ -44,3 +45,4 @@ ok( $results->valid('foo'), 'foo valid');
 
 }
 
+done_testing;

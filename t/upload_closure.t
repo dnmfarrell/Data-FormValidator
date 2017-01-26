@@ -1,10 +1,12 @@
 #########################
 
-use Test::More 'no_plan';
+use Test::More;
 use strict;
-BEGIN { 
-    use_ok('CGI');
-    use_ok('Data::FormValidator::Constraints::Upload') 
+BEGIN {
+  eval { require CGI };
+  plan skip_all => 'CGI.pm not found' if $@;
+  use_ok('CGI');
+  use_ok('Data::FormValidator::Constraints::Upload') 
 };
 
 #########################
@@ -142,4 +144,4 @@ $dfv = Data::FormValidator->new({ profile_3 => $profile_3});
 ok(exists $valid->{'100x100_gif'}, 'expecting success with max_dimensions using constraint_regexp_map');
 ok((grep {m/300x300/} @$invalid), 'expecting failure with max_dimensions using constraint_regexp_map');
 
-
+done_testing;

@@ -6,11 +6,13 @@ use lib ('.','../t');
 
 $^W = 1;
 
-use Test::More tests => 2;
+use Test::More;
+
+eval { require CGI };
+plan skip_all => 'CGI.pm not found' if $@;
 
 my $q;
 eval {
-	use CGI;
 	$q = CGI->new({ my_zipcode_field => 'big brown' });
 };
 ok(not $@);
@@ -29,4 +31,4 @@ eval{
 };
 
 is($valids->{my_zipcode_field}, 'big brown');
-
+done_testing;
