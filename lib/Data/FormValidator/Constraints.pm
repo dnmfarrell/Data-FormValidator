@@ -1069,8 +1069,8 @@ and the names were given as strings, like this:
 
 =item L<Data::FormValidator::Filters> - transform data before constraints are applied
 
-=item L<Data::FormValidator::ConstraintsFactory> - This is a historical collection of constraints that suffer from cumbersome names. They are worth reviewing though-- C<make_and_constraint> will allow to validate against a list of constraints and shortcircuit if the first one fails. That's perfect if the second constraint depends on the first one having passed.
-For a modern version of this toolkit, see L<Data::FormValidator::Constraints::MethodsFactory>.
+=item L<Data::FormValidator::ConstraintsFactory> - This is a historical collection of constraints that suffer from cumbersome names. They are worth reviewing though-- C<make_and_constraint> will allow one to validate against a list of constraints and shortcircuit if the first one fails. That's perfect if the second constraint depends on the first one having passed.
+ For a modern version of this toolkit, see L<Data::FormValidator::Constraints::MethodsFactory>.
 
 =item L<Data::FormValidator>
 
