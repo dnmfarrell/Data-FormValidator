@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # A gift from Andy Lester, this trick shows me where eval's die. 
 use Carp;
 $SIG{__WARN__} = \&carp;

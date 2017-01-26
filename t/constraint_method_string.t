@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 #!/usr/bin/perl
 # 
 # in response to bug report 2006/10/25 by Brian E. Lozier <brian@massassi.net>

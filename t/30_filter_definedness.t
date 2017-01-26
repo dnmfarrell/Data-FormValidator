@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 #!/usr/bin/perl -w
 # to test definedness of built-in filters and general functions, as reported: http://rt.cpan.org/Ticket/Display.html?id=2751
 

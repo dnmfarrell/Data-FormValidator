@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # Tests for missing_optional_valid
 use Test::More 'no_plan';
 use strict;

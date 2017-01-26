@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 #!/usr/bin/perl -w
 
 # This tests to make sure that we can use hashrefs and code refs as OK values in the input hash

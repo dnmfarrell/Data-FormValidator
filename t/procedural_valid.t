@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 use strict;
 #Check that the valid_* routines are nominally working.
 

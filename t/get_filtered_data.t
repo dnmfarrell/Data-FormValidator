@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 use strict;
 use Test::More tests => 4;
 use Data::FormValidator;

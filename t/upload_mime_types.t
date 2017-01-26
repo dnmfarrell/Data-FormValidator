@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # Exercise the _is_allowed_type() helper function
 
 use Test::More tests => 5;

@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # Testing new support for 'qr'. -mls
 
 use Test::More qw/no_plan/;

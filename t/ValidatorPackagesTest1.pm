@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 package ValidatorPackagesTest1;
 
 sub match_single_validator_success_expected {

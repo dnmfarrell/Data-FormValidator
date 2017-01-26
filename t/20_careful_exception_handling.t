@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 #!/usr/bin/perl -w
 
 # This tests to make sure that when we test $@, we are testing the right thing.

@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # This test is a for a bug where a value doesn't get filtered when it should
 # The bug was discovered by Jeff Till, and he contributed this test, too. 
 

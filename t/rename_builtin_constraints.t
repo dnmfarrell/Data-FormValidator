@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 #!perl
 use Test::More 'no_plan';
 

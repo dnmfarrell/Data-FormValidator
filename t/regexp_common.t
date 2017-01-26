@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # Integration with Regexp::Common;
 
 use Test::More tests => 10;

@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 #!/usr/bin/perl -w
 
 # This tests for some constraint related bugs found by Chris Spiegel

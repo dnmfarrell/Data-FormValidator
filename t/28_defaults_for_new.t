@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # testing passing defaults to the new constructor. -mls 05/03/03 
 
 use Test::More tests => 3;
