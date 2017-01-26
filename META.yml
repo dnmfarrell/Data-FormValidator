@@ -1,0 +1,59 @@
+---
+abstract: "Validates user input (usually from an HTML form) based\non input profile."
+author:
+  - 'Mark Stosberg <mark@summersault.com>'
+build_requires:
+  CGI: 3.48
+configure_requires:
+  Module::Build: 0.38
+dynamic_config: 1
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.120921'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Data-FormValidator
+no_index:
+  package:
+    - Data::FormValidator::Constraints::RegexpCommon
+provides:
+  Data::FormValidator:
+    file: lib/Data/FormValidator.pm
+    version: 4.81
+  Data::FormValidator::Constraints:
+    file: lib/Data/FormValidator/Constraints.pm
+    version: 4.81
+  Data::FormValidator::Constraints::Dates:
+    file: lib/Data/FormValidator/Constraints/Dates.pm
+    version: 4.81
+  Data::FormValidator::Constraints::RegexpCommon:
+    file: lib/Data/FormValidator/Results.pm
+    version: 0
+  Data::FormValidator::Constraints::Upload:
+    file: lib/Data/FormValidator/Constraints/Upload.pm
+    version: 4.81
+  Data::FormValidator::ConstraintsFactory:
+    file: lib/Data/FormValidator/ConstraintsFactory.pm
+    version: 4.81
+  Data::FormValidator::Filters:
+    file: lib/Data/FormValidator/Filters.pm
+    version: 4.81
+  Data::FormValidator::Results:
+    file: lib/Data/FormValidator/Results.pm
+    version: 4.81
+requires:
+  Date::Calc: 5
+  Email::Valid: 0
+  File::MMagic: 1.17
+  Image::Size: 0
+  MIME::Types: 1.005
+  Perl6::Junction: 1.1
+  Regexp::Common: 0
+  Scalar::Util: 0
+  Test::More: 0
+  overload: 0
+  perl: 5.008
+resources:
+  license: http://dev.perl.org/licenses/
+  repository: http://mark.stosberg.com/darcs_hive/dfv/
+version: 4.81
