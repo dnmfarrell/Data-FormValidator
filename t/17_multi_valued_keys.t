@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # This script tests validating keys with multiple data
 use strict;
 use lib ('.','../t');

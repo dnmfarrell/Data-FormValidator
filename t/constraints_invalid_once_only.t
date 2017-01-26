@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 #!/usr/bin/perl
 
 # this test checks that a failing constraint is only marked as invalid once

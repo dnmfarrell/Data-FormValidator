@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 #!/usr/bin/perl
 
 use Test::More qw/no_plan/;

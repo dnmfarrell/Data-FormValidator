@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # Friendy error messages when quality_to_ref fails due to a typo. -mls 05/03/03 
 
 use Test::More tests => 5;

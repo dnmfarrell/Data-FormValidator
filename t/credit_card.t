@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 use strict;
 # check credit card number validation (the cc_number constraint).
 # note: this constraint is checked directly in 11_procedural_match.t and

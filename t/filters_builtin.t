@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 use Test::More 'no_plan';
 use Data::FormValidator::Filters (qw/:filters/);
 use strict;

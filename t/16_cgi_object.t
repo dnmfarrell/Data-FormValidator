@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # This script tests whether a CGI.pm object can be used to provide the input data
 # Mark Stosberg 02/16/03 
 
