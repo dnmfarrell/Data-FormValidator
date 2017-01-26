@@ -25,7 +25,6 @@ package Data::FormValidator;
 use Exporter 'import';
 use 5.008;
 
-use Perl6::Junction qw(any none);
 use Data::FormValidator::Results;
 *_arrayify = \&Data::FormValidator::Results::_arrayify;
 use Data::FormValidator::Filters ':filters';
@@ -944,7 +943,7 @@ sub _check_profile_syntax {
         # If any of the keys in the profile are not listed as
         # valid keys here, we die with an error
         for my $key (keys %$profile) {
-            push @invalid, $key unless ($key eq any(@valid_profile_keys));
+            push @invalid, $key unless grep $key eq $_, @valid_profile_keys;
         }
 
         local $" = ', ';
@@ -965,11 +964,11 @@ sub _check_profile_syntax {
         # Could be improved by also naming the associated key for the bad value.
         for my $key (grep { $profile->{$_} } qw/constraint_methods constraint_method_regexp_map/) {
             for my $val (map { _arrayify($_) } values %{ $profile->{$key} }) {
-                if ((ref $val eq 'HASH') and ref $val->{constraint_method} eq none('CODE','Regexp'))  {
+                if (ref $val eq 'HASH' && !grep(ref $val->{constraint_method} eq $_, 'CODE','Regexp'))  {
                     die "Value for constraint_method within hashref '$val->{constraint_method}' not a code reference or Regexp . Do you need func(), not 'func'?";
                 }
                 # Cases 1 through 4.
-                elsif (ref $val eq none('HASH','CODE','Regexp')) {
+                elsif (!grep(ref $val eq $_, 'HASH','CODE','Regexp')) {
                     die "Value for constraint_method '$val' not a code reference or Regexp . Do you need func(), not 'func'?";
                 }
                 # Case 5.
@@ -996,7 +995,7 @@ sub _check_profile_syntax {
 
         for my $href (@constraint_hashrefs) {
             for my $key (keys %$href) {
-                push @invalid, $key unless ($key eq any(@valid_constraint_hash_keys));
+                push @invalid, $key unless grep $key eq $_, @valid_constraint_hash_keys;
             }
         }
 
@@ -1019,7 +1018,7 @@ sub _check_profile_syntax {
         /);
         if (ref $profile->{msgs} eq 'HASH') {
             for my $key (keys %{ $profile->{msgs} }) {
-                push @invalid, $key unless ($key eq any(@valid_msgs_hash_keys));
+                push @invalid, $key unless grep $key eq $_, @valid_msgs_hash_keys;
             }
         }
         if (@invalid) {
