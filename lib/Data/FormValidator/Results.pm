@@ -851,7 +851,7 @@ sub _arrayify {
 
    # if it's a reference, return an array unless it points to an empty array. -mls
    if ( ref $val eq 'ARRAY' ) {
-       $^W = 0; # turn off warnings about undef
+       local $^W = 0; # turn off warnings about undef
        return grep(defined, @$val) ? @$val : ();
    }
    # if it's a string, return an array unless the string is missing or empty. -mls
