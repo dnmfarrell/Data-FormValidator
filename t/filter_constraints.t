@@ -1,18 +1,13 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
+use lib ('.','../t');
+use Test::More tests => 4;
+use Data::FormValidator;
+
 # This test is a for a bug where a value doesn't get filtered when it should
 # The bug was discovered by Jeff Till, and he contributed this test, too. 
-
-use strict;
-use Test::More tests => 4;
-use lib ('.','../t');
-      
 # Verify that multiple params passed to a constraint are being filtered
-
-$^W = 1;
-                         
-  
-use Data::FormValidator;
-                   
 my $validator = new Data::FormValidator({
    default =>
    {
@@ -110,7 +105,4 @@ is_deeply($invalids, [], "all fields are valid");
 
     eval { ok($res->valid('local_filter')," when passed through param, local filters are applied."); };
     eval { ok($res->valid('global_filter_field')," when passed through param, global filters are applied."); };
-
-
 }
-

@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
-#!perl
+use strict;
+use warnings;
 use Test::More 'no_plan';
-
 use Data::FormValidator;
 use Data::FormValidator::Constraints qw( 
     FV_max_length 
@@ -26,5 +26,3 @@ my $result = Data::FormValidator->check({
     });
 
 like( $result->msgs->{'first_names'}, qr/Custom length msg/, "built-ins can have custom names" );
-
-

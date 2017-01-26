@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
-use Test::More qw/no_plan/;
 use strict;
-
+use warnings;
+use Test::More qw/no_plan/;
 use Data::FormValidator;
 
 my $simple_profile = {
@@ -220,8 +220,3 @@ ok ((not $@), 'calling msgs method without hash definition');
     like($msgs->{field},qr/callback/,$test_name);
 
 }
-
-
-
-
-

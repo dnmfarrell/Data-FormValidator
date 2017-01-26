@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More qw/no_plan/;
 use Data::FormValidator;
-use strict;
 
 {
 	local $@ = undef;
@@ -47,4 +48,3 @@ $results = Data::FormValidator->check({},
 );
 };
 like($@, qr/Invalid/, 'checking syntax of constraint_regexp_map hashrefs works');
-

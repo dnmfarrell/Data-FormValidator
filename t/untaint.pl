@@ -1,8 +1,5 @@
-#!/usr/bin/env perl
-#!/usr/bin/perl -wT
-
+#!/usr/bin/env perl -wT
 use strict;
-
 use Test::More (tests => 55);
 use Data::FormValidator;
 use Data::FormValidator::Constraints qw/
@@ -10,7 +7,7 @@ use Data::FormValidator::Constraints qw/
     FV_max_length
 /;
 
-# A gift from Andy Lester, this trick shows me where eval's die. 
+# A gift from Andy Lester, this trick shows me where eval's die.
 use Carp;
 $SIG{__WARN__} = \&carp;
 $SIG{__DIE__} = \&confess;

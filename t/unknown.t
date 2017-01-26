@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More tests => 4;
-
 use Data::FormValidator; 
 
 my %FORM = (
@@ -26,4 +27,3 @@ is_deeply(\@mv,$FORM{mv}, 'unknown() returns multi-valued results');
 
 my @stick = $results->unknown('stick');
 is_deeply(\@stick,[ $FORM{stick} ], 'unknown() returns single value in list context');
-

@@ -1,6 +1,10 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl -w
+use strict;
+use warnings;
 use Test::More;
+use Data::FormValidator;
+use Data::FormValidator::Constraints::Dates qw( date_and_time );
+
 
 eval { require Date::Calc; };
 if( $@ ) {
@@ -9,12 +13,6 @@ if( $@ ) {
 else {
     plan 'no_plan';
 }
-
-require Data::FormValidator::Constraints::Dates;
-
-use strict;
-
-use strict;
 
 my $format = Data::FormValidator::Constraints::Dates::_prepare_date_format('MM/DD/YYYY hh?:mm:ss pp');
 
@@ -37,9 +35,6 @@ ok ($day == 2,'day');
 ok ($hour == 1,'hour');
 ok ($min == 1,'min');
 ok ($sec == 3,'sec'); 
-
-use Data::FormValidator;
-use Data::FormValidator::Constraints::Dates qw( date_and_time );
 
 my $simple_profile = {
 	required => [qw/date_and_time_field_bad date_and_time_field_good/],
@@ -98,5 +93,4 @@ ok ((grep /date_and_time_field_bad/, @$invalids), 'expecting date_and_time failu
    # This one fails not because the date is bad, but because the pattern is not sensible
    # It would be better to detect that the pattern was bad and fail that way, of course.
    ok ( $r->invalid('date_and_time_field_bad_pat'), "02/29/2008 should fail MM/DD/YYY?Y?" );
-
 }

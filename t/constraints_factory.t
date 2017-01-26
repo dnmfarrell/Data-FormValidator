@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More 'no_plan';
-
 use Data::FormValidator;
 use Data::FormValidator::ConstraintsFactory 'make_length_constraint';
 
@@ -23,4 +24,3 @@ use Data::FormValidator::ConstraintsFactory 'make_length_constraint';
     ok(! $results->valid('too_long'),'negative test for make_length_constraint()');
 
 }
-

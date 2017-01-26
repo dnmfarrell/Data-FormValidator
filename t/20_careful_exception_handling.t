@@ -1,20 +1,15 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl -w
-
-# This tests to make sure that when we test $@, we are testing the right thing.
-# inspired by a patch from dom@semantico.com
-use lib ('.','../t');
-
-$^W = 1;
-
-use Test::More tests => 1;
-
 use strict;
+use warnings;
+use lib ('.','../t');
+use Test::More tests => 1;
 use Data::FormValidator;
 
 # So as to not trigger a require later on in the code.
 require UNIVERSAL;
 
+# This tests to make sure that when we test $@, we are testing the right thing.
+# inspired by a patch from dom@semantico.com
 my $input_profile =
 {
 	required => 'nothing',

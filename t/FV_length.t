@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl
-use Test::More 'no_plan';
 use strict;
+use warnings;
+use Test::More 'no_plan';
+
 BEGIN {
     use_ok('Data::FormValidator'); 
 }

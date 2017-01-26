@@ -1,10 +1,10 @@
 #!/usr/bin/env perl
-# Friendy error messages when quality_to_ref fails due to a typo. -mls 05/03/03 
-
+use strict;
+use warnings;
 use Test::More tests => 5;
+use Data::FormValidator;
 
-use Data::FormValidator; 
-
+# Friendy error messages when quality_to_ref fails due to a typo. -mls 05/03/03 
 my %FORM = (
 	bad_email  => 'oops',
 	good_email => 'great@domain.com',
@@ -62,4 +62,3 @@ $results = Data::FormValidator->check(\%FORM, {
 	});
 };
 like($@,qr/found named/, 'happy untainted constraints typo failure');
-

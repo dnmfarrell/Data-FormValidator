@@ -1,4 +1,6 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More tests => 4;
 use Data::FormValidator;
 
@@ -42,4 +44,3 @@ ok(!$results->success, 'not success()');
     $results || ($false = 1); 
     ok($false,  "returns false in bool context on not success");
 }
-

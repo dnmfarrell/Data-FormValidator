@@ -1,14 +1,14 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More;
+use File::Spec;
+use File::Find;
 
 # Check our Pod
 # The test was provided by Andy Lester,
 # who stole it from Brian D. Foy
 # Thanks to both !
-
-use File::Spec;
-use File::Find;
-use strict;
 
 eval {
   require Test::Pod;

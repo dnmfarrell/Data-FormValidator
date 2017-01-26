@@ -1,18 +1,12 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl -w
+use strict;
+use warnings;
+use lib ('.','../t');
+use Test::More tests => 3;
+use Data::FormValidator;
 
 # This tests to make sure that we can use hashrefs and code refs as OK values in the input hash
 # inspired by a patch from Boris Zentner
-
-use lib ('.','../t');
-
-$^W = 1;
-
-use Test::More tests => 3;
-
-use strict;
-use Data::FormValidator;
-
 my $input_profile =
 {
   required => [ qw( arrayref hashref coderef ) ],
@@ -36,6 +30,3 @@ ok(not defined $valids->{arrayref}->[0]);
 # hash refs and code refs should be ok.
 is(ref $valids->{hashref}, 'HASH');
 is(ref $valids->{coderef}, 'CODE');
-
-
-

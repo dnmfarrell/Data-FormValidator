@@ -1,4 +1,6 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More qw/no_plan/;
 use Data::FormValidator;
 
@@ -20,8 +22,3 @@ isnt($h{key},$out{key},"after copying structure, values should have different me
 
     is($h{key}[0], ' value1 ', "filters shouldn't modify data in arrayrefs");
 }
-
-
-
-
-

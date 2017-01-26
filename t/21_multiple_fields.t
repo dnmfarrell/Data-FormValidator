@@ -1,15 +1,11 @@
 #!/usr/bin/env perl
 use strict;
+use warnings;
 use Test::More tests => 3;
 use lib ('.','../t');
-
-# Verify that multiple params passed to a constraint are being handled correctly
-
-$^W = 1;
-
-
 use Data::FormValidator;
 
+# Verify that multiple params passed to a constraint are being handled correctly
 my $validator = new Data::FormValidator({
    default =>
    {

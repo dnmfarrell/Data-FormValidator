@@ -1,13 +1,11 @@
 #!/usr/bin/env perl
-#!/usr/bin/perl
-
-use Test::More;
 use strict;
-
-# Test FV_num_values and FV_num_values_between
-
+use warnings;
+use Test::More;
 use Data::FormValidator;
 use Data::FormValidator::Constraints qw(:closures);
+
+# Test FV_num_values and FV_num_values_between
 
 my $results = Data::FormValidator->check(
 {

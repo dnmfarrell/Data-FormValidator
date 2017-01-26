@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
-
+use strict;
+use warnings;
 use Test::More tests => 5;
 
 BEGIN {
@@ -27,9 +28,3 @@ eval { $dfv = Data::FormValidator->new('test/00_base.profile'); };
 my $results = $dfv->check({}, 'profile1');
 
 ok(scalar $results->missing, 'loading a profile from a file works');
-
-
-
-
-
-

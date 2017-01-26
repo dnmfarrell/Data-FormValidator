@@ -1,4 +1,6 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More;
 use Data::FormValidator;
 
@@ -13,4 +15,3 @@ my $tt = Template->new( STASH => Template::Stash->new );
 $tt->process( \'[% form.missing %]', {form => $results}, \my $out );
 
 ok(not $tt->error);
-

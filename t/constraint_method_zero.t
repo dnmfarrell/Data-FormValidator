@@ -1,13 +1,10 @@
 #!/usr/bin/env perl
-#!perl
-# For RT#45177
-
 use strict;
 use warnings;
-
 use Test::More 'no_plan';
 use Data::FormValidator;
 
+# For RT#45177
 {
     my $results = Data::FormValidator->check({ nine_is_ok => 9 }, {
      required => [ 'nine_is_ok' ],
@@ -68,7 +65,3 @@ use Data::FormValidator;
     });
     is($results->valid('zero_is_ok'),0, "zero should be valid with capturing parens");
 }
-
-
-
-

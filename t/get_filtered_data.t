@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 use strict;
+use warnings;
 use Test::More tests => 4;
 use Data::FormValidator;
 use Data::FormValidator::Constraints qw(FV_eq_with);

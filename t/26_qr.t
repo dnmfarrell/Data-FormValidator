@@ -1,10 +1,10 @@
 #!/usr/bin/env perl
-# Testing new support for 'qr'. -mls
-
+use strict;
+use warnings;
 use Test::More qw/no_plan/;
-
 use Data::FormValidator; 
 
+# Testing new support for 'qr'. -mls
 my %FORM = (
 	stick 	=> 'big',
 	speak 	=> 'softly',
@@ -60,8 +60,3 @@ my $msgs = $results->msgs;
 like($msgs->{not_oops},qr/testing named/, 'named qr constraints');
 
 is($results->valid('untainted_with_qr'),'Slim', 'untainting with qr');
-
-
-
-
-

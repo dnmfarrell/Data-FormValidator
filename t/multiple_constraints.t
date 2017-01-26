@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
-
+use strict;
+use warnings;
 use Data::FormValidator;
 use Test::More tests => 8;
-use strict;
 use lib ('.','../t');
 
 my $input_profile = {
