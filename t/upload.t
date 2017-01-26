@@ -1,9 +1,11 @@
 #########################
 
-use Test::More 'no_plan';
+use Test::More;
 use strict;
 
-BEGIN { 
+BEGIN {
+    eval { require CGI };
+    plan skip_all => 'CGI.pm not found' if $@;
     use_ok('CGI');
     use_ok('Data::FormValidator::Constraints::Upload') 
 };
@@ -293,4 +295,4 @@ for my $q ($cgi_pm_q, $cgi_simple_q) {
 
 } ## end of for loop
 
-## end of tests
+done_testing;
