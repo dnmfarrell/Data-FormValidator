@@ -8,17 +8,23 @@ eval { require CGI };
 plan skip_all => 'CGI.pm not found' if $@;
 
 {
-    my $results = Data::FormValidator->check({},{});
-    is_deeply($results->get_input_data, {}, 'get_input_data works for empty hashref' ); 
+  my $results = Data::FormValidator->check( {}, {} );
+  is_deeply( $results->get_input_data, {},
+    'get_input_data works for empty hashref' );
 }
 
-my $q = CGI->new( { key => 'value' });
-my $results = Data::FormValidator->check($q,{});
+my $q = CGI->new( { key => 'value' } );
+my $results = Data::FormValidator->check( $q, {} );
 
-is_deeply($results->get_input_data, $q, 'get_input_data works for CGI object' ); 
+is_deeply( $results->get_input_data, $q,
+  'get_input_data works for CGI object' );
 
 {
-    my $href = $results->get_input_data(as_hashref => 1);
-    is_deeply($href , { key => 'value' },  'get_input_data( as_hashref => 1 ) works for CGI object' ); 
+  my $href = $results->get_input_data( as_hashref => 1 );
+  is_deeply(
+    $href,
+    { key => 'value' },
+    'get_input_data( as_hashref => 1 ) works for CGI object'
+  );
 }
 done_testing;
