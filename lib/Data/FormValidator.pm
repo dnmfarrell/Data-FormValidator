@@ -30,7 +30,7 @@ use Data::FormValidator::Results;
 use Data::FormValidator::Filters ':filters';
 use Data::FormValidator::Constraints qw(:validators :matchers);
 
-our $VERSION = '4.81';
+our $VERSION = '4.82';
 
 our %EXPORT_TAGS = (
     filters => [qw/
@@ -98,6 +98,24 @@ sub DESTROY {}
 
 Data::FormValidator - Validates user input (usually from an HTML form) based
 on input profile.
+
+=head2 NOTICE
+
+This is a fork of L<Data::FormValidator|https://metacpan.org/pod/Data::FormValidator-4.81>. The goals of this fork are:
+
+=over 4
+
+=item * Remove dependencies on deprecated or slow modules
+
+=item * Replace Build.PL with Makefile.PL
+
+=item * Fix any serious bugs in the RT queue
+
+=item * Host the code on GitHub and not I<darcs>
+
+=item * Upload a new version onto CPAN, possibly under a different name
+
+=back
 
 =head1 SYNOPSIS
 
