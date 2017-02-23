@@ -28,7 +28,7 @@ patches
 lib/Perl6
 rejects
 ^Build$
-
+\.git
 
 ^MYMETA.yml$
 ^MYMETA\.json$
