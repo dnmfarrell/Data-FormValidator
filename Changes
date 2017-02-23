@@ -1,3 +1,9 @@
+4.83 Feb 23rd, 2017
+
+    [MAINTENANCE]
+    - Re-release of 4.82: tarball was missing files as "make dist" errored when it didn't find MANIFEST
+    - Deleted unused Perl6 files
+
 4.82 Feb 23rd, 2017
 
     [MAINTENANCE]
