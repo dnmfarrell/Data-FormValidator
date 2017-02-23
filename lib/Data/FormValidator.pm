@@ -31,7 +31,7 @@ use Data::FormValidator::Results;
 use Data::FormValidator::Filters ':filters';
 use Data::FormValidator::Constraints qw(:validators :matchers);
 
-our $VERSION = '4.82';
+our $VERSION = '4.83';
 
 our %EXPORT_TAGS = (
     filters => [qw/
