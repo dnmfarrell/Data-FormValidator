@@ -4,7 +4,8 @@
 #    This file is part of Data::FormValidator.
 #
 #    Author: Francis J. Lacoste
-#    Maintainer: Mark Stosberg <mark@stosberg.com>
+#    Previous Maintainer: Mark Stosberg <mark@stosberg.com>
+#    Maintainer: David Farrell <dfarrell@cpan.org>
 #
 #    Copyright (C) 1999 Francis J. Lacoste, iNsu Innovations
 #    Parts Copyright 1996-1999 by Michael J. Heins
@@ -98,24 +99,6 @@ sub DESTROY {}
 
 Data::FormValidator - Validates user input (usually from an HTML form) based
 on input profile.
-
-=head2 NOTICE
-
-This is a fork of L<Data::FormValidator|https://metacpan.org/pod/Data::FormValidator-4.81>. The goals of this fork are:
-
-=over 4
-
-=item * Remove dependencies on deprecated or slow modules
-
-=item * Replace Build.PL with Makefile.PL
-
-=item * Fix any serious bugs in the RT queue
-
-=item * Host the code on GitHub and not I<darcs>
-
-=item * Upload a new version onto CPAN, possibly under a different name
-
-=back
 
 =head1 SYNOPSIS
 
@@ -1284,7 +1267,9 @@ Messages about DFV sent directly to the maintainer may be redirected here.
 
 =head1 AUTHOR
 
-Parts Copyright 2001-2006 by Mark Stosberg <mark at summersault.com>, (Current Maintainer)
+Currently maintained by David Farrell <dfarrell@cpan.org>
+
+Parts Copyright 2001-2006 by Mark Stosberg <mark at summersault.com>, (previous maintainer)
 
 Copyright (c) 1999 Francis J. Lacoste and iNsu Innovations Inc.  All rights reserved.
 (Original Author)

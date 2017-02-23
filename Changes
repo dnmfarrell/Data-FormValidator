@@ -1,3 +1,15 @@
+4.82 Feb 23rd, 2017
+
+    [MAINTENANCE]
+    - Made CGI dependency optional
+    - Replaced Build.PL with Makefile.PL
+    - Updated Makefile.PL constraints
+    - Removed dependency on Perl6::Junctions
+    - Moved the code to GitHub
+    - Applied patches from: RT 77765, 78443, 10489
+    - Added shebang, warnings pragma to all test scripts
+    - Perltidied tests scripts
+    - Replaced is_tainted() sub with Scalar::Util::tainted()
 
 4.81 Jul 19th, 2013
 
