@@ -475,6 +475,92 @@ This is a hash reference which contains information about groups of
 interdependent fields. The keys are arbitrary names that you create and
 the values are references to arrays of the field names in each group.
 
+=head2 dependencies_regexp
+
+ dependencies_regexp => {
+    qr/Line\d+\_ItemType$/ => sub {
+       my $dfv = shift;
+       my $itemtype = shift;
+       my $field = shift;
+      
+       if ($type eq 'NeedsBatteries') {
+          my ($prefix, $suffix) = split(/\_/, $field);
+         
+          return([$prefix . '_add_batteries]);
+       } else {
+          return([]);
+       }
+    },
+ },
+
+This is a regular expression used to specify additional fields which are
+dependent. For example, if you wanted to add dependencies for all fields which
+meet a certain criteria (such as multiple items in a shopping cart) where you
+do not know before hand how many of such fields you may have.
+
+=head2 dependent_optionals
+
+ dependent_optionals => {
+    # If delivery_address is specified then delivery_notes becomes optional
+    "delivery_address" => [ qw( delivery_notes ) ],
+
+    # if delivery_type eq 'collection', collection_notes becomes optional
+    "delivery_type" => {
+       collection => [ qw( collection_notes ) ],
+    }
+
+    # if callback_type is "phone" or "email" then additional_notes becomes optional
+    "callback_type" => sub {
+       my $dfv = shift;
+       my $type = shift;
+
+       if ($type eq 'phone' || $type eq 'email') {
+          return(['additional_notes']);
+       } else {
+          return([]);
+       }
+    },
+ },
+
+This is for the case where an optional field can trigger other optional fields.
+The dependent optional fields can be specified with an array reference.
+
+If the dependent optional fields are specified with a hash reference, then an
+additional constraint is added that the optional field must equal a key for the
+additional optional fields to be added.
+
+If the dependent optional fields are specified as a code reference then the
+code will be executed to determine the additional optional fields. It is passed
+two parameters, the object and the value of the field, and it should return an
+array reference containing the list of additional optional fields.
+
+=head2 dependent_require_some
+
+ dependent_require_some => {
+    # require any fields from this group if AddressID is "new"
+    AddressID => sub {
+       my $dfv = shift;
+       my $value = shift;
+       
+       if ($value eq 'new') {
+          return({
+             house_name_or_number => [ 1, 'HouseName', 'HouseNumber' ],
+          });
+       } else {
+          return;
+       }
+    },
+ }
+
+Sometimes a field will need to trigger additional dependencies but you only
+require some of the fields. You cannot set them all to be dependent as you
+might only have some of them, and you cannot set them all to be optional as
+you must have some of them. This method allows you to specify this in a
+similar way to the equire_some method but dependent upon other values. In
+the example above if the AddressID submitted is "new" then at least 1 of
+HouseName and HouseNumber must also be supplied. See require_some for the
+valid options for the return.
+
 =head2 defaults
 
  defaults => {
@@ -923,7 +1009,10 @@ sub _check_profile_syntax {
             defaults
             defaults_regexp_map
             dependencies
+            dependencies_regexp
             dependency_groups
+            dependent_optionals
+            dependent_require_some
             field_filter_regexp_map
             field_filters
             filters
