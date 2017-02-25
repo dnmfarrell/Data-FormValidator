@@ -1,3 +1,9 @@
+4.84 Feb 25th, 2017
+
+    [MAINTENANCE]
+    - Various test file warning fixes
+    - Change conditional loading of CGI to require version 4.35 or higher (4ce9ac9e)
+
 4.83 Feb 23rd, 2017
 
     [MAINTENANCE]
