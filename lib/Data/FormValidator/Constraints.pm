@@ -24,7 +24,7 @@ use base 'Exporter';
 use strict;
 our $AUTOLOAD;
 
-our $VERSION = 4.81;
+our $VERSION = 4.85;
 
 BEGIN {
     use Carp;

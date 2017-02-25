@@ -13,7 +13,7 @@ package Data::FormValidator::Filters;
 use Exporter 'import';
 use strict;
 
-our $VERSION = 4.81;
+our $VERSION = 4.85;
 
 our @EXPORT_OK = qw(
     filter_alphanum

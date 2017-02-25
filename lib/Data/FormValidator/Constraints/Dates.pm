@@ -14,7 +14,7 @@ our @EXPORT = qw(
     match_date_and_time
 );
 
-our $VERSION = '4.81';
+our $VERSION = 4.85;
 
 sub date_and_time {
     my $fmt = shift;
