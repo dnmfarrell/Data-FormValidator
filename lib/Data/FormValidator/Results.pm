@@ -188,6 +188,28 @@ sub _process {
     }
 
     # handle "require_some"
+    while (my ($field, $dependent_require_some) = each %{$profile->{dependent_require_some}}) {
+        if (defined $valid{$field}) {
+            if (ref $dependent_require_some eq "CODE") {
+                for my $value (_arrayify($valid{$field})) {
+                    my $returned_require_some = $dependent_require_some->($self, $value);
+
+                    if (ref($returned_require_some) eq 'HASH') {
+                        foreach my $key (keys %$returned_require_some) {
+                            $profile->{require_some}->{$key} = $returned_require_some->{$key};
+                        }
+                    }
+                }
+            } else {
+                if (ref($dependent_require_some) eq 'HASH') {
+                    foreach my $key (keys %$dependent_require_some) {
+                        $profile->{require_some}->{$key} = $dependent_require_some->{$key};
+                    }
+                }
+            }
+        }
+    }
+
     my %require_some;
     while ( my ( $field, $deps) = each %{$profile->{require_some}} ) {
         for my $dep (_arrayify($deps)){
@@ -262,6 +284,80 @@ sub _process {
        if ($require_all) {
             map { $required{$_} = 1 } _arrayify($group);
        }
+    }
+
+    my $dependency_re;
+
+    foreach my $re (keys %{$profile->{dependencies_regexp}}) {
+        my $sub = _create_sub_from_RE($re);
+
+        $dependency_re->{$re} = {
+            sub => $sub,
+            value => $profile->{dependencies_regexp}->{$re},
+        };
+    }
+
+    if ($dependency_re) {
+        foreach my $k (keys %valid) {
+            foreach my $re (keys %$dependency_re) {
+                if ($dependency_re->{$re}->{sub}->($k)) {
+                    my $deps = $dependency_re->{$re}->{value};
+
+                    if (ref($deps) eq 'HASH') {
+                        for my $key (keys %$deps) {
+                            # Handle case of a key with a single value given as an arrayref
+                            # There is probably a better, more general solution to this problem.
+                            my $val_to_compare;
+
+                            if ((ref $valid{$k} eq 'ARRAY') and (scalar @{ $valid{$k} } == 1)) {
+                                $val_to_compare = $valid{$k}->[0];
+                            } else {
+                                $val_to_compare = $valid{$k}
+                            }
+
+                            if($val_to_compare eq $key){
+                                for my $dep (_arrayify($deps->{$key})){
+                                    $required{$dep} = 1;
+                                }
+                            }
+                        }
+                    } elsif (ref $deps eq "CODE") {
+                        for my $val (_arrayify($valid{$k})) {
+                            my $returned_deps = $deps->($self, $val, $k);
+
+                            for my $dep (_arrayify($returned_deps)) {
+                                $required{$dep} = 1;
+                            }
+                        }
+                    } else {
+                        for my $dep (_arrayify($deps)){
+                            $required{$dep} = 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    # Check if the presence of some fields makes other fields optional.
+    while (my ($field, $dependent_optional) = each %{$profile->{dependent_optionals}} ) {
+        if (defined $valid{$field}) {
+            if (ref $dependent_optional eq "CODE") {
+                for my $value (_arrayify($valid{$field})) {
+                    my $returned_optionals = $dependent_optional->($self, $value);
+
+
+
+                    foreach my $optional (_arrayify($returned_optionals)) {
+                        $optional{$optional} = 1;
+                    }
+                }
+            } else {
+                foreach my $optional (_arrayify($dependent_optional)){
+                    $optional{$optional} = 1;
+                }
+            }
+        }
     }
 
     # Find unknown

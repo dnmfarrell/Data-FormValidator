@@ -412,11 +412,23 @@ sub FV_num_values_between {
         my $param = $dfv->get_current_constraint_field();
         my $value = $dfv->get_filtered_data()->{$param};
 
-        my $num_values = scalar @$value;
+		if (ref($value) eq 'ARRAY') {
+	        my $num_values = scalar @$value;
 
-        return ($num_values >= $min) && ($num_values <= $max) if ref $value eq 'ARRAY';
-        return 1 if $min == 0 && $max >= 2; # scalar, size could be 1
-        return 0;                           # scalar, size can't be 1
+	        return(
+	        	(
+	        		$num_values >= $min
+	        		&& $num_values <= $max
+	        	) ? 1 : 0
+	        );
+		} else {
+			if ($min <= 1 && $max >= 1) {
+				# Single value is allowed
+				return 1;
+			} else {
+				return 0;
+			}
+		}
     }
 }
 
