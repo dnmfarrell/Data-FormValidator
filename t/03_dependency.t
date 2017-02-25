@@ -87,8 +87,7 @@ SKIP:
   skip 'CGI.pm not found', 3 if $@;
 
   my $q = CGI->new('pay_type=0');
-  my $results;
-  eval { $results = $validator->check( $q, 'default' ); };
+  my $results = $validator->check( $q, 'default' );
   ok( $results->missing('cc_num'), 'using CGI.pm object for input' );
   is( $result->missing('cc_exp'),  undef, "missing('cc_exp') returned false" );
   is( $result->missing('cc_name'), undef, "missing('cc_name') returned false" );
