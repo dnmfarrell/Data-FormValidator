@@ -41,10 +41,10 @@ ok( exists $valids->{'not_filled'} );
 # "should_be_unknown" should be still be unknown
 ok( $unknowns->[0] eq 'should_be_unknown' );
 
-eval { require CGI; };
+eval { require CGI;CGI->VERSION(4.35); };
 SKIP:
 {
-  skip 'CGI.pm not found', 3 if $@;
+  skip 'CGI 4.35 or higher not found', 3 if $@;
 
   my $q = CGI->new($input_hashref);
   my ( $valids, $missings, $invalids, $unknowns );

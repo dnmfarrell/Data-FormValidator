@@ -81,10 +81,10 @@ ok( $result->missing('cc_num'), "missing('cc_num') returned true" );
 is( $result->missing('cc_exp'),  undef, "missing('cc_exp') returned false" );
 is( $result->missing('cc_name'), undef, "missing('cc_name') returned false" );
 
-eval { require CGI; };
+eval { require CGI;CGI->VERSION(4.35); };
 SKIP:
 {
-  skip 'CGI.pm not found', 3 if $@;
+  skip 'CGI 4.35 or higher not found', 3 if $@;
 
   my $q = CGI->new('pay_type=0');
   my $results = $validator->check( $q, 'default' );

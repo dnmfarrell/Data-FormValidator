@@ -4,8 +4,8 @@ use warnings;
 use Test::More;
 use Data::FormValidator;
 
-eval { require CGI };
-plan skip_all => 'CGI.pm not found' if $@;
+eval { require CGI;CGI->VERSION(4.35); };
+plan skip_all => 'CGI 4.35 or higher not found' if $@;
 
 # test profile
 my $input_profile = {
