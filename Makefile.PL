@@ -5,7 +5,7 @@ WriteMakefile(
   NAME          => 'Data::FormValidator',
   VERSION_FROM  => 'lib/Data/FormValidator.pm',
   ABSTRACT_FROM => 'lib/Data/FormValidator.pm',
-  AUTHOR        => 'Mark Stosberg <mark@summersault.com>',
+  AUTHOR        => 'David Farrell <dfarrell@cpan.org>',
   LICENSE       => 'perl',
   PREREQ_PM     => {
     # In 5.6, t/upload* was failing.
@@ -29,11 +29,10 @@ WriteMakefile(
           web  => 'https://github.com/dnmfarrell/Data-FormValidator',
         },
       },
-      # this doesn't appear necessary anymore
+      # this is a cuckoo package in Data::FormValidator::Results
       no_index => {
         package => ['Data::FormValidator::Constraints::RegexpCommon'],
       }})
    : ()
   ),
 );
-
