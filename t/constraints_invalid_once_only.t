@@ -37,6 +37,7 @@ my $duplicated = {};
 my $has_duplicates;
 foreach ( @{ $invalid->{password} } )
 {
+  next unless $_;
   if ( exists $duplicated->{$_} )
   {
     $has_duplicates = 1;
