@@ -31,7 +31,7 @@ use Data::FormValidator::Results;
 use Data::FormValidator::Filters ':filters';
 use Data::FormValidator::Constraints qw(:validators :matchers);
 
-our $VERSION = 4.85;
+our $VERSION = 4.86;
 
 our %EXPORT_TAGS = (
     filters => [qw/
@@ -482,10 +482,10 @@ the values are references to arrays of the field names in each group.
        my $dfv = shift;
        my $itemtype = shift;
        my $field = shift;
-      
+
        if ($type eq 'NeedsBatteries') {
           my ($prefix, $suffix) = split(/\_/, $field);
-         
+
           return([$prefix . '_add_batteries]);
        } else {
           return([]);
@@ -541,7 +541,7 @@ array reference containing the list of additional optional fields.
     AddressID => sub {
        my $dfv = shift;
        my $value = shift;
-       
+
        if ($value eq 'new') {
           return({
              house_name_or_number => [ 1, 'HouseName', 'HouseNumber' ],

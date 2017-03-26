@@ -24,7 +24,7 @@ use base 'Exporter';
 use strict;
 our $AUTOLOAD;
 
-our $VERSION = 4.85;
+our $VERSION = 4.86;
 
 BEGIN {
     use Carp;
@@ -412,23 +412,23 @@ sub FV_num_values_between {
         my $param = $dfv->get_current_constraint_field();
         my $value = $dfv->get_filtered_data()->{$param};
 
-		if (ref($value) eq 'ARRAY') {
-	        my $num_values = scalar @$value;
+    if (ref($value) eq 'ARRAY') {
+          my $num_values = scalar @$value;
 
-	        return(
-	        	(
-	        		$num_values >= $min
-	        		&& $num_values <= $max
-	        	) ? 1 : 0
-	        );
-		} else {
-			if ($min <= 1 && $max >= 1) {
-				# Single value is allowed
-				return 1;
-			} else {
-				return 0;
-			}
-		}
+          return(
+            (
+              $num_values >= $min
+              && $num_values <= $max
+            ) ? 1 : 0
+          );
+    } else {
+      if ($min <= 1 && $max >= 1) {
+        # Single value is allowed
+        return 1;
+      } else {
+        return 0;
+      }
+    }
     }
 }
 

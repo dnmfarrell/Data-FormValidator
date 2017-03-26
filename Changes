@@ -1,3 +1,10 @@
+4.86 March 26th, 2017
+    [NEW FEATURES]
+    - Add three new profile methods: depedencies_regexp, dependent_optional, dependent_require_some
+
+    [MAINTENANCE]
+    - Bump VERSION in all classes to 5.85
+
 4.85 Feb 25th, 2017
 
     [MAINTENANCE]
