@@ -123,7 +123,7 @@ simple format.
 Data::FormValidator lets you define profiles which declare the
 required and optional fields and any constraints they might have.
 
-The results are provided as an object which makes it easy to handle
+The results are provided as an object, which makes it easy to handle
 missing and invalid results, return error messages about which constraints
 failed, or process the resulting valid data.
 
@@ -166,8 +166,8 @@ sub new {
 
 C<check> is the recommended method to use to validate forms. It returns its results as a
 L<Data::FormValidator::Results|Data::FormValidator::Results> object.  A
-deprecated method C<validate> is also available, returning its results as an
-array described below.
+deprecated method C<validate> described below is also available, returning its results as an
+array.
 
  use Data::FormValidator;
  my $results = Data::FormValidator->check(\%input_hash, \%dfv_profile);
@@ -1255,7 +1255,7 @@ For more details see L<VALIDATING INPUT BASED ON MULTIPLE FIELDS>.
 
 =head2 constraint_regexp_map (profile key)
 
-This is a supported by deprecated profile key. Using
+This is a supported but deprecated profile key. Using
 C<constraint_methods_regexp_map> is recommended instead.
 
  constraint_regexp_map => {
@@ -1325,7 +1325,7 @@ Debian GNU/Linux includes a port named B<libdata-formvalidator-perl>
 
 =head1 CREDITS
 
-Some of those input validation functions have been taken from MiniVend
+Some of these input validation functions have been taken from MiniVend
 by Michael J. Heins.
 
 The credit card checksum validation was taken from contribution by Bruce
@@ -1334,7 +1334,7 @@ Albrecht to the MiniVend program.
 =head1 BUGS
 
 Bug reports and patches are welcome. Reports which include a failing Test::More
-style test are helpful will receive priority.
+style test are helpful and will receive priority.
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-FormValidator>
 
