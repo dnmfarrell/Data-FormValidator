@@ -1,3 +1,8 @@
+4.87 May 14th, 2017
+
+    [MAINTENANCE]
+    - Update cc routine to recognize new 2 series Mastercards
+
 4.86 March 26th, 2017
     [NEW FEATURES]
     - Add three new profile methods: depedencies_regexp, dependent_optional, dependent_require_some
