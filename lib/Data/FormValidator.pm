@@ -24,6 +24,7 @@
 
 package Data::FormValidator;
 use Exporter 'import';
+use File::Spec qw();
 use 5.008;
 
 use Data::FormValidator::Results;
@@ -147,7 +148,7 @@ sub new {
         $profiles = $profiles_or_file;
     }
     else {
-        $file = $profiles_or_file;
+        $file = File::Spec->rel2abs( $profiles_or_file );
     }
 
 
