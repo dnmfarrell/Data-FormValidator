@@ -1297,7 +1297,7 @@ L<Data::FormValidator::Tutorial|Data::FormValidator::Tutorial>
 
 L<Data::FormValidator::Util::HTML|Data::FormValidator::Util::HTML>
 
-L<CGI::Application::ValidateRM|CGI::Application::ValidateRM>, a
+L<CGI::Application::Plugin::ValidateRM|CGI::Application::Plugin::ValidateRM>, a
 CGI::Application & Data::FormValidator glue module
 
 L<HTML::Template::Associate::FormValidator|HTML::Template::Associate::FormValidator> is designed
