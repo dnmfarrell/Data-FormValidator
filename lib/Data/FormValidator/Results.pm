@@ -1165,6 +1165,10 @@ sub _get_input_as_hash {
             if ($data->isa('CGI::Simple')) {
                 @v = $data->upload($k) || $data->param($k);
             }
+            # CGI::FormBuilder doesn't support returning field value from `multi_param`
+            elsif ($data->isa('CGI::FormBuilder')) {
+                @v = $data->param($k);
+            }
             else {
                 # insecure
                 @v = $data->multi_param($k);
